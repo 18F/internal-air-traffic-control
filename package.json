@@ -1,7 +1,7 @@
 {
-  "name": "flight-control",
-  "version": "1.0.0",
-  "description": "",
+  "name": "air-traffic-control",
+  "version": "0.1.0",
+  "description": "Internal project status tracking",
   "main": "index.js",
   "scripts": {
 	"build-style": "node-sass web/src/style/main.scss -o web/static --include-path `node -e \"console.log(require('18f-contrib-web-design-standards').includePaths.join(':'))\"`",
