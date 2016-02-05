@@ -2324,7 +2324,8 @@ fieldset {
 
 .flight-status {
   background-color: #d6d7d9;
-  position: relative; }
+  position: relative;
+  margin: 10px 0 10px 0; }
 
 .flight-status-name {
   text-align: center;
