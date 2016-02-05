@@ -1,0 +1,72 @@
+@import "all";
+
+.flight {
+    background-color: #323a45;
+    color: white;
+    margin-top: 2rem;
+}
+
+.flight-status {
+    background-color: #d6d7d9;
+    position: relative;
+}
+
+.flight-status-name {
+    text-align: center;
+    color: black;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 10;
+}
+
+.flight-status-progress {
+    background-color: #94bfa2;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+
+    &.preflight { width: 0; }
+    &.climbing { width: 16.67%; }
+    &.in-flight { width: 33.33%; }
+    &.descent { width: 50%; }
+    &.landed { width: 66.67%; }
+    &.at-the-gate { width: 83.33%; }
+    &.complete { width: 100%; }
+}
+
+img.flight-status-icon {
+    width: 100px;
+
+    &.preflight, &.complete {
+        opacity: 0;
+    }
+
+    &.climbing {
+        transform: rotate(-20deg);
+        margin-left: 16.67%;
+    }
+
+    &.in-flight {
+        margin-left: 33.33%;
+    }
+
+    &.descent {
+        transform: rotate(20deg);
+        margin-left: 50%;
+    }
+
+    &.landed {
+        margin-left: 66.67%;
+    }
+
+    &.at-the-gate {
+        margin-left: 83.33%;
+    }
+}
+
+.flight-leader {
+    font-weight: bold;
+}

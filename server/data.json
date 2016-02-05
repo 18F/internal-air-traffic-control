@@ -1,0 +1,90 @@
+[
+	{
+		"id": 0,
+		"name": "Riddles in the Dark",
+		"status": "Preflight",
+		"lead": "Bilbo",
+		"pair": "Gollum",
+		"staff": [ ]
+	},
+	{
+		"id": 1,
+		"name": "A Long Expected Party",
+		"status": "Taxiing",
+		"lead": "Bilbo",
+		"pair": "Gandalf",
+		"staff": [
+			"Frodo",
+			"Sam",
+			"Merry",
+			"Pippin"
+		]
+	},
+	{
+		"id": 2,
+		"name": "At the Sign of the Prancing Pony",
+		"status": "Climbing",
+		"lead": "Frodo",
+		"pair": "",
+		"staff": [
+			"Sam",
+			"Merry",
+			"Pippin"
+		]
+	},
+	{
+		"id": 3,
+		"name": "The Council of Elrond",
+		"status": "In flight",
+		"lead": "Elrond",
+		"pair": "Gandalf",
+		"staff": [
+			"Aragorn",
+			"Legolas",
+			"Gimlin",
+			"Boromir",
+			"Frodo"
+		]
+	},
+	{
+		"id": 4,
+		"name": "Mount Doom",
+		"status": "Descent",
+		"lead": "Frodo",
+		"pair": "Sam",
+		"staff": [
+			"Gollum",
+			"Sauron"
+		]
+	},
+	{
+		"id": 5,
+		"name": "The Field of Cormallen",
+		"status": "Landed",
+		"lead": "Aragorn",
+		"pair": "Gandalf",
+		"staff": [
+			"Frodo",
+			"Sam"
+		]
+	},
+	{
+		"id": 6,
+		"name": "The Scouring of the Shire",
+		"status": "At the gate",
+		"lead": "Sam",
+		"pair": "Frodo",
+		"staff": [
+			"Merry",
+			"Pippin"
+		]
+	},
+	{
+		"id": 7,
+		"name": "The Grey Havens",
+		"status": "Complete",
+		"lead": "",
+		"pair": "",
+		"staff": [ ]
+	}
+]
