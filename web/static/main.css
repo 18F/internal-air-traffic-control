@@ -2317,6 +2317,9 @@ fieldset {
   .usa-accordion-content > *:last-child {
     margin-bottom: 0; }
 
+#auth {
+  float: right; }
+
 .flight {
   background-color: #323a45;
   color: white;
