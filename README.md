@@ -8,6 +8,10 @@ If you make any changes to the _web_ HTML, Javascript, or SASS, you will need to
 
 If you make any changes to the _server_ code, you will need to stop and restart.  `CTRL+C` will stop the server, and then just restart as above.  Note that at this time. the `data.json` is only read at startup, so changing the data will (for now) require restarting the server.
 
+The server uses GitHub for authentication and must be able to verify that you are in the 18F org.  In order to use GitHub, you must create an app (https://github.com/settings/developers) and then provide the `clientID`, `clientSecret` and `callbackURL` to the node server as environment variables `GH_CLIENT_ID`, `GH_CLIENT_SECRET`, and `GH_CALLBACK_URL`, respectively.
+
+Additionally, authentication is persisted in user sessions.  To secure the session, a strong session secret is recommended.  This is read from the environment variable `SESSION_SECRET`.  If it is not provided in the environment variable, it uses a default, hard-coded string that is more secure than nothing, but only just barely since the code is open.  Please set the `SESSION_SECRET`.
+
 ### Public domain
 
 This project is in the worldwide [public domain](LICENSE.md). As stated in [CONTRIBUTING](CONTRIBUTING.md):
