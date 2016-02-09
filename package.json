@@ -4,27 +4,32 @@
   "description": "Internal project status tracking",
   "main": "index.js",
   "scripts": {
-	"build-style": "node-sass web/src/style/main.scss -o web/static --include-path `node -e \"console.log(require('18f-contrib-web-design-standards').includePaths.join(':'))\"`",
-	"build-html": "browserify -t [ babelify --presets [ react es2015 ] ] web/src/index.js -o web/static/bundle.js",
-	"build": "npm run build-style && npm run build-html",
-	"start": "node server/main.js"
+    "build-style": "node-sass web/src/style/main.scss -o web/static --include-path `node -e \"console.log(require('18f-contrib-web-design-standards').includePaths.join(':'))\"`",
+    "build-html": "browserify -t [ babelify --presets [ react es2015 ] ] web/src/index.js -o web/static/bundle.js",
+    "build": "npm run build-style && npm run build-html",
+    "start": "node server/main.js"
   },
   "author": "",
   "license": "CC0-1.0",
   "dependencies": {
-	"restify": "^4.0.3"
+    "client-sessions": "^0.7.0",
+    "passport": "^0.3.2",
+    "passport-github": "^1.1.0",
+    "request": "^2.69.0",
+    "restify": "^4.0.3",
+    "restify-redirect": "^1.0.0"
   },
   "devDependencies": {
-	"18f-contrib-web-design-standards": "^1.0.1",
-	"babel-preset-es2015": "^6.3.13",
-	"babel-preset-react": "^6.3.13",
-	"babelify": "^7.2.0",
-	"browser-request": "^0.3.3",
-	"browserify": "^12.0.0",
-	"es6-promise": "^3.0.2",
-	"flux": "^2.1.1",
-	"node-sass": "^3.4.2",
-	"react": "^0.14.7",
-	"react-dom": "^0.14.7"
+    "18f-contrib-web-design-standards": "^1.0.1",
+    "babel-preset-es2015": "^6.3.13",
+    "babel-preset-react": "^6.3.13",
+    "babelify": "^7.2.0",
+    "browser-request": "^0.3.3",
+    "browserify": "^12.0.0",
+    "es6-promise": "^3.0.2",
+    "flux": "^2.1.1",
+    "node-sass": "^3.4.2",
+    "react": "^0.14.7",
+    "react-dom": "^0.14.7"
   }
 }

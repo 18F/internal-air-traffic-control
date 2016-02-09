@@ -26077,58 +26077,51 @@ module.exports = require('./lib/React');
 "use strict";
 
 var React = require("react");
-
-function getStaff(flight) {
-    var staff = [];
-    if (flight.pair) {
-        staff.push(flight.pair);
-    }
-    staff = staff.concat(flight.staff);
-
-    return (staff.length > 0 ? ", " : "") + staff.join(", ");
-}
-
-function getStatusClassName(flight) {
-    return flight.status.replace(/ /g, "-").toLowerCase();
-}
+var userStore = require("../stores/userStore");
 
 module.exports = React.createClass({
     displayName: "exports",
+    getInitialState: function getInitialState() {
+        return {
+            user: userStore.getUser()
+        };
+    },
+    componentDidMount: function componentDidMount() {
+        this.userStoreListenerToken = userStore.addListener(this._storeChanged);
+    },
+    componentWillUnmount: function componentWillUnmount() {
+        this.userStoreListenerToken.remove();
+    },
+    _storeChanged: function _storeChanged() {
+        this.setState({ user: userStore.getUser() });
+    },
     render: function render() {
         return React.createElement(
             "div",
-            { className: "usa-grid flight" },
-            React.createElement(
-                "div",
-                { className: "usa-width-one-sixth" },
-                this.props.flight.name
-            ),
-            React.createElement(
-                "div",
-                { className: "flight-status usa-width-two-thirds" },
-                React.createElement("img", { className: "flight-status-icon " + getStatusClassName(this.props.flight), src: "images/plane.svg" }),
-                React.createElement(
-                    "div",
-                    { className: "flight-status-name" },
-                    this.props.flight.status
-                ),
-                React.createElement("div", { className: "flight-status-progress " + getStatusClassName(this.props.flight) })
-            ),
-            React.createElement(
-                "div",
-                { className: "usa-width-one-sixth flight-staff" },
+            { className: "auth-status" },
+            this.state.user.loggedIn ? React.createElement(
+                "span",
+                { className: "username" },
+                "Logged in as ",
                 React.createElement(
                     "span",
-                    { className: "flight-leader" },
-                    this.props.flight.lead
-                ),
-                getStaff(this.props.flight)
+                    { className: "bold" },
+                    this.state.user.user.name
+                )
+            ) : React.createElement(
+                "span",
+                { className: "authButton" },
+                React.createElement(
+                    "a",
+                    { href: "/auth/github" },
+                    "Login with Github"
+                )
             )
         );
     }
 });
 
-},{"react":177}],179:[function(require,module,exports){
+},{"../stores/userStore":187,"react":177}],179:[function(require,module,exports){
 "use strict";
 
 var React = require("react");
@@ -26171,29 +26164,135 @@ module.exports = React.createClass({
     }
 });
 
-},{"../stores/flightStore":183,"./flight":178,"react":177}],180:[function(require,module,exports){
+},{"../stores/flightStore":186,"./flight":182,"react":177}],180:[function(require,module,exports){
+"use strict";
+
+var React = require("react");
+var FlightStatus = require("./flight-status");
+
+function getStaff(flight) {
+    var staff = [];
+    if (flight.pair) {
+        staff.push(flight.pair);
+    }
+    staff = staff.concat(flight.staff);
+
+    return (staff.length > 0 ? ", " : "") + staff.join(", ");
+}
+
+module.exports = React.createClass({
+    displayName: "exports",
+    render: function render() {
+        return React.createElement(
+            "div",
+            { className: "flight-staff" },
+            React.createElement(
+                "span",
+                { className: "flight-leader" },
+                this.props.flight.lead
+            ),
+            getStaff(this.props.flight)
+        );
+    }
+});
+
+},{"./flight-status":181,"react":177}],181:[function(require,module,exports){
+"use strict";
+
+var React = require("react");
+
+function getStatusClassName(status) {
+    return status.replace(/ /g, "-").toLowerCase();
+}
+
+module.exports = React.createClass({
+    displayName: "exports",
+    render: function render() {
+        return React.createElement(
+            "div",
+            { className: "flight-status" },
+            React.createElement("img", { className: "flight-status-icon " + getStatusClassName(this.props.status), src: "images/plane.svg" }),
+            React.createElement(
+                "div",
+                { className: "flight-status-name" },
+                this.props.status
+            ),
+            React.createElement("div", { className: "flight-status-progress " + getStatusClassName(this.props.status) })
+        );
+    }
+});
+
+},{"react":177}],182:[function(require,module,exports){
+"use strict";
+
+var React = require("react");
+var FlightStatus = require("./flight-status");
+var FlightStaff = require("./flight-staff");
+
+module.exports = React.createClass({
+    displayName: "exports",
+    render: function render() {
+        return React.createElement(
+            "div",
+            { className: "usa-grid flight" },
+            React.createElement(
+                "div",
+                { className: "usa-width-one-sixth" },
+                this.props.flight.name
+            ),
+            React.createElement(
+                "div",
+                { className: "usa-width-two-thirds" },
+                React.createElement(FlightStatus, { status: this.props.flight.status })
+            ),
+            React.createElement(
+                "div",
+                { className: "usa-width-one-sixth" },
+                React.createElement(FlightStaff, { flight: this.props.flight })
+            )
+        );
+    }
+});
+
+},{"./flight-staff":180,"./flight-status":181,"react":177}],183:[function(require,module,exports){
 "use strict";
 
 module.exports = new (require("flux").Dispatcher)();
 
-},{"flux":34}],181:[function(require,module,exports){
+},{"flux":34}],184:[function(require,module,exports){
 "use strict";
 
 var React = require("react");
 var ReactDOM = require("react-dom");
-var FlightList = require("./components/flightList");
+var Auth = require("./components/auth");
+var FlightList = require("./components/flight-list");
 
 require("./service").getFlights();
+require("./service").getUser();
+
+ReactDOM.render(React.createElement(Auth, null), document.getElementById("auth"));
 
 ReactDOM.render(React.createElement(FlightList, null), document.getElementById("content"));
 
-},{"./components/flightList":179,"./service":182,"react":177,"react-dom":48}],182:[function(require,module,exports){
+},{"./components/auth":178,"./components/flight-list":179,"./service":185,"react":177,"react-dom":48}],185:[function(require,module,exports){
 "use strict";
 
 var request = require("browser-request");
 var dispatcher = require("./dispatcher");
 
 module.exports = {
+	getUser: function getUser() {
+		request.get("/api/user", function (err, res) {
+			if (!err && res.body) {
+				try {
+					dispatcher.dispatch({
+						type: "user-in",
+						payload: JSON.parse(res.body)
+					});
+				} catch (e) {}
+			}
+		});
+	},
 	getFlights: function getFlights() {
 		request.get("/api/flights", function (err, res) {
 			if (!err && res.body) {
@@ -26208,7 +26307,7 @@ module.exports = {
 	}
 };
 
-},{"./dispatcher":180,"browser-request":1}],183:[function(require,module,exports){
+},{"./dispatcher":183,"browser-request":1}],186:[function(require,module,exports){
 "use strict";
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -26257,4 +26356,53 @@ var FlightStore = function (_Store) {
 
 module.exports = new FlightStore(dispatcher);
 
-},{"../dispatcher":180,"flux/utils":45}]},{},[181]);
+},{"../dispatcher":183,"flux/utils":45}],187:[function(require,module,exports){
+"use strict";
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _utils = require("flux/utils");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var dispatcher = require("../dispatcher");
+
+var UserStore = function (_Store) {
+    _inherits(UserStore, _Store);
+
+    function UserStore(dispatcher) {
+        _classCallCheck(this, UserStore);
+
+        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(UserStore).call(this, dispatcher));
+
+        _this._user = {};
+        return _this;
+    }
+
+    _createClass(UserStore, [{
+        key: "getUser",
+        value: function getUser() {
+            return this._user;
+        }
+    }, {
+        key: "__onDispatch",
+        value: function __onDispatch(event) {
+            switch (event.type) {
+                case "user-in":
+                    this._user = event.payload;
+                    this.__emitChange();
+                    break;
+            }
+        }
+    }]);
+
+    return UserStore;
+}(_utils.Store);
+
+module.exports = new UserStore(dispatcher);
+
+},{"../dispatcher":183,"flux/utils":45}]},{},[184]);
