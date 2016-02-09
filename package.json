@@ -4,10 +4,10 @@
   "description": "Internal project status tracking",
   "main": "index.js",
   "scripts": {
-	"build-style": "node-sass web/src/style/main.scss -o web/static --include-path `node -e \"console.log(require('18f-contrib-web-design-standards').includePaths.join(':'))\"`",
-	"build-html": "browserify -t [ babelify --presets [ react es2015 ] ] web/src/index.js -o web/static/bundle.js",
-	"build": "npm run build-style && npm run build-html",
-	"start": "node server/main.js"
+    "build-style": "node-sass web/src/style/main.scss -o web/static --include-path `node -e \"console.log(require('18f-contrib-web-design-standards').includePaths.join(':'))\"`",
+    "build-html": "browserify -t [ babelify --presets [ react es2015 ] ] web/src/index.js -o web/static/bundle.js",
+    "build": "npm run build-style && npm run build-html",
+    "start": "node server/main.js"
   },
   "author": "",
   "license": "CC0-1.0",
