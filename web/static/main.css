@@ -2361,6 +2361,10 @@ header {
     .flight .flight-status-bar .flight-status-pending {
       height: 50%;
       border-top: 3px dashed #fdb81e; }
+    .flight .flight-status-bar .flight-status {
+      width: 100%;
+      text-align: center;
+      display: block; }
   .flight + .flight {
     margin-top: 3rem; }
 

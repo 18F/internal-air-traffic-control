@@ -26190,28 +26190,6 @@ function getStatusClassName(status) {
     return status.replace(/ /g, "-").toLowerCase();
 }
 
-function getStatusPre(status) {
-    var pre = [];
-    var i = 0;
-    while (status !== statuses[i] && i < statuses.length) {
-        pre.push(React.createElement("div", { className: "usa-width-one-twelfth flight-status-done" }));
-        i++;
-    }
-    return pre;
-}
-
-function getStatusPost(status) {
-    var post = [];
-    var i = 1;
-    while (i < statuses.length) {
-        if (status === statuses[i - 1] || post.length > 0) {
-            post.push(React.createElement("div", { className: "usa-width-one-twelfth flight-status-pending" }));
-        }
-        i++;
-    }
-    return post;
-}
-
 function getPreStyle(status) {
     return { width: statuses.indexOf(status) / statuses.length * 100 + "%" };
 }
@@ -26232,7 +26210,12 @@ module.exports = React.createClass({
                 { className: "flight-status-icon", style: { width: "12.5%" } },
                 React.createElement("img", { className: "flight-status-icon-" + getStatusClassName(this.props.status), src: "images/plane.svg", alt: "" })
             ),
-            React.createElement("div", { className: "flight-status-pending", style: getPostStyle(this.props.status) })
+            React.createElement("div", { className: "flight-status-pending", style: getPostStyle(this.props.status) }),
+            React.createElement(
+                "div",
+                { className: "flight-status" },
+                this.props.status
+            )
         );
     }
 });
