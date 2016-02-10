@@ -1,17 +1,41 @@
 @import "all";
 
-#auth {
-    float: right;
+* {
+    font-family: $font-sans!important;
 }
 
+header {
+    background-color: $color-primary-darkest;
+    color: white;
+    height: 7rem;
+    padding: 1rem;
+
+    nav {
+        .logo {
+            float: left;
+            h1 {
+                padding: 0 10px 0 0;
+                margin: 0;
+            }
+        }
+        ul {
+            float: right;
+        }
+    }
+}
+
+@import "./flight.scss";
+
+/*
 .flight {
-    background-color: #323a45;
+    background-color: $color-base;
     color: white;
     margin-top: 2rem;
+    border-radius: 0.5rem;
 }
 
 .flight-status {
-    background-color: #d6d7d9;
+    background-color: $color-gray-lighter;
     position: relative;
     margin: 10px 0 10px 0;
 }
@@ -27,7 +51,7 @@
 }
 
 .flight-status-progress {
-    background-color: #94bfa2;
+    background-color: $color-primary-alt;
     position: absolute;
     top: 0;
     left: 0;
@@ -74,4 +98,4 @@ img.flight-status-icon {
 
 .flight-leader {
     font-weight: bold;
-}
+}*/

@@ -22,9 +22,9 @@ module.exports = React.createClass({
 
     render() {
         return (
-            <div className="auth-status">
-                { this.state.user.loggedIn ? <span className="username">Logged in as <span className="bold">{ this.state.user.user.name }</span></span> : <span className="authButton"><a href="/auth/github">Login with Github</a></span> }
-            </div>
+            <a className="usa-button auth-status" href={ this.state.user.loggedIn ? "#" : "/auth/github" }>
+                { this.state.user.loggedIn ? "Logged in as " + this.state.user.user.name : "Login with Github" }
+            </a>
         );
     }
 });

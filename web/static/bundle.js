@@ -26097,26 +26097,9 @@ module.exports = React.createClass({
     },
     render: function render() {
         return React.createElement(
-            "div",
-            { className: "auth-status" },
-            this.state.user.loggedIn ? React.createElement(
-                "span",
-                { className: "username" },
-                "Logged in as ",
-                React.createElement(
-                    "span",
-                    { className: "bold" },
-                    this.state.user.user.name
-                )
-            ) : React.createElement(
-                "span",
-                { className: "authButton" },
-                React.createElement(
-                    "a",
-                    { href: "/auth/github" },
-                    "Login with Github"
-                )
-            )
+            "a",
+            { className: "usa-button auth-status", href: this.state.user.loggedIn ? "#" : "/auth/github" },
+            this.state.user.loggedIn ? "Logged in as " + this.state.user.user.name : "Login with Github"
         );
     }
 });
@@ -26201,8 +26184,40 @@ module.exports = React.createClass({
 
 var React = require("react");
 
+var statuses = ["Preflight", "Taxiing", "Climbing", "In flight", "Descent", "Landed", "At the gate", "Complete"];
+
 function getStatusClassName(status) {
     return status.replace(/ /g, "-").toLowerCase();
+}
+
+function getStatusPre(status) {
+    var pre = [];
+    var i = 0;
+    while (status !== statuses[i] && i < statuses.length) {
+        pre.push(React.createElement("div", { className: "usa-width-one-twelfth flight-status-done" }));
+        i++;
+    }
+    return pre;
+}
+
+function getStatusPost(status) {
+    var post = [];
+    var i = 1;
+    while (i < statuses.length) {
+        if (status === statuses[i - 1] || post.length > 0) {
+            post.push(React.createElement("div", { className: "usa-width-one-twelfth flight-status-pending" }));
+        }
+        i++;
+    }
+    return post;
+}
+
+function getPreStyle(status) {
+    return { width: statuses.indexOf(status) / statuses.length * 100 + "%" };
+}
+
+function getPostStyle(status) {
+    return { width: (statuses.length - statuses.indexOf(status) - 1) / statuses.length * 100 + "%" };
 }
 
 module.exports = React.createClass({
@@ -26210,14 +26225,14 @@ module.exports = React.createClass({
     render: function render() {
         return React.createElement(
             "div",
-            { className: "flight-status" },
-            React.createElement("img", { className: "flight-status-icon " + getStatusClassName(this.props.status), src: "images/plane.svg" }),
+            { className: "flight-status-bar usa-width-two-thirds" },
+            React.createElement("div", { className: "flight-status-done", style: getPreStyle(this.props.status) }),
             React.createElement(
                 "div",
-                { className: "flight-status-name" },
-                this.props.status
+                { className: "flight-status-icon", style: { width: "12.5%" } },
+                React.createElement("img", { className: "flight-status-icon-" + getStatusClassName(this.props.status), src: "images/plane.svg", alt: "" })
             ),
-            React.createElement("div", { className: "flight-status-progress " + getStatusClassName(this.props.status) })
+            React.createElement("div", { className: "flight-status-pending", style: getPostStyle(this.props.status) })
         );
     }
 });
@@ -26237,14 +26252,10 @@ module.exports = React.createClass({
             { className: "usa-grid flight" },
             React.createElement(
                 "div",
-                { className: "usa-width-one-sixth" },
+                { className: "usa-width-one-sixth flight-name" },
                 this.props.flight.name
             ),
-            React.createElement(
-                "div",
-                { className: "usa-width-two-thirds" },
-                React.createElement(FlightStatus, { status: this.props.flight.status })
-            ),
+            React.createElement(FlightStatus, { status: this.props.flight.status }),
             React.createElement(
                 "div",
                 { className: "usa-width-one-sixth" },

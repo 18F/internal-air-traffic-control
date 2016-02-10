@@ -1,0 +1,49 @@
+.flight {
+    background: $color-primary-darker;
+    color: white;
+    padding: 3rem;
+    border-radius: 5px;
+
+    > div {
+        height: 5rem;
+    }
+
+    .flight-name {
+        font-weight: bold;
+        background: $color-primary-darker;
+        color: white;
+    }
+
+    .flight-status-bar {
+        position: relative;
+        background: $color-cool-blue-lightest;
+        border-radius: 5px;
+
+        > div {
+            display: inline-block;
+            min-height: 1px;
+        }
+
+        .flight-status-done {
+            height: 50%;
+            border-top: 3px solid $color-green-light;
+        }
+
+        .flight-status-icon-climbing {
+            transform: rotate(-20deg);
+        }
+
+        .flight-status-icon-descent {
+            transform: rotate(20deg);
+        }
+
+        .flight-status-pending {
+            height: 50%;
+            border-top: 3px dashed $color-gold;
+        }
+    }
+
+    & + .flight {
+        margin-top: 3rem;
+    }
+}

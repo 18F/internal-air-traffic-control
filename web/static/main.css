@@ -2317,65 +2317,123 @@ fieldset {
   .usa-accordion-content > *:last-child {
     margin-bottom: 0; }
 
-#auth {
-  float: right; }
+* {
+  font-family: "Source Sans Pro", "Helvetica", "Arial", sans-serif !important; }
+
+header {
+  background-color: #112e51;
+  color: white;
+  height: 7rem;
+  padding: 1rem; }
+  header nav .logo {
+    float: left; }
+    header nav .logo h1 {
+      padding: 0 10px 0 0;
+      margin: 0; }
+  header nav ul {
+    float: right; }
 
 .flight {
-  background-color: #323a45;
+  background: #205493;
   color: white;
-  margin-top: 2rem; }
+  padding: 3rem;
+  border-radius: 5px; }
+  .flight > div {
+    height: 5rem; }
+  .flight .flight-name {
+    font-weight: bold;
+    background: #205493;
+    color: white; }
+  .flight .flight-status-bar {
+    position: relative;
+    background: #dce4ef;
+    border-radius: 5px; }
+    .flight .flight-status-bar > div {
+      display: inline-block;
+      min-height: 1px; }
+    .flight .flight-status-bar .flight-status-done {
+      height: 50%;
+      border-top: 3px solid #4aa564; }
+    .flight .flight-status-bar .flight-status-icon-climbing {
+      transform: rotate(-20deg); }
+    .flight .flight-status-bar .flight-status-icon-descent {
+      transform: rotate(20deg); }
+    .flight .flight-status-bar .flight-status-pending {
+      height: 50%;
+      border-top: 3px dashed #fdb81e; }
+  .flight + .flight {
+    margin-top: 3rem; }
+
+/*
+.flight {
+    background-color: $color-base;
+    color: white;
+    margin-top: 2rem;
+    border-radius: 0.5rem;
+}
 
 .flight-status {
-  background-color: #d6d7d9;
-  position: relative;
-  margin: 10px 0 10px 0; }
+    background-color: $color-gray-lighter;
+    position: relative;
+    margin: 10px 0 10px 0;
+}
 
 .flight-status-name {
-  text-align: center;
-  color: black;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  z-index: 10; }
+    text-align: center;
+    color: black;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 10;
+}
 
 .flight-status-progress {
-  background-color: #94bfa2;
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0; }
-  .flight-status-progress.preflight {
-    width: 0; }
-  .flight-status-progress.climbing {
-    width: 16.67%; }
-  .flight-status-progress.in-flight {
-    width: 33.33%; }
-  .flight-status-progress.descent {
-    width: 50%; }
-  .flight-status-progress.landed {
-    width: 66.67%; }
-  .flight-status-progress.at-the-gate {
-    width: 83.33%; }
-  .flight-status-progress.complete {
-    width: 100%; }
+    background-color: $color-primary-alt;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+
+    &.preflight { width: 0; }
+    &.climbing { width: 16.67%; }
+    &.in-flight { width: 33.33%; }
+    &.descent { width: 50%; }
+    &.landed { width: 66.67%; }
+    &.at-the-gate { width: 83.33%; }
+    &.complete { width: 100%; }
+}
 
 img.flight-status-icon {
-  width: 100px; }
-  img.flight-status-icon.preflight, img.flight-status-icon.complete {
-    opacity: 0; }
-  img.flight-status-icon.climbing {
-    transform: rotate(-20deg);
-    margin-left: 16.67%; }
-  img.flight-status-icon.in-flight {
-    margin-left: 33.33%; }
-  img.flight-status-icon.descent {
-    transform: rotate(20deg);
-    margin-left: 50%; }
-  img.flight-status-icon.landed {
-    margin-left: 66.67%; }
-  img.flight-status-icon.at-the-gate {
-    margin-left: 83.33%; }
+    width: 100px;
+
+    &.preflight, &.complete {
+        opacity: 0;
+    }
+
+    &.climbing {
+        transform: rotate(-20deg);
+        margin-left: 16.67%;
+    }
+
+    &.in-flight {
+        margin-left: 33.33%;
+    }
+
+    &.descent {
+        transform: rotate(20deg);
+        margin-left: 50%;
+    }
+
+    &.landed {
+        margin-left: 66.67%;
+    }
+
+    &.at-the-gate {
+        margin-left: 83.33%;
+    }
+}
 
 .flight-leader {
-  font-weight: bold; }
+    font-weight: bold;
+}*/

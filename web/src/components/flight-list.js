@@ -27,7 +27,7 @@ module.exports = React.createClass({
                 <div className="usa-grid">
                     <h3 className="usa-width-one-whole">Flights on the Board</h3>
                 </div>
-                {this.state.flights.map(flight => <Flight key={flight.id} flight={flight} />)}
+                { this.state.flights.map(flight => <Flight key={flight.id} flight={flight} />) }
             </div>
         );
     }
