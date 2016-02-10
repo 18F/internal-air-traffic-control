@@ -3,19 +3,25 @@
 const restify = require("restify");
 const passport = require("passport");
 const sessions = require("client-sessions");
+const sheet = require("./sheet").setSheetID(process.env["GOOG_SHEET_ID"]);
 const PORT = process.env.PORT || 5000;
 const statuses = require("./data.json");
 
-if(!process.env["GH_CLIENT_ID"]) {
-    console.error("GitHub client ID not set.  Cannot continue.");
+if(!process.env["GOOG_CLIENT_ID"]) {
+    console.error("Google client ID not set.  Cannot continue.");
     process.exit(1);
 }
-if(!process.env["GH_CLIENT_SECRET"]) {
-    console.error("GitHub client secret not set.  Cannot continue.");
+if(!process.env["GOOG_CLIENT_SECRET"]) {
+    console.error("Google client secret not set.  Cannot continue.");
     process.exit(1);
 }
-if(!process.env["GH_CALLBACK_URL"]) {
-    console.error("GitHub callback URL not set.  Cannot continue.");
+if(!process.env["GOOG_CALLBACK_URL"]) {
+    console.error("Google callback URL not set.  Cannot continue.");
+    process.exit(1);
+}
+
+if(!process.env["GOOG_SHEET_ID"]) {
+    console.error("Google sheet ID not set.  Cannot continue.");
     process.exit(1);
 }
 
@@ -40,7 +46,7 @@ server.get('/auth/error', (req, res, next) => {
     return next(new restify.UnauthorizedError(""));
 });
 
-require("./auth/github")(server, passport, "/auth/error");
+require("./auth/google")(server, passport, "/auth/error");
 
 server.get("/api/flights", (req, res, next) => {
     if(req.user) {
