@@ -22,8 +22,8 @@ module.exports = React.createClass({
 
     render() {
         return (
-            <a className="usa-button auth-status" href={ this.state.user.loggedIn ? "#" : "/auth/github" }>
-                { this.state.user.loggedIn ? "Logged in as " + this.state.user.user.name : "Login with Github" }
+            <a className="usa-button auth-status" href={ this.state.user.loggedIn ? "#" : "/auth/google" }>
+                { this.state.user.loggedIn ? "Logged In" : "Login with Google" }
             </a>
         );
     }
