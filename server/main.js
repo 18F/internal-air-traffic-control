@@ -5,7 +5,6 @@ const passport = require("passport");
 const sessions = require("client-sessions");
 const sheet = require("./sheet");
 const PORT = process.env.PORT || 5000;
-const statuses = require("./data.json");
 
 if(!process.env["GOOG_CLIENT_ID"]) {
     console.error("Google client ID not set.  Cannot continue.");
@@ -91,7 +90,6 @@ server.get("/api/flights", (req, res, next) => {
             console.log(e);
             res.send(new restify.InternalServerError());
         });
-    //res.send(statuses);
     next();
 });
 
