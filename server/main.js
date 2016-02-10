@@ -3,7 +3,7 @@
 const restify = require("restify");
 const passport = require("passport");
 const sessions = require("client-sessions");
-const sheet = require("./sheet").setSheetID(process.env["GOOG_SHEET_ID"]);
+const sheet = require("./sheet");
 const PORT = process.env.PORT || 5000;
 const statuses = require("./data.json");
 
@@ -29,6 +29,8 @@ if(!process.env["SESSION_SECRET"]) {
     console.warn("No SESSION_SECRET set.  Using less secure default.");
 }
 
+sheet.setSheetID(process.env["GOOG_SHEET_ID"])
+
 const server = restify.createServer({ name: "Traffic Control API" });
 server.use(sessions({
     cookieName: "session",
@@ -48,22 +50,54 @@ server.get('/auth/error', (req, res, next) => {
 
 require("./auth/google")(server, passport, "/auth/error");
 
-server.get("/api/flights", (req, res, next) => {
-    if(req.user) {
-        res.send(statuses);
-    } else {
-        res.send(new restify.UnauthorizedError("Not logged in"));
+server.use((req, res, next) => {
+    if(!req.user) {
+        res.redirect("/auth/google");
     }
     next();
 });
 
+server.get("/api/flights", (req, res, next) => {
+    sheet.getRows(req.user.accessToken)
+        .then(rows => {
+            console.log(rows);
+            for(let r of rows) {
+                switch(r.lead.toLowerCase()) {
+                    case "none":
+                    case "tbd":
+                        r.lead = "";
+                        break;
+                }
+                switch(r.pair.toLowerCase()) {
+                    case "none":
+                    case "tbd":
+                        r.pair = "";
+                        break;
+                }
+
+                r.staff = [ ];
+                if(r.staff3.length) {
+                    r.staff.push(r.staff3);
+                }
+                if(r.staff4.length) {
+                    r.staff.push(r.staff4);
+                }
+                delete r.staff3;
+                delete r.staff4;
+            }
+            res.send(rows);
+        })
+        .catch(e => {
+            console.log("Error getting rows from sheet:");
+            console.log(e);
+            res.send(new restify.InternalServerError());
+        });
+    //res.send(statuses);
+    next();
+});
+
 server.get("/api/user", (req, res, next) => {
-    const user = { loggedIn: false };
-    if(req.user) {
-        user.loggedIn = true;
-        user.user = req.user;
-    }
-    res.send(user);
+    res.send({ loggedIn: true, user: { name: "/shrug" } });
     next();
 });
 

@@ -11,9 +11,8 @@ module.exports = function(server, passport, errorURL) {
         clientSecret: process.env["GOOG_CLIENT_SECRET"],
         callbackURL: process.env["GOOG_CALLBACK_URL"]
     }, function(accessToken, refreshToken, profile, done) {
-        sheet.setAccessToken(accessToken);
-        sheet.load()
-            .then(() => done(null, { accessToken, name: "Google User "}))
+        sheet.load(accessToken)
+            .then(() => done(null, { accessToken, refreshToken, name: "Google User "}))
             .catch(e => done(e, false));
     }));
 

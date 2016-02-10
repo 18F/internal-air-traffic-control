@@ -26098,8 +26098,8 @@ module.exports = React.createClass({
     render: function render() {
         return React.createElement(
             "a",
-            { className: "usa-button auth-status", href: this.state.user.loggedIn ? "#" : "/auth/github" },
-            this.state.user.loggedIn ? "Logged in as " + this.state.user.user.name : "Login with Github"
+            { className: "usa-button auth-status", href: this.state.user.loggedIn ? "#" : "/auth/google" },
+            this.state.user.loggedIn ? "Logged In" : "Login with Google"
         );
     }
 });
@@ -26184,18 +26184,24 @@ module.exports = React.createClass({
 
 var React = require("react");
 
-var statuses = ["Preflight", "Taxiing", "Climbing", "In flight", "Descent", "Landed", "At the gate", "Complete"];
+var statuses = ["preflight", "taxiing", "climbing", "in flight", "descent", "landing", "at gate", "complete"];
 
 function getStatusClassName(status) {
     return status.replace(/ /g, "-").toLowerCase();
 }
 
 function getPreStyle(status) {
-    return { width: statuses.indexOf(status) / statuses.length * 100 + "%" };
+    if (statuses.indexOf(status.toLowerCase()) >= 0) {
+        return { width: statuses.indexOf(status.toLowerCase()) / statuses.length * 100 + "%" };
+    }
+    return { width: "0%" };
 }
 
 function getPostStyle(status) {
-    return { width: (statuses.length - statuses.indexOf(status) - 1) / statuses.length * 100 + "%" };
+    if (statuses.indexOf(status.toLowerCase()) >= 0) {
+        return { width: (statuses.length - statuses.indexOf(status.toLowerCase()) - 1) / statuses.length * 100 + "%" };
+    }
+    return { width: "0%" };
 }
 
 module.exports = React.createClass({
@@ -26236,7 +26242,7 @@ module.exports = React.createClass({
             React.createElement(
                 "div",
                 { className: "usa-width-one-sixth flight-name" },
-                this.props.flight.name
+                this.props.flight.description
             ),
             React.createElement(FlightStatus, { status: this.props.flight.status }),
             React.createElement(

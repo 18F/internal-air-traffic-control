@@ -7,7 +7,7 @@ module.exports = React.createClass({
         return (
             <div className="usa-grid flight">
                 <div className="usa-width-one-sixth flight-name">
-                    {this.props.flight.name}
+                    {this.props.flight.description}
                 </div>
                 <FlightStatus status={this.props.flight.status} />
                 <div className="usa-width-one-sixth">

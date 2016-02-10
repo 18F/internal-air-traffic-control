@@ -2356,7 +2356,7 @@ header {
       border-top: 3px solid #4aa564; }
     .flight .flight-status-bar .flight-status-icon-climbing {
       transform: rotate(-20deg); }
-    .flight .flight-status-bar .flight-status-icon-descent {
+    .flight .flight-status-bar .flight-status-icon-landing {
       transform: rotate(20deg); }
     .flight .flight-status-bar .flight-status-pending {
       height: 50%;
