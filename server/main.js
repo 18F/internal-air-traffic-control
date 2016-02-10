@@ -60,7 +60,6 @@ server.use((req, res, next) => {
 server.get("/api/flights", (req, res, next) => {
     sheet.getRows(req.user.accessToken)
         .then(rows => {
-            console.log(rows);
             for(let r of rows) {
                 switch(r.lead.toLowerCase()) {
                     case "none":
