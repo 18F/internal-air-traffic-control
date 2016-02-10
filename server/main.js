@@ -2,6 +2,7 @@
 
 const restify = require("restify");
 const passport = require("passport");
+const googleAuth = require("./auth/google");
 const sessions = require("client-sessions");
 const sheet = require("./sheet");
 const PORT = process.env.PORT || 5000;
@@ -47,13 +48,21 @@ server.get('/auth/error', (req, res, next) => {
     return next(new restify.UnauthorizedError(""));
 });
 
-require("./auth/google")(server, passport, "/auth/error");
+googleAuth.setupMiddleware(server, passport, "/auth/error");
 
 server.use((req, res, next) => {
     if(!req.user) {
         res.redirect("/auth/google");
+        next();
+    } else {
+        googleAuth.refresh(req)
+            .then(next)
+            .catch(e => {
+                console.log("Error refreshing Google OAuth token");
+                console.error(e);
+                return next(new restify.InternalServerError("Could not refresh authentication token"));
+            });
     }
-    next();
 });
 
 server.get("/api/flights", (req, res, next) => {
@@ -94,7 +103,7 @@ server.get("/api/flights", (req, res, next) => {
 });
 
 server.get("/api/user", (req, res, next) => {
-    res.send({ loggedIn: true, user: { name: "/shrug" } });
+    res.send({ loggedIn: true, user: { name: req.user.name } });
     next();
 });
 
