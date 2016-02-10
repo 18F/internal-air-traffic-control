@@ -23,7 +23,7 @@ module.exports = React.createClass({
     render() {
         return (
             <a className="usa-button auth-status" href={ this.state.user.loggedIn ? "#" : "/auth/google" }>
-                { this.state.user.loggedIn ? "Logged In" : "Login with Google" }
+                { this.state.user.loggedIn ? `Logged In (${this.state.user.user.name})` : "Login with Google" }
             </a>
         );
     }
