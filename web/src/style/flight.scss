@@ -24,22 +24,32 @@
             min-height: 1px;
         }
 
-        .flight-status-done {
-            height: 50%;
-            border-top: 3px solid $color-green-light;
+        .flight-status-journey {
+            height: 90%;
         }
 
-        .flight-status-icon-climbing {
-            transform: rotate(-20deg);
+        &.flight-status-climbing .flight-status-journey, &.flight-status-landing .flight-status-journey {
+            height: 65%;
         }
 
-        .flight-status-icon-landing {
-            transform: rotate(20deg);
+        &.flight-status-in-flight .flight-status-journey {
+            height: 40%;
         }
 
-        .flight-status-pending {
-            height: 50%;
-            border-top: 3px dashed $color-gold;
+        .flight-status-journey-done {
+            border-top: 1rem solid $color-green-light;
+        }
+
+        &.flight-status-climbing .flight-status-icon {
+            transform: rotate(-10deg);
+        }
+
+        &.flight-status-landing .flight-status-icon {
+            transform: rotate(10deg);
+        }
+
+        .flight-status-journey-pending {
+            border-top: 1rem dashed $color-gold;
         }
 
         .flight-status {

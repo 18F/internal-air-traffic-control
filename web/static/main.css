@@ -2351,16 +2351,20 @@ header {
     .flight .flight-status-bar > div {
       display: inline-block;
       min-height: 1px; }
-    .flight .flight-status-bar .flight-status-done {
-      height: 50%;
-      border-top: 3px solid #4aa564; }
-    .flight .flight-status-bar .flight-status-icon-climbing {
-      transform: rotate(-20deg); }
-    .flight .flight-status-bar .flight-status-icon-landing {
-      transform: rotate(20deg); }
-    .flight .flight-status-bar .flight-status-pending {
-      height: 50%;
-      border-top: 3px dashed #fdb81e; }
+    .flight .flight-status-bar .flight-status-journey {
+      height: 90%; }
+    .flight .flight-status-bar.flight-status-climbing .flight-status-journey, .flight .flight-status-bar.flight-status-landing .flight-status-journey {
+      height: 65%; }
+    .flight .flight-status-bar.flight-status-in-flight .flight-status-journey {
+      height: 40%; }
+    .flight .flight-status-bar .flight-status-journey-done {
+      border-top: 1rem solid #4aa564; }
+    .flight .flight-status-bar.flight-status-climbing .flight-status-icon {
+      transform: rotate(-10deg); }
+    .flight .flight-status-bar.flight-status-landing .flight-status-icon {
+      transform: rotate(10deg); }
+    .flight .flight-status-bar .flight-status-journey-pending {
+      border-top: 1rem dashed #fdb81e; }
     .flight .flight-status-bar .flight-status {
       width: 100%;
       text-align: center;
