@@ -43,8 +43,8 @@ module.exports = {
             } else {
                 request.post("https://www.googleapis.com/oauth2/v4/token", {
                     form: {
-                        "client_id": process.env[GOOG_CLIENT_ID],
-                        "client_secret": process.env[GOOG_CLIENT_SECRET],
+                        "client_id": process.env["GOOG_CLIENT_ID"],
+                        "client_secret": process.env["GOOG_CLIENT_SECRET"],
                         "refresh_token": req.user.refreshToken,
                         "grant_type": "refresh_token"
                     }
@@ -59,8 +59,13 @@ module.exports = {
                         return reject(new Error("Could not parse refreshed token body"));
                     }
 
+                    if(body.error) {
+                        return reject(new Error(body.error_description));
+                    }
+
                     req.user.accessToken = body["access_token"];
                     req.user.expires = (Date.now() + (30 * 60 * 1000));
+                    resolve();
                 });
             }
         });
