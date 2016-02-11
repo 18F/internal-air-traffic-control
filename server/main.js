@@ -36,7 +36,10 @@ server.use(sessions({
     cookieName: "session",
     secret: process.env["SESSION_SECRET"] || "N4JnqJmmMjjEHHq22yIAkN0owlsMVJeYzsgBkSQ0zSPGrHmdxLVLfnFYGhccog7",
     duration: 24 * 60 * 60 * 1000, // how long the session will stay valid in ms
-    activeDuration: 1000 * 60 * 5 // if expiresIn < activeDuration, the session will be extended by activeDuration milliseconds
+    activeDuration: 1000 * 60 * 5, // if expiresIn < activeDuration, the session will be extended by activeDuration milliseconds
+    cookie: {
+        httpOnly: true
+    }
 }));
 
 server.use(require("restify-redirect")());
