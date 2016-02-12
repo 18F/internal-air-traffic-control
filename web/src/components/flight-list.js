@@ -8,7 +8,8 @@ module.exports = React.createClass({
         return {
             visibleStatuses: false,
             allStatuses: [ ],
-            flights: flightStore.getFlights()
+            flights: flightStore.getFlights(),
+            visibleFlights: [ ]
         };
     },
 
@@ -20,8 +21,17 @@ module.exports = React.createClass({
         this.flightStoreListenerToken.remove();
     },
 
-    statusesChanged(selected) {
-        this.setState({ visibleStatuses: selected });
+    getVisibleFlights(flights, visibleStatuses) {
+        if(visibleStatuses) {
+            const statusNames = visibleStatuses.map(vs => vs.label.toLowerCase());
+            console.log(statusNames);
+            return flights.filter(f => (statusNames.indexOf(f.status.toLowerCase()) >= 0));
+        }
+        return [ ];
+    },
+
+    _onStatusesChanged(selected) {
+        this.setState({ visibleStatuses: selected, visibleFlights: this.getVisibleFlights(this.state.flights, selected) });
     },
 
     _storeChanged() {
@@ -39,7 +49,7 @@ module.exports = React.createClass({
             visibleStatuses = allStatuses.map(s => { return { value: s, label: s }});
         }
 
-        this.setState({ allStatuses, flights, visibleStatuses });
+        this.setState({ allStatuses, flights, visibleStatuses, visibleFlights: this.getVisibleFlights(flights, visibleStatuses) });
     },
 
     render() {
@@ -47,10 +57,10 @@ module.exports = React.createClass({
             <div>
                 <div className="usa-grid">
                     <h3 className="usa-width-one-whole">Flights on the Board</h3>
-                    <ReactSelect multi={true} value={ this.state.visibleStatuses } delimiter=":" onChange={this.statusesChanged} placeholder="Show statuses..." options={ this.state.allStatuses.map(status => { return { value: status, label: status }}) } />
+                    <ReactSelect multi={true} value={ this.state.visibleStatuses } delimiter=":" onChange={this._onStatusesChanged} placeholder="Show statuses..." options={ this.state.allStatuses.map(status => { return { value: status, label: status }}) } />
                 </div>
                 <br/>
-                { this.state.flights.map(flight => <Flight key={flight.id} flight={flight} />) }
+                { this.state.visibleFlights.map(flight => <Flight key={flight.id} flight={flight} />) }
             </div>
         );
     }
