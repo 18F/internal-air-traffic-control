@@ -87,6 +87,40 @@ class Sheet {
                 });
         });
     }
+
+    updateRow(row, accessToken) {
+        return new Promise((resolve, reject) => {
+            this.getRows(accessToken)
+                .then(rows => {
+                    const targetRow = rows.find(r => r._id === row._id);
+                    if(targetRow) {
+                        request.put(targetRow._links.edit, { headers: { "Content-type": "application/atom+xml", "Authorization": `Bearer ${accessToken}` }, body: this.atomizeRow(row) }, (err) => {
+                            if(err) {
+                                console.log(err);
+                                reject(new Error("Error updating row"));
+                            } else {
+                                resolve();
+                            }
+                        });
+                    } else {
+                        reject(new Error(`No row found with ID [${row._id}]`))
+                    }
+
+                })
+        });
+    }
+
+    atomizeRow(row) {
+        return `<?xml version="1.0" encoding="UTF-8"?>
+            <entry xmlns="http://www.w3.org/2005/Atom" xmlns:gsx="http://schemas.google.com/spreadsheets/2006/extended">
+                <id>${row._id}</id>
+                <gsx:id>${row.id}</gsx:id>
+                <gsx:description>${row.description}</gsx:description>
+                <gsx:status>${row.status}</gsx:status>
+                <gsx:lead>${row.lead}</gsx:lead>
+                <gsx:pair>${row.pair}</gsx:pair>
+            </entry>`;
+    }
 }
 
 module.exports = new Sheet();
