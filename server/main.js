@@ -47,7 +47,14 @@ server.use(restify.queryParser());
 server.use(passport.initialize());
 server.use(passport.session());
 
-server.get('/auth/error', (req, res, next) => {
+server.get("/auth/reset", (req, res, next) => {
+    req.logout();
+    req.session.destroy();
+    res.send(200);
+    next();
+});
+
+server.get("/auth/error", (req, res, next) => {
     return next(new restify.UnauthorizedError(""));
 });
 

@@ -65,7 +65,9 @@ module.exports = {
 
                     req.user.accessToken = body["access_token"];
                     req.user.expires = (Date.now() + (30 * 60 * 1000));
-                    resolve();
+                    req.login(req.user, error => {
+                        resolve();
+                    });
                 });
             }
         });
