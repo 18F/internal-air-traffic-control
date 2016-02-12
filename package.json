@@ -4,7 +4,7 @@
   "description": "Internal project status tracking",
   "main": "index.js",
   "scripts": {
-    "build-style": "node-sass web/src/style/main.scss -o web/static --include-path `node -e \"console.log(require('18f-contrib-web-design-standards').includePaths.join(':'))\"`",
+    "build-style": "node-sass web/src/style/main.scss -o web/static --include-path `node sassPaths.js`",
     "build-html": "browserify -t [ babelify --presets [ react es2015 ] ] web/src/index.js -o web/static/bundle.js",
     "build": "npm run build-style && npm run build-html",
     "start": "node server/main.js"
@@ -28,8 +28,10 @@
     "browserify": "^12.0.0",
     "es6-promise": "^3.0.2",
     "flux": "^2.1.1",
+    "local-storage": "^1.4.2",
     "node-sass": "^3.4.2",
     "react": "^0.14.7",
-    "react-dom": "^0.14.7"
+    "react-dom": "^0.14.7",
+    "react-select": "^1.0.0-beta8"
   }
 }

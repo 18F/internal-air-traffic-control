@@ -65,6 +65,7 @@ server.use((req, res, next) => {
         res.redirect("/auth/google");
         next();
     } else {
+        res.charSet("utf-8");
         googleAuth.refresh(req)
             .then(next)
             .catch(e => {
@@ -119,7 +120,8 @@ server.get("/api/user", (req, res, next) => {
 
 server.get(/.*/, restify.serveStatic({
     directory: "./web/static",
-    default: "index.html"
+    default: "index.html",
+    charSet: "utf-8"
 }));
 
 server.listen(PORT, (a, b) => {
