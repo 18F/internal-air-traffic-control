@@ -33,5 +33,9 @@
     "react": "^0.14.7",
     "react-dom": "^0.14.7",
     "react-select": "^1.0.0-beta8"
+  },
+  "engines": {
+    "node": "4.2.5",
+    "npm": "3.5.3"
   }
 }
