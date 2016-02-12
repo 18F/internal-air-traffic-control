@@ -12,7 +12,8 @@ module.exports = React.createClass({
             visibleStatuses: false,
             allStatuses: [ ],
             flights: flightStore.getFlights(),
-            visibleFlights: [ ]
+            visibleFlights: [ ],
+            searchField: ""
         };
     },
 
@@ -20,7 +21,7 @@ module.exports = React.createClass({
         this.flightStoreListenerToken = flightStore.addListener(this._storeChanged);
         let visibleStatusesFromStorage = localStorage(STORAGE_KEY);
         if(visibleStatusesFromStorage) {
-            this.setState({ visibleStatuses: visibleStatusesFromStorage, visibleFlights: this.getVisibleFlights(this.state.flights, visibleStatusesFromStorage) });
+            this.setState({ visibleStatuses: visibleStatusesFromStorage, visibleFlights: this.getVisibleFlights(this.state.flights, visibleStatusesFromStorage, this.state.searchField) });
         }
     },
 
@@ -28,17 +29,44 @@ module.exports = React.createClass({
         this.flightStoreListenerToken.remove();
     },
 
-    getVisibleFlights(flights, visibleStatuses) {
+    getVisibleFlights(flights, visibleStatuses, searchText) {
+        let visibleFlights = [ ];
         if(visibleStatuses) {
             const statusNames = visibleStatuses.map(vs => vs.label.toLowerCase());
-            console.log(statusNames);
-            return flights.filter(f => (statusNames.indexOf(f.status.toLowerCase()) >= 0));
+            visibleFlights = flights.filter(f => (statusNames.indexOf(f.status.toLowerCase()) >= 0));
         }
-        return [ ];
+
+        const majorSearchProperties = [ "description", "status", "lead", "pair" ];
+
+        searchText = searchText.trim().toLowerCase();
+        if(visibleFlights.length && searchText.trim()) {
+            let terms = searchText.split(" ");
+            visibleFlights = visibleFlights.filter(flight => {
+                for(let term of terms) {
+                    for(let property of majorSearchProperties) {
+                        if(flight[property].toLowerCase().indexOf(term) >= 0) {
+                            return true;
+                        }
+                    }
+                    for(let staff of flight.staff) {
+                        if(staff.toLowerCase().indexOf(term) >= 0) {
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            });
+        }
+
+        return visibleFlights;
+    },
+
+    _onSearchChanged(event) {
+        this.setState({ searchField: event.target.value, visibleFlights: this.getVisibleFlights(this.state.flights, this.state.visibleStatuses, event.target.value) });
     },
 
     _onStatusesChanged(selected) {
-        this.setState({ visibleStatuses: selected, visibleFlights: this.getVisibleFlights(this.state.flights, selected) });
+        this.setState({ visibleStatuses: selected, visibleFlights: this.getVisibleFlights(this.state.flights, selected, this.state.searchField) });
         localStorage(STORAGE_KEY, selected);
     },
 
@@ -57,7 +85,7 @@ module.exports = React.createClass({
             visibleStatuses = allStatuses.map(s => { return { value: s, label: s }});
         }
 
-        this.setState({ allStatuses, flights, visibleStatuses, visibleFlights: this.getVisibleFlights(flights, visibleStatuses) });
+        this.setState({ allStatuses, flights, visibleStatuses, visibleFlights: this.getVisibleFlights(flights, visibleStatuses, this.state.searchField) });
     },
 
     render() {
@@ -65,7 +93,10 @@ module.exports = React.createClass({
             <div>
                 <div className="usa-grid">
                     <h3 className="usa-width-one-whole">Flights on the Board</h3>
-                    <ReactSelect multi={true} value={ this.state.visibleStatuses } delimiter=":" onChange={this._onStatusesChanged} placeholder="Show statuses..." options={ this.state.allStatuses.map(status => { return { value: status, label: status }}) } />
+                    <ReactSelect className="usa-width-three-fourths" multi={true} value={ this.state.visibleStatuses } delimiter=":" onChange={ this._onStatusesChanged } placeholder="Show statuses..." options={ this.state.allStatuses.map(status => { return { value: status, label: status }}) } />
+                    <div className="usa-width-one-fourth flight-list-search">
+                        <input type="text" onChange={ this._onSearchChanged } placeholder="Filter..." />
+                    </div>
                 </div>
                 <br/>
                 { this.state.visibleFlights.map(flight => <Flight key={flight.id} flight={flight} />) }
