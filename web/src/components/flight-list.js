@@ -6,7 +6,7 @@ const flightStore = require("../stores/flightStore");
 module.exports = React.createClass({
     getInitialState() {
         return {
-            visibleStatuses: [ ],
+            visibleStatuses: false,
             allStatuses: [ ],
             flights: flightStore.getFlights()
         };
@@ -26,6 +26,7 @@ module.exports = React.createClass({
 
     _storeChanged() {
         const allStatuses = [ ];
+        let visibleStatuses = this.state.visibleStatuses;
         const flights = flightStore.getFlights();
 
         for(let flight of flights) {
@@ -33,7 +34,12 @@ module.exports = React.createClass({
                 allStatuses.push(flight.status);
             }
         }
-        this.setState({ allStatuses, flights });
+
+        if(visibleStatuses === false) {
+            visibleStatuses = allStatuses.map(s => { return { value: s, label: s }});
+        }
+
+        this.setState({ allStatuses, flights, visibleStatuses });
     },
 
     render() {
@@ -43,6 +49,7 @@ module.exports = React.createClass({
                     <h3 className="usa-width-one-whole">Flights on the Board</h3>
                     <ReactSelect multi={true} value={ this.state.visibleStatuses } delimiter=":" onChange={this.statusesChanged} placeholder="Show statuses..." options={ this.state.allStatuses.map(status => { return { value: status, label: status }}) } />
                 </div>
+                <br/>
                 { this.state.flights.map(flight => <Flight key={flight.id} flight={flight} />) }
             </div>
         );
