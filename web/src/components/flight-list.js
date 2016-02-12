@@ -2,6 +2,9 @@ const React = require("react");
 const Flight = require("./flight");
 const ReactSelect = require("react-select");
 const flightStore = require("../stores/flightStore");
+const localStorage = require("local-storage");
+
+const STORAGE_KEY = "flight-list-visible-statuses";
 
 module.exports = React.createClass({
     getInitialState() {
@@ -15,6 +18,10 @@ module.exports = React.createClass({
 
     componentDidMount() {
         this.flightStoreListenerToken = flightStore.addListener(this._storeChanged);
+        let visibleStatusesFromStorage = localStorage(STORAGE_KEY);
+        if(visibleStatusesFromStorage) {
+            this.setState({ visibleStatuses: visibleStatusesFromStorage, visibleFlights: this.getVisibleFlights(this.state.flights, visibleStatusesFromStorage) });
+        }
     },
 
     componentWillUnmount() {
@@ -32,6 +39,7 @@ module.exports = React.createClass({
 
     _onStatusesChanged(selected) {
         this.setState({ visibleStatuses: selected, visibleFlights: this.getVisibleFlights(this.state.flights, selected) });
+        localStorage(STORAGE_KEY, selected);
     },
 
     _storeChanged() {
