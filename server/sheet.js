@@ -58,7 +58,19 @@ class Sheet {
 
                         const rows = [ ];
                         for(let r of body.feed.entry) {
-                            let row = { };
+                            let row = {
+                                _id: r.id.$t,
+                                _links: {
+                                    edit: ""
+                                }
+                            };
+
+                            for(let l of r.link) {
+                                if(l.rel === "edit") {
+                                    row._links.edit = l.href;
+                                }
+                            }
+
                             for(let key of Object.keys(r)) {
                                 if(key.substr(0, 4) === "gsx$") {
                                     row[key.substr(4)] = r[key]["$t"];
