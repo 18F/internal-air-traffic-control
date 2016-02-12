@@ -1,4 +1,9 @@
+// This gets US Web Design Standard SCSS.  Its proper include path
+// is in the build script of package.json
 @import "all";
+
+// This gets the react-select SCSS.  Same story with the include path.
+@import "default";
 
 * {
     font-family: $font-sans!important;
