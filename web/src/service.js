@@ -14,6 +14,7 @@ module.exports = {
 			}
 		});
 	},
+	
 	getFlights() {
 		request.get("/api/flights", (err, res) => {
 			if(!err && res.body) {
@@ -23,6 +24,15 @@ module.exports = {
 						payload: JSON.parse(res.body)
 					});
 				} catch(e) { }
+			}
+		});
+	},
+
+	saveFlight(flight) {
+		request.put({ url: "/api/flights", body: flight, json: true }, (err, res) => {
+			console.log(err);
+			if(!err) {
+				this.getFlights();
 			}
 		});
 	}

@@ -33,7 +33,7 @@ module.exports = React.createClass({
         let visibleFlights = [ ];
         if(visibleStatuses) {
             const statusNames = visibleStatuses.map(vs => vs.label.toLowerCase());
-            visibleFlights = flights.filter(f => (statusNames.indexOf(f.status.toLowerCase()) >= 0));
+            return flights.filter(f => (statusNames.indexOf(f.status.toLowerCase()) >= 0));
         }
 
         const majorSearchProperties = [ "description", "status", "lead", "pair" ];

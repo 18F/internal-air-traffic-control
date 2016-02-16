@@ -27550,6 +27550,14 @@ module.exports = warning;
 module.exports = require('./lib/React');
 
 },{"./lib/React":57}],190:[function(require,module,exports){
+'use strict';
+
+module.exports = function(s) {
+  return s.substr(0, 1).toUpperCase() + s.substring(1);
+};
+
+
+},{}],191:[function(require,module,exports){
 "use strict";
 
 var React = require("react");
@@ -27580,8 +27588,10 @@ module.exports = React.createClass({
     }
 });
 
-},{"../stores/userStore":199,"react":189}],191:[function(require,module,exports){
+},{"../stores/userStore":202,"react":189}],192:[function(require,module,exports){
 "use strict";
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
 var React = require("react");
 var Flight = require("./flight");
@@ -27615,14 +27625,18 @@ module.exports = React.createClass({
     getVisibleFlights: function getVisibleFlights(flights, visibleStatuses, searchText) {
         var visibleFlights = [];
         if (visibleStatuses) {
-            (function () {
+            var _ret = function () {
                 var statusNames = visibleStatuses.map(function (vs) {
                     return vs.label.toLowerCase();
                 });
-                visibleFlights = flights.filter(function (f) {
-                    return statusNames.indexOf(f.status.toLowerCase()) >= 0;
-                });
-            })();
+                return {
+                    v: flights.filter(function (f) {
+                        return statusNames.indexOf(f.status.toLowerCase()) >= 0;
+                    })
+                };
+            }();
+
+            if ((typeof _ret === "undefined" ? "undefined" : _typeof(_ret)) === "object") return _ret.v;
         }
 
         var majorSearchProperties = ["description", "status", "lead", "pair"];
@@ -27791,7 +27805,7 @@ module.exports = React.createClass({
     }
 });
 
-},{"../stores/flightStore":198,"./flight":194,"local-storage":23,"react":189,"react-select":31}],192:[function(require,module,exports){
+},{"../stores/flightStore":201,"./flight":196,"local-storage":23,"react":189,"react-select":31}],193:[function(require,module,exports){
 "use strict";
 
 var React = require("react");
@@ -27823,37 +27837,76 @@ module.exports = React.createClass({
     }
 });
 
-},{"./flight-status":193,"react":189}],193:[function(require,module,exports){
+},{"./flight-status":195,"react":189}],194:[function(require,module,exports){
 "use strict";
 
 var React = require("react");
+var Statuses = require("../statuses");
 
-var statuses = ["preflight", "taxiing", "climbing", "in flight", "descent", "landing", "at gate", "complete"];
+module.exports = React.createClass({
+    displayName: "exports",
+    _onChange: function _onChange(event) {
+        if (typeof this.props.onStatusChange === "function") {
+            this.props.onStatusChange(Statuses.getPrettyName(event.target.value));
+        }
+    },
+    render: function render() {
+        return React.createElement(
+            "select",
+            { value: this.props.status.toLowerCase(), onChange: this._onChange },
+            Statuses.list.map(function (s) {
+                return React.createElement(
+                    "option",
+                    { key: s, value: s },
+                    Statuses.getPrettyName(s)
+                );
+            })
+        );
+    }
+});
+
+},{"../statuses":200,"react":189}],195:[function(require,module,exports){
+"use strict";
+
+var React = require("react");
+var Statuses = require("../statuses");
+var StatusPicker = require("./flight-status-picker");
+
+var statusList = Statuses.list;
 
 function getStatusClassName(status) {
     return "flight-status-" + status.replace(/ /g, "-").toLowerCase();
 }
 
+function getUnitLength() {
+    return 100 / statusList.length;
+}
+
 function getPreStyle(status) {
-    var i = statuses.indexOf(status.toLowerCase());
+    var i = statusList.indexOf(status.toLowerCase());
     var style = { width: "0%" };
     if (i >= 0) {
-        style.width = i / statuses.length * 100 + "%";
+        style.width = i / statusList.length * 100 + "%";
     }
     return style;
 }
 
 function getPostStyle(status) {
-    var i = statuses.indexOf(status.toLowerCase());
+    var i = statusList.indexOf(status.toLowerCase());
     var style = { width: "0%" };
     if (i >= 0) {
-        style.width = (statuses.length - i - 1) / statuses.length * 100 + "%";
+        style.width = (statusList.length - i - 1) / statusList.length * 100 + "%";
     }
     return style;
 }
 
 module.exports = React.createClass({
     displayName: "exports",
+    _onStatusChange: function _onStatusChange(newStatus) {
+        if (typeof this.props.onStatusChange === "function") {
+            this.props.onStatusChange(newStatus);
+        }
+    },
     render: function render() {
         return React.createElement(
             "div",
@@ -27861,28 +27914,34 @@ module.exports = React.createClass({
             React.createElement("div", { className: "flight-status-journey flight-status-journey-done", style: getPreStyle(this.props.status) }),
             React.createElement(
                 "div",
-                { className: "flight-status-icon", style: { width: "12.5%" } },
+                { className: "flight-status-icon", style: { width: getUnitLength() + "%" } },
                 React.createElement("img", { className: "flight-status-icon", src: "images/plane.svg", alt: "" })
             ),
             React.createElement("div", { className: "flight-status-journey flight-status-journey-pending", style: getPostStyle(this.props.status) }),
             React.createElement(
                 "div",
                 { className: "flight-status" },
-                this.props.status
+                React.createElement(StatusPicker, { status: this.props.status, onStatusChange: this._onStatusChange })
             )
         );
     }
 });
 
-},{"react":189}],194:[function(require,module,exports){
+},{"../statuses":200,"./flight-status-picker":194,"react":189}],196:[function(require,module,exports){
 "use strict";
 
 var React = require("react");
 var FlightStatus = require("./flight-status");
 var FlightStaff = require("./flight-staff");
+var service = require("../service");
 
 module.exports = React.createClass({
     displayName: "exports",
+    _onStatusChange: function _onStatusChange(newStatus) {
+        var flight = JSON.parse(JSON.stringify(this.props.flight));
+        flight.status = newStatus;
+        service.saveFlight(flight);
+    },
     render: function render() {
         return React.createElement(
             "div",
@@ -27892,7 +27951,7 @@ module.exports = React.createClass({
                 { className: "usa-width-one-sixth flight-name" },
                 this.props.flight.description
             ),
-            React.createElement(FlightStatus, { status: this.props.flight.status }),
+            React.createElement(FlightStatus, { status: this.props.flight.status, onStatusChange: this._onStatusChange }),
             React.createElement(
                 "div",
                 { className: "usa-width-one-sixth" },
@@ -27902,12 +27961,12 @@ module.exports = React.createClass({
     }
 });
 
-},{"./flight-staff":192,"./flight-status":193,"react":189}],195:[function(require,module,exports){
+},{"../service":199,"./flight-staff":193,"./flight-status":195,"react":189}],197:[function(require,module,exports){
 "use strict";
 
 module.exports = new (require("flux").Dispatcher)();
 
-},{"flux":12}],196:[function(require,module,exports){
+},{"flux":12}],198:[function(require,module,exports){
 "use strict";
 
 var React = require("react");
@@ -27922,7 +27981,7 @@ ReactDOM.render(React.createElement(Auth, null), document.getElementById("auth")
 
 ReactDOM.render(React.createElement(FlightList, null), document.getElementById("content"));
 
-},{"./components/auth":190,"./components/flight-list":191,"./service":197,"react":189,"react-dom":27}],197:[function(require,module,exports){
+},{"./components/auth":191,"./components/flight-list":192,"./service":199,"react":189,"react-dom":27}],199:[function(require,module,exports){
 "use strict";
 
 var request = require("browser-request");
@@ -27952,10 +28011,36 @@ module.exports = {
 				} catch (e) {}
 			}
 		});
+	},
+	saveFlight: function saveFlight(flight) {
+		var _this = this;
+
+		request.put({ url: "/api/flights", body: flight, json: true }, function (err, res) {
+			console.log(err);
+			if (!err) {
+				_this.getFlights();
+			}
+		});
 	}
 };
 
-},{"./dispatcher":195,"browser-request":1}],198:[function(require,module,exports){
+},{"./dispatcher":197,"browser-request":1}],200:[function(require,module,exports){
+"use strict";
+
+var ucfirst = require("ucfirst");
+
+module.exports = {
+    list: ["preflight", "taxiing", "climbing", "in flight", "landing", "landed", "at gate", "complete"],
+    getPrettyName: function getPrettyName(status) {
+        var parts = status.split(" ");
+        for (var i = 0; i < parts.length; i++) {
+            parts[i] = ucfirst(parts[i]);
+        }
+        return parts.join(" ");
+    }
+};
+
+},{"ucfirst":190}],201:[function(require,module,exports){
 "use strict";
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -28004,7 +28089,7 @@ var FlightStore = function (_Store) {
 
 module.exports = new FlightStore(dispatcher);
 
-},{"../dispatcher":195,"flux/utils":21}],199:[function(require,module,exports){
+},{"../dispatcher":197,"flux/utils":21}],202:[function(require,module,exports){
 "use strict";
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -28053,4 +28138,4 @@ var UserStore = function (_Store) {
 
 module.exports = new UserStore(dispatcher);
 
-},{"../dispatcher":195,"flux/utils":21}]},{},[196]);
+},{"../dispatcher":197,"flux/utils":21}]},{},[198]);
