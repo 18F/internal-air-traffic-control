@@ -13,7 +13,6 @@ const known = [
 ];
 
 let all = [ ].concat(known);
-
 function getAll() {
     return all;
 }
@@ -30,9 +29,7 @@ flightStore.addListener(() => {
 
 module.exports = {
     known,
-
     getAll,
-
     getPrettyName(status) {
         const parts = status.split(" ");
         for(let i = 0; i < parts.length; i++) {

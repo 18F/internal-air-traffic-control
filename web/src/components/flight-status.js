@@ -1,31 +1,29 @@
 const React = require("react");
-const Statuses = require("../statuses");
 const StatusPicker = require("./flight-status-picker");
-
-const statusList = Statuses.list;
+const statuses = require("../statuses").known;
 
 function getStatusClassName(status) {
     return `flight-status-${status.replace(/ /g, "-").toLowerCase()}`;
 }
 
 function getUnitLength() {
-    return 100 / statusList.length;
+    return 100 / statuses.length;
 }
 
 function getPreStyle(status) {
-    const i = statusList.indexOf(status.toLowerCase());
+    const i = statuses.indexOf(status.toLowerCase());
     const style = { width: "0%" };
     if(i >= 0) {
-        style.width = `${(i / statusList.length) * 100}%`;
+        style.width = `${(i / statuses.length) * 100}%`;
     }
     return style;
 }
 
 function getPostStyle(status) {
-    const i = statusList.indexOf(status.toLowerCase());
+    const i = statuses.indexOf(status.toLowerCase());
     const style = { width: "0%" };
     if(i >= 0) {
-        style.width = `${((statusList.length - i - 1) / statusList.length) * 100}%`;
+        style.width = `${((statuses.length - i - 1) / statuses.length) * 100}%`;
     }
     return style;
 }
