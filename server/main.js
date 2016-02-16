@@ -113,6 +113,17 @@ server.get("/api/flights", (req, res, next) => {
     next();
 });
 
+server.put("/api/flights", restify.bodyParser(), (req, res, next) => {
+    sheet.updateRow(req.body, req.user.accessToken)
+        .then(() => res.send({}))
+        .catch(e => {
+            console.log("Error updating flight");
+            console.log(e);
+            res.send(new restify.InternalServerError());
+        });
+    next();
+});
+
 server.get("/api/user", (req, res, next) => {
     res.send({ loggedIn: true, user: { name: req.user.name } });
     next();

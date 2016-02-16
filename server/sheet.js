@@ -9,6 +9,7 @@ class Sheet {
 
     getListFeedURL(accessToken) {
         if(!this.listFeedURL) {
+            // If we haven't gotten the feed URL yet, go get it.
             return new Promise((resolve, reject) => {
                 request.get(`https://spreadsheets.google.com/feeds/worksheets/${this.id}/private/full?alt=json`, { headers: { "Authorization": `Bearer ${accessToken}` }}, (err, res, body) => {
                     if(err) {
@@ -27,6 +28,7 @@ class Sheet {
 
                     for(let link of body.feed.entry[0].link) {
                         if(link.rel.indexOf("#listfeed") >= 0) {
+                            // Now save the feed URL, and resolve the promise.
                             this.listFeedURL = link.href;
                             return resolve(link.href)
                         }
@@ -36,14 +38,19 @@ class Sheet {
                 });
             });
         } else {
+            // If we already have it, resolve it immediately.
             return Promise.resolve(this.listFeedURL);
         }
     }
 
     getRows(accessToken) {
         return new Promise((resolve, reject) => {
+            // The sheet feed URL comes from Google, so calling this
+            // before we try to get the feed guarantees that we've
+            // got the feed URL.
             this.getListFeedURL(accessToken)
                 .then(listFeed => {
+                    // With that, we can then get the actual rows.
                     request.get(`${listFeed}?alt=json`, { headers: { "Authorization": `Bearer ${accessToken}` } }, (err, res, body) => {
                         if(err) {
                             return reject(e);
@@ -58,7 +65,25 @@ class Sheet {
 
                         const rows = [ ];
                         for(let r of body.feed.entry) {
-                            let row = { };
+
+                            // Stash off the row and some relevant links.
+                            let row = {
+                                _id: r.id.$t,
+                                _links: {
+                                    edit: ""
+                                }
+                            };
+
+                            for(let l of r.link) {
+                                if(l.rel === "edit") {
+                                    row._links.edit = l.href;
+                                }
+                            }
+
+                            // Column names are prefixed with "gsx$" in JSON,
+                            // a compromise with the gsx: namespace used in
+                            // the atom feed.  I'm not sure what the "$t" is
+                            // all about.
                             for(let key of Object.keys(r)) {
                                 if(key.substr(0, 4) === "gsx$") {
                                     row[key.substr(4)] = r[key]["$t"];
@@ -74,6 +99,44 @@ class Sheet {
                     reject(e);
                 });
         });
+    }
+
+    updateRow(row, accessToken) {
+        return new Promise((resolve, reject) => {
+            // Get the rows as Google has them now.  The reason for this is
+            // that the edit link may have changed, if someone else has
+            // modified the row since we originally fetched it.
+            this.getRows(accessToken)
+                .then(rows => {
+                    // Now get the row we're actually interested in.
+                    const targetRow = rows.find(r => r._id === row._id);
+                    if(targetRow) {
+                        request.put(targetRow._links.edit, { headers: { "Content-type": "application/atom+xml", "Authorization": `Bearer ${accessToken}` }, body: this.atomizeRow(row) }, (err) => {
+                            if(err) {
+                                console.log(err);
+                                reject(new Error("Error updating row"));
+                            } else {
+                                resolve();
+                            }
+                        });
+                    } else {
+                        reject(new Error(`No row found with ID [${row._id}]`))
+                    }
+
+                })
+        });
+    }
+
+    atomizeRow(row) {
+        return `<?xml version="1.0" encoding="UTF-8"?>
+            <entry xmlns="http://www.w3.org/2005/Atom" xmlns:gsx="http://schemas.google.com/spreadsheets/2006/extended">
+                <id>${row._id}</id>
+                <gsx:id>${row.id}</gsx:id>
+                <gsx:description>${row.description}</gsx:description>
+                <gsx:status>${row.status}</gsx:status>
+                <gsx:lead>${row.lead}</gsx:lead>
+                <gsx:pair>${row.pair}</gsx:pair>
+            </entry>`;
     }
 }
 
