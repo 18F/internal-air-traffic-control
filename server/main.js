@@ -115,7 +115,7 @@ server.get("/api/flights", (req, res, next) => {
 
 server.put("/api/flights", restify.bodyParser(), (req, res, next) => {
     sheet.updateRow(req.body, req.user.accessToken)
-        .then(() => res.send(200))
+        .then(() => res.send({}))
         .catch(e => {
             console.log("Error updating flight");
             console.log(e);
