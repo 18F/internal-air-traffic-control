@@ -5,7 +5,7 @@
     border-radius: 5px;
 
     > div {
-        height: 5rem;
+        height: 9rem;
     }
 
     .flight-name {
@@ -51,11 +51,13 @@
         .flight-status-journey-pending {
             border-top: 1rem dashed $color-gold;
         }
+    }
 
-        .flight-status {
-            width: 100%;
-            text-align: center;
-            display: block;
+    .flight-status-picker {
+        text-align: center;
+        select {
+            display: inline-block;
+            background-color: $color-primary-alt-lightest;
         }
     }
 

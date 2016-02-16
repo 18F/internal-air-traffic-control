@@ -2661,7 +2661,7 @@ header {
   padding: 3rem;
   border-radius: 5px; }
   .flight > div {
-    height: 5rem; }
+    height: 9rem; }
   .flight .flight-name {
     font-weight: bold;
     background: #205493;
@@ -2687,10 +2687,11 @@ header {
       transform: rotate(10deg); }
     .flight .flight-status-bar .flight-status-journey-pending {
       border-top: 1rem dashed #fdb81e; }
-    .flight .flight-status-bar .flight-status {
-      width: 100%;
-      text-align: center;
-      display: block; }
+  .flight .flight-status-picker {
+    text-align: center; }
+    .flight .flight-status-picker select {
+      display: inline-block;
+      background-color: #e1f3f8; }
   .flight + .flight {
     margin-top: 3rem; }
 

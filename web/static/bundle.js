@@ -27910,19 +27910,14 @@ module.exports = React.createClass({
     render: function render() {
         return React.createElement(
             "div",
-            { className: "flight-status-bar usa-width-two-thirds " + getStatusClassName(this.props.status) },
+            { className: "flight-status-bar " + getStatusClassName(this.props.status) },
             React.createElement("div", { className: "flight-status-journey flight-status-journey-done", style: getPreStyle(this.props.status) }),
             React.createElement(
                 "div",
                 { className: "flight-status-icon", style: { width: getUnitLength() + "%" } },
                 React.createElement("img", { className: "flight-status-icon", src: "images/plane.svg", alt: "" })
             ),
-            React.createElement("div", { className: "flight-status-journey flight-status-journey-pending", style: getPostStyle(this.props.status) }),
-            React.createElement(
-                "div",
-                { className: "flight-status" },
-                React.createElement(StatusPicker, { status: this.props.status, onStatusChange: this._onStatusChange })
-            )
+            React.createElement("div", { className: "flight-status-journey flight-status-journey-pending", style: getPostStyle(this.props.status) })
         );
     }
 });
@@ -27933,6 +27928,7 @@ module.exports = React.createClass({
 var React = require("react");
 var FlightStatus = require("./flight-status");
 var FlightStaff = require("./flight-staff");
+var StatusPicker = require("./flight-status-picker");
 var service = require("../service");
 
 module.exports = React.createClass({
@@ -27951,7 +27947,16 @@ module.exports = React.createClass({
                 { className: "usa-width-one-sixth flight-name" },
                 this.props.flight.description
             ),
-            React.createElement(FlightStatus, { status: this.props.flight.status, onStatusChange: this._onStatusChange }),
+            React.createElement(
+                "div",
+                { className: "usa-width-two-thirds" },
+                React.createElement(FlightStatus, { status: this.props.flight.status, onStatusChange: this._onStatusChange }),
+                React.createElement(
+                    "div",
+                    { className: "usa-width-one-whole flight-status-picker" },
+                    React.createElement(StatusPicker, { status: this.props.flight.status, onStatusChange: this._onStatusChange })
+                )
+            ),
             React.createElement(
                 "div",
                 { className: "usa-width-one-sixth" },
@@ -27961,7 +27966,7 @@ module.exports = React.createClass({
     }
 });
 
-},{"../service":199,"./flight-staff":193,"./flight-status":195,"react":189}],197:[function(require,module,exports){
+},{"../service":199,"./flight-staff":193,"./flight-status":195,"./flight-status-picker":194,"react":189}],197:[function(require,module,exports){
 "use strict";
 
 module.exports = new (require("flux").Dispatcher)();
