@@ -71,6 +71,7 @@ module.exports = React.createClass({
     },
 
     _storeChanged() {
+        const flights = flightStore.getFlights();
         let visibleStatuses = this.state.visibleStatuses;
 
         if(visibleStatuses === false) {
