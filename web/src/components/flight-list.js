@@ -7,6 +7,10 @@ const localStorage = require("local-storage");
 const statuses = require("../statuses");
 const STORAGE_KEY = "flight-list-visible-statuses";
 
+function getAllStatusObjects() {
+    return statuses.getAll().map(s => { return { value: s, label: statuses.getPrettyName(s) }})
+}
+
 module.exports = React.createClass({
     getInitialState() {
         return {
@@ -32,7 +36,7 @@ module.exports = React.createClass({
     getVisibleFlights(flights, visibleStatuses, searchText) {
         let visibleFlights = [ ];
         if(visibleStatuses) {
-            const statusNames = visibleStatuses.map(vs => vs.label.toLowerCase());
+            const statusNames = visibleStatuses.map(vs => vs.value);
             return flights.filter(f => (statusNames.indexOf(f.status.toLowerCase()) >= 0));
         }
 
@@ -75,7 +79,7 @@ module.exports = React.createClass({
         let visibleStatuses = this.state.visibleStatuses;
 
         if(visibleStatuses === false) {
-            visibleStatuses = statuses.getAll().map(s => { return { value: s, label: s }});
+            visibleStatuses = getAllStatusObjects();
         }
 
         this.setState({ flights, visibleStatuses, visibleFlights: this.getVisibleFlights(flights, visibleStatuses) });
@@ -86,7 +90,7 @@ module.exports = React.createClass({
             <div>
                 <div className="usa-grid">
                     <h3 className="usa-width-one-whole">Flights on the Board</h3>
-                    <ReactSelect multi={true} value={ this.state.visibleStatuses } delimiter=":" onChange={this._onStatusesChanged} placeholder="Show statuses..." options={ statuses.getAll().map(status => { return { value: status, label: status }}) } />
+                    <ReactSelect multi={true} value={ this.state.visibleStatuses } delimiter=":" onChange={this._onStatusesChanged} placeholder="Show statuses..." options={ getAllStatusObjects() } />
                 </div>
                 <br/>
                 { this.state.visibleFlights.map(flight => <Flight key={flight.id} flight={flight} />) }
