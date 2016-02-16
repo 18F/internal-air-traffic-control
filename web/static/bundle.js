@@ -28021,7 +28021,6 @@ module.exports = {
 		var _this = this;
 
 		request.put({ url: "/api/flights", body: flight, json: true }, function (err, res) {
-			console.log(err);
 			if (!err) {
 				_this.getFlights();
 			}
