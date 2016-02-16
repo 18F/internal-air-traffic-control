@@ -27591,8 +27591,6 @@ module.exports = React.createClass({
 },{"../stores/userStore":202,"react":189}],192:[function(require,module,exports){
 "use strict";
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
-
 var React = require("react");
 var Flight = require("./flight");
 var ReactSelect = require("react-select");
@@ -27628,27 +27626,25 @@ module.exports = React.createClass({
     componentWillUnmount: function componentWillUnmount() {
         this.flightStoreListenerToken.remove();
     },
-    getVisibleFlights: function getVisibleFlights(flights, visibleStatuses, searchText) {
-        var visibleFlights = [];
+    getVisibleFlights: function getVisibleFlights(flights, visibleStatuses) {
+        var searchText = arguments.length <= 2 || arguments[2] === undefined ? "" : arguments[2];
+
+        var visibleFlights = flights.slice(0);
         if (visibleStatuses) {
-            var _ret = function () {
+            (function () {
                 var statusNames = visibleStatuses.map(function (vs) {
                     return vs.value;
                 });
-                return {
-                    v: flights.filter(function (f) {
-                        return statusNames.indexOf(f.status.toLowerCase()) >= 0;
-                    })
-                };
-            }();
-
-            if ((typeof _ret === "undefined" ? "undefined" : _typeof(_ret)) === "object") return _ret.v;
+                visibleFlights = flights.filter(function (f) {
+                    return statusNames.indexOf(f.status.toLowerCase()) >= 0;
+                });
+            })();
         }
 
         var majorSearchProperties = ["description", "status", "lead", "pair"];
 
         searchText = searchText.trim().toLowerCase();
-        if (visibleFlights.length && searchText.trim()) {
+        if (visibleFlights.length && searchText.length) {
             (function () {
                 var terms = searchText.split(" ");
                 visibleFlights = visibleFlights.filter(function (flight) {
@@ -27732,7 +27728,6 @@ module.exports = React.createClass({
                 });
             })();
         }
-
         return visibleFlights;
     },
     _onSearchChanged: function _onSearchChanged(event) {
@@ -27741,6 +27736,9 @@ module.exports = React.createClass({
     _onStatusesChanged: function _onStatusesChanged(selected) {
         this.setState({ visibleStatuses: selected, visibleFlights: this.getVisibleFlights(this.state.flights, selected, this.state.searchField) });
         localStorage(STORAGE_KEY, selected);
+    },
+    _onSearchChanged: function _onSearchChanged(event) {
+        this.setState({ searchField: event.target.value, visibleFlights: this.getVisibleFlights(this.state.flights, this.state.visibleStatuses, event.target.value) });
     },
     _storeChanged: function _storeChanged() {
         var flights = flightStore.getFlights();
@@ -27764,7 +27762,12 @@ module.exports = React.createClass({
                     { className: "usa-width-one-whole" },
                     "Flights on the Board"
                 ),
-                React.createElement(ReactSelect, { multi: true, value: this.state.visibleStatuses, delimiter: ":", onChange: this._onStatusesChanged, placeholder: "Show statuses...", options: getAllStatusObjects() })
+                React.createElement(ReactSelect, { className: "usa-width-three-fourths", multi: true, value: this.state.visibleStatuses, delimiter: ":", onChange: this._onStatusesChanged, placeholder: "Show statuses...", options: getAllStatusObjects() }),
+                React.createElement(
+                    "div",
+                    { className: "usa-width-one-fourth flight-list-search" },
+                    React.createElement("input", { type: "text", onChange: this._onSearchChanged, placeholder: "Filter..." })
+                )
             ),
             React.createElement("br", null),
             this.state.visibleFlights.map(function (flight) {
