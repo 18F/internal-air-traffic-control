@@ -39,15 +39,12 @@ module.exports = React.createClass({
 
     render() {
         return (
-            <div className={ "flight-status-bar usa-width-two-thirds " + getStatusClassName(this.props.status) }>
+            <div className={ "flight-status-bar " + getStatusClassName(this.props.status) }>
                 <div className="flight-status-journey flight-status-journey-done" style={ getPreStyle(this.props.status) }/>
                 <div className="flight-status-icon" style={ { width: getUnitLength() + "%" } }>
                     <img className="flight-status-icon" src="images/plane.svg" alt="" />
                 </div>
                 <div className="flight-status-journey flight-status-journey-pending" style={ getPostStyle(this.props.status) }/>
-                <div className="flight-status">
-                    <StatusPicker status={ this.props.status } onStatusChange={ this._onStatusChange }/>
-                </div>
             </div>
         );
     }
