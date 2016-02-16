@@ -27599,14 +27599,20 @@ var ReactSelect = require("react-select");
 var flightStore = require("../stores/flightStore");
 var localStorage = require("local-storage");
 
+var statuses = require("../statuses");
 var STORAGE_KEY = "flight-list-visible-statuses";
+
+function getAllStatusObjects() {
+    return statuses.getAll().map(function (s) {
+        return { value: s, label: statuses.getPrettyName(s) };
+    });
+}
 
 module.exports = React.createClass({
     displayName: "exports",
     getInitialState: function getInitialState() {
         return {
             visibleStatuses: false,
-            allStatuses: [],
             flights: flightStore.getFlights(),
             visibleFlights: [],
             searchField: ""
@@ -27627,7 +27633,7 @@ module.exports = React.createClass({
         if (visibleStatuses) {
             var _ret = function () {
                 var statusNames = visibleStatuses.map(function (vs) {
-                    return vs.label.toLowerCase();
+                    return vs.value;
                 });
                 return {
                     v: flights.filter(function (f) {
@@ -27737,44 +27743,14 @@ module.exports = React.createClass({
         localStorage(STORAGE_KEY, selected);
     },
     _storeChanged: function _storeChanged() {
-        var allStatuses = [];
-        var visibleStatuses = this.state.visibleStatuses;
         var flights = flightStore.getFlights();
-
-        var _iteratorNormalCompletion4 = true;
-        var _didIteratorError4 = false;
-        var _iteratorError4 = undefined;
-
-        try {
-            for (var _iterator4 = flights[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
-                var flight = _step4.value;
-
-                if (allStatuses.indexOf(flight.status) < 0) {
-                    allStatuses.push(flight.status);
-                }
-            }
-        } catch (err) {
-            _didIteratorError4 = true;
-            _iteratorError4 = err;
-        } finally {
-            try {
-                if (!_iteratorNormalCompletion4 && _iterator4.return) {
-                    _iterator4.return();
-                }
-            } finally {
-                if (_didIteratorError4) {
-                    throw _iteratorError4;
-                }
-            }
-        }
+        var visibleStatuses = this.state.visibleStatuses;
 
         if (visibleStatuses === false) {
-            visibleStatuses = allStatuses.map(function (s) {
-                return { value: s, label: s };
-            });
+            visibleStatuses = getAllStatusObjects();
         }
 
-        this.setState({ allStatuses: allStatuses, flights: flights, visibleStatuses: visibleStatuses, visibleFlights: this.getVisibleFlights(flights, visibleStatuses, this.state.searchField) });
+        this.setState({ flights: flights, visibleStatuses: visibleStatuses, visibleFlights: this.getVisibleFlights(flights, visibleStatuses) });
     },
     render: function render() {
         return React.createElement(
@@ -27788,14 +27764,7 @@ module.exports = React.createClass({
                     { className: "usa-width-one-whole" },
                     "Flights on the Board"
                 ),
-                React.createElement(ReactSelect, { className: "usa-width-three-fourths", multi: true, value: this.state.visibleStatuses, delimiter: ":", onChange: this._onStatusesChanged, placeholder: "Show statuses...", options: this.state.allStatuses.map(function (status) {
-                        return { value: status, label: status };
-                    }) }),
-                React.createElement(
-                    "div",
-                    { className: "usa-width-one-fourth flight-list-search" },
-                    React.createElement("input", { type: "text", onChange: this._onSearchChanged, placeholder: "Filter..." })
-                )
+                React.createElement(ReactSelect, { multi: true, value: this.state.visibleStatuses, delimiter: ":", onChange: this._onStatusesChanged, placeholder: "Show statuses...", options: getAllStatusObjects() })
             ),
             React.createElement("br", null),
             this.state.visibleFlights.map(function (flight) {
@@ -27805,7 +27774,7 @@ module.exports = React.createClass({
     }
 });
 
-},{"../stores/flightStore":201,"./flight":196,"local-storage":23,"react":189,"react-select":31}],193:[function(require,module,exports){
+},{"../statuses":200,"../stores/flightStore":201,"./flight":196,"local-storage":23,"react":189,"react-select":31}],193:[function(require,module,exports){
 "use strict";
 
 var React = require("react");
@@ -27854,7 +27823,7 @@ module.exports = React.createClass({
         return React.createElement(
             "select",
             { value: this.props.status.toLowerCase(), onChange: this._onChange },
-            Statuses.list.map(function (s) {
+            Statuses.getAll().map(function (s) {
                 return React.createElement(
                     "option",
                     { key: s, value: s },
@@ -27869,33 +27838,31 @@ module.exports = React.createClass({
 "use strict";
 
 var React = require("react");
-var Statuses = require("../statuses");
 var StatusPicker = require("./flight-status-picker");
-
-var statusList = Statuses.list;
+var statuses = require("../statuses").known;
 
 function getStatusClassName(status) {
     return "flight-status-" + status.replace(/ /g, "-").toLowerCase();
 }
 
 function getUnitLength() {
-    return 100 / statusList.length;
+    return 100 / statuses.length;
 }
 
 function getPreStyle(status) {
-    var i = statusList.indexOf(status.toLowerCase());
+    var i = statuses.indexOf(status.toLowerCase());
     var style = { width: "0%" };
     if (i >= 0) {
-        style.width = i / statusList.length * 100 + "%";
+        style.width = i / statuses.length * 100 + "%";
     }
     return style;
 }
 
 function getPostStyle(status) {
-    var i = statusList.indexOf(status.toLowerCase());
+    var i = statuses.indexOf(status.toLowerCase());
     var style = { width: "0%" };
     if (i >= 0) {
-        style.width = (statusList.length - i - 1) / statusList.length * 100 + "%";
+        style.width = (statuses.length - i - 1) / statuses.length * 100 + "%";
     }
     return style;
 }
@@ -28032,9 +27999,49 @@ module.exports = {
 "use strict";
 
 var ucfirst = require("ucfirst");
+var flightStore = require("./stores/flightStore");
+
+var known = ["preflight", "taxiing", "climbing", "in flight", "landing", "landed", "at gate", "complete"];
+
+var all = [].concat(known);
+function getAll() {
+    return all;
+}
+
+flightStore.addListener(function () {
+    var flights = flightStore.getFlights();
+    all = [].concat(known);
+    var _iteratorNormalCompletion = true;
+    var _didIteratorError = false;
+    var _iteratorError = undefined;
+
+    try {
+        for (var _iterator = flights[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var flight = _step.value;
+
+            if (all.indexOf(flight.status.toLowerCase()) < 0) {
+                all.push(flight.status.toLowerCase());
+            }
+        }
+    } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+    } finally {
+        try {
+            if (!_iteratorNormalCompletion && _iterator.return) {
+                _iterator.return();
+            }
+        } finally {
+            if (_didIteratorError) {
+                throw _iteratorError;
+            }
+        }
+    }
+});
 
 module.exports = {
-    list: ["preflight", "taxiing", "climbing", "in flight", "landing", "landed", "at gate", "complete"],
+    known: known,
+    getAll: getAll,
     getPrettyName: function getPrettyName(status) {
         var parts = status.split(" ");
         for (var i = 0; i < parts.length; i++) {
@@ -28044,7 +28051,7 @@ module.exports = {
     }
 };
 
-},{"ucfirst":190}],201:[function(require,module,exports){
+},{"./stores/flightStore":201,"ucfirst":190}],201:[function(require,module,exports){
 "use strict";
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
