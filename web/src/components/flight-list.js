@@ -4,13 +4,13 @@ const ReactSelect = require("react-select");
 const flightStore = require("../stores/flightStore");
 const localStorage = require("local-storage");
 
+const statuses = require("../statuses");
 const STORAGE_KEY = "flight-list-visible-statuses";
 
 module.exports = React.createClass({
     getInitialState() {
         return {
             visibleStatuses: false,
-            allStatuses: [ ],
             flights: flightStore.getFlights(),
             visibleFlights: [ ],
             searchField: ""
@@ -71,21 +71,13 @@ module.exports = React.createClass({
     },
 
     _storeChanged() {
-        const allStatuses = [ ];
         let visibleStatuses = this.state.visibleStatuses;
-        const flights = flightStore.getFlights();
-
-        for(let flight of flights) {
-            if(allStatuses.indexOf(flight.status) < 0) {
-                allStatuses.push(flight.status);
-            }
-        }
 
         if(visibleStatuses === false) {
-            visibleStatuses = allStatuses.map(s => { return { value: s, label: s }});
+            visibleStatuses = statuses.getAll().map(s => { return { value: s, label: s }});
         }
 
-        this.setState({ allStatuses, flights, visibleStatuses, visibleFlights: this.getVisibleFlights(flights, visibleStatuses, this.state.searchField) });
+        this.setState({ flights, visibleStatuses, visibleFlights: this.getVisibleFlights(flights, visibleStatuses) });
     },
 
     render() {
@@ -93,10 +85,7 @@ module.exports = React.createClass({
             <div>
                 <div className="usa-grid">
                     <h3 className="usa-width-one-whole">Flights on the Board</h3>
-                    <ReactSelect className="usa-width-three-fourths" multi={true} value={ this.state.visibleStatuses } delimiter=":" onChange={ this._onStatusesChanged } placeholder="Show statuses..." options={ this.state.allStatuses.map(status => { return { value: status, label: status }}) } />
-                    <div className="usa-width-one-fourth flight-list-search">
-                        <input type="text" onChange={ this._onSearchChanged } placeholder="Filter..." />
-                    </div>
+                    <ReactSelect multi={true} value={ this.state.visibleStatuses } delimiter=":" onChange={this._onStatusesChanged} placeholder="Show statuses..." options={ statuses.getAll().map(status => { return { value: status, label: status }}) } />
                 </div>
                 <br/>
                 { this.state.visibleFlights.map(flight => <Flight key={flight.id} flight={flight} />) }

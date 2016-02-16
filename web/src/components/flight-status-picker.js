@@ -11,7 +11,7 @@ module.exports = React.createClass({
     render() {
         return (
             <select value={ this.props.status.toLowerCase() } onChange={ this._onChange }>
-                { Statuses.list.map(s => <option key={s} value={s}>{ Statuses.getPrettyName(s) }</option>) }
+                { Statuses.getAll().map(s => <option key={s} value={s}>{ Statuses.getPrettyName(s) }</option>) }
             </select>
         )
     }
