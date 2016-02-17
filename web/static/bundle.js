@@ -27958,6 +27958,9 @@ module.exports = React.createClass({
     componentWillUnmount: function componentWillUnmount() {
         this.messageStoreListenerToken.remove();
     },
+    _close: function _close() {
+        this.setState({ visible: false });
+    },
     _storeChanged: function _storeChanged() {
         var _this = this;
 
@@ -27997,7 +28000,13 @@ module.exports = React.createClass({
                 this.state.message ? React.createElement(
                     "p",
                     { className: "usa-alert-text" },
-                    this.state.message
+                    this.state.message,
+                    React.createElement("br", null),
+                    React.createElement(
+                        "a",
+                        { onClick: this._close },
+                        "Close"
+                    )
                 ) : null
             )
         );
@@ -28056,7 +28065,11 @@ module.exports = {
 						type: "flights-in",
 						payload: JSON.parse(res.body)
 					});
-				} catch (e) {}
+				} catch (e) {
+					dispatcher.dispatch({ type: "error", payload: { error: "Invalid flight data", title: "Error" } });
+				}
+			} else {
+				dispatcher.dispatch({ type: "error", payload: { error: err.message, title: "Network error " } });
 			}
 		});
 	},
@@ -28067,6 +28080,8 @@ module.exports = {
 		request.put({ url: "/api/flights", body: flight, json: true }, function (err, res) {
 			if (!err) {
 				_this.getFlights();
+			} else {
+				dispatcher.dispatch({ type: "error", payload: { error: err.message, title: "Network error " } });
 			}
 		});
 	}

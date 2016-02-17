@@ -25,7 +25,11 @@ module.exports = {
 						type: "flights-in",
 						payload: JSON.parse(res.body)
 					});
-				} catch(e) { }
+				} catch(e) {
+					dispatcher.dispatch({ type: "error", payload: { error: "Invalid flight data", title: "Error" }});
+				}
+			} else {
+				dispatcher.dispatch({ type: "error", payload: { error: err.message, title: "Network error "}});
 			}
 		});
 	},
@@ -35,6 +39,8 @@ module.exports = {
 		request.put({ url: "/api/flights", body: flight, json: true }, (err, res) => {
 			if(!err) {
 				this.getFlights();
+			} else {
+				dispatcher.dispatch({ type: "error", payload: { error: err.message, title: "Network error "}});
 			}
 		});
 	}

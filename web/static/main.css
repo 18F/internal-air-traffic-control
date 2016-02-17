@@ -2660,6 +2660,8 @@ div#messages {
     transition: opacity 0.4s ease-in-out; }
     div#messages .usa-alert.alert-hidden {
       opacity: 0; }
+    div#messages .usa-alert a {
+      cursor: pointer; }
 
 .flight-list-search > input[type="text"] {
   border-color: #d9d9d9 #ccc #b3b3b3;

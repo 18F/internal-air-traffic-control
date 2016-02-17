@@ -19,6 +19,10 @@ module.exports = React.createClass({
         this.messageStoreListenerToken.remove();
     },
 
+    _close() {
+        this.setState({ visible: false });
+    },
+
     _storeChanged() {
         const message = messageStore.getMessage();
         const visible = (message.title.length > 0);
@@ -47,7 +51,7 @@ module.exports = React.createClass({
             <div className={ `usa-alert usa-alert-${this.state.type} alert-${this.state.visible ? "visible" : "hidden"}` }>
                 <div className="usa-alert-body">
                     <h3 className="usa-alert-heading">{ this.state.title }</h3>
-                    { this.state.message ? <p className="usa-alert-text">{ this.state.message }</p> : null }
+                    { this.state.message ? <p className="usa-alert-text">{ this.state.message }<br/><a onClick={ this._close }>Close</a></p> : null }
                 </div>
             </div>
         );
