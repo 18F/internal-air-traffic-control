@@ -27588,7 +27588,7 @@ module.exports = React.createClass({
     }
 });
 
-},{"../stores/userStore":202,"react":189}],192:[function(require,module,exports){
+},{"../stores/userStore":204,"react":189}],192:[function(require,module,exports){
 "use strict";
 
 var React = require("react");
@@ -27777,7 +27777,7 @@ module.exports = React.createClass({
     }
 });
 
-},{"../statuses":200,"../stores/flightStore":201,"./flight":196,"local-storage":23,"react":189,"react-select":31}],193:[function(require,module,exports){
+},{"../statuses":201,"../stores/flightStore":202,"./flight":196,"local-storage":23,"react":189,"react-select":31}],193:[function(require,module,exports){
 "use strict";
 
 var React = require("react");
@@ -27837,7 +27837,7 @@ module.exports = React.createClass({
     }
 });
 
-},{"../statuses":200,"react":189}],195:[function(require,module,exports){
+},{"../statuses":201,"react":189}],195:[function(require,module,exports){
 "use strict";
 
 var React = require("react");
@@ -27892,7 +27892,7 @@ module.exports = React.createClass({
     }
 });
 
-},{"../statuses":200,"./flight-status-picker":194,"react":189}],196:[function(require,module,exports){
+},{"../statuses":201,"./flight-status-picker":194,"react":189}],196:[function(require,module,exports){
 "use strict";
 
 var React = require("react");
@@ -27936,17 +27936,86 @@ module.exports = React.createClass({
     }
 });
 
-},{"../service":199,"./flight-staff":193,"./flight-status":195,"./flight-status-picker":194,"react":189}],197:[function(require,module,exports){
+},{"../service":200,"./flight-staff":193,"./flight-status":195,"./flight-status-picker":194,"react":189}],197:[function(require,module,exports){
+"use strict";
+
+var React = require("react");
+var messageStore = require("../stores/messageStore");
+
+module.exports = React.createClass({
+    displayName: "exports",
+    getInitialState: function getInitialState() {
+        return {
+            visible: false,
+            type: "info",
+            title: "",
+            message: ""
+        };
+    },
+    componentDidMount: function componentDidMount() {
+        this.messageStoreListenerToken = messageStore.addListener(this._storeChanged);
+    },
+    componentWillUnmount: function componentWillUnmount() {
+        this.messageStoreListenerToken.remove();
+    },
+    _storeChanged: function _storeChanged() {
+        var _this = this;
+
+        var message = messageStore.getMessage();
+        var visible = message.title.length > 0;
+
+        // If there's already a pending message text change, cancel
+        // it now, or else get weird behavior.
+        clearTimeout(this.messageChangeTimeout);
+
+        // If the message is becoming visible (or is already visible),
+        // just update everything immediately.
+        if (visible) {
+            this.setState({ visible: visible, title: message.title, message: message.error, type: message.error ? "error" : "info" });
+        } else {
+            // If the message is being hidden, only change the visibility
+            // first.  Wait until after the visibility animation has
+            // finished before changing the text.
+            this.setState({ visible: visible });
+            this.messageChangeTimeout = setTimeout(function () {
+                _this.setState({ title: message.title, message: message.error, type: message.error ? "error" : "info" });
+            }, 500);
+        }
+    },
+    render: function render() {
+        return React.createElement(
+            "div",
+            { className: "usa-alert usa-alert-" + this.state.type + " alert-" + (this.state.visible ? "visible" : "hidden") },
+            React.createElement(
+                "div",
+                { className: "usa-alert-body" },
+                React.createElement(
+                    "h3",
+                    { className: "usa-alert-heading" },
+                    this.state.title
+                ),
+                this.state.message ? React.createElement(
+                    "p",
+                    { className: "usa-alert-text" },
+                    this.state.message
+                ) : null
+            )
+        );
+    }
+});
+
+},{"../stores/messageStore":203,"react":189}],198:[function(require,module,exports){
 "use strict";
 
 module.exports = new (require("flux").Dispatcher)();
 
-},{"flux":12}],198:[function(require,module,exports){
+},{"flux":12}],199:[function(require,module,exports){
 "use strict";
 
 var React = require("react");
 var ReactDOM = require("react-dom");
 var Auth = require("./components/auth");
+var Message = require("./components/message");
 var FlightList = require("./components/flight-list");
 
 require("./service").getFlights();
@@ -27954,9 +28023,11 @@ require("./service").getUser();
 
 ReactDOM.render(React.createElement(Auth, null), document.getElementById("auth"));
 
+ReactDOM.render(React.createElement(Message, null), document.getElementById("messages"));
+
 ReactDOM.render(React.createElement(FlightList, null), document.getElementById("content"));
 
-},{"./components/auth":191,"./components/flight-list":192,"./service":199,"react":189,"react-dom":27}],199:[function(require,module,exports){
+},{"./components/auth":191,"./components/flight-list":192,"./components/message":197,"./service":200,"react":189,"react-dom":27}],200:[function(require,module,exports){
 "use strict";
 
 var request = require("browser-request");
@@ -27976,9 +28047,11 @@ module.exports = {
 		});
 	},
 	getFlights: function getFlights() {
+		dispatcher.dispatch({ type: "network-ops", payload: { error: null, title: "Fetching flights..." } });
 		request.get("/api/flights", function (err, res) {
 			if (!err && res.body) {
 				try {
+					dispatcher.dispatch({ type: "network-ops", payload: false });
 					dispatcher.dispatch({
 						type: "flights-in",
 						payload: JSON.parse(res.body)
@@ -27990,6 +28063,7 @@ module.exports = {
 	saveFlight: function saveFlight(flight) {
 		var _this = this;
 
+		dispatcher.dispatch({ type: "network-ops", payload: { error: null, title: "Updating flight..." } });
 		request.put({ url: "/api/flights", body: flight, json: true }, function (err, res) {
 			if (!err) {
 				_this.getFlights();
@@ -27998,7 +28072,7 @@ module.exports = {
 	}
 };
 
-},{"./dispatcher":197,"browser-request":1}],200:[function(require,module,exports){
+},{"./dispatcher":198,"browser-request":1}],201:[function(require,module,exports){
 "use strict";
 
 var ucfirst = require("ucfirst");
@@ -28054,7 +28128,7 @@ module.exports = {
     }
 };
 
-},{"./stores/flightStore":201,"ucfirst":190}],201:[function(require,module,exports){
+},{"./stores/flightStore":202,"ucfirst":190}],202:[function(require,module,exports){
 "use strict";
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -28103,7 +28177,60 @@ var FlightStore = function (_Store) {
 
 module.exports = new FlightStore(dispatcher);
 
-},{"../dispatcher":197,"flux/utils":21}],202:[function(require,module,exports){
+},{"../dispatcher":198,"flux/utils":21}],203:[function(require,module,exports){
+"use strict";
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _utils = require("flux/utils");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var dispatcher = require("../dispatcher");
+
+var MessageStore = function (_Store) {
+    _inherits(MessageStore, _Store);
+
+    function MessageStore(dispatcher) {
+        _classCallCheck(this, MessageStore);
+
+        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(MessageStore).call(this, dispatcher));
+
+        _this._message = { error: null, title: "" };
+        return _this;
+    }
+
+    _createClass(MessageStore, [{
+        key: "getMessage",
+        value: function getMessage() {
+            return this._message;
+        }
+    }, {
+        key: "__onDispatch",
+        value: function __onDispatch(event) {
+            switch (event.type) {
+                case "network-ops":
+                case "error":
+                    this._message = event.payload;
+                    if (!this._message) {
+                        this._message = { error: null, title: "" };
+                    }
+                    this.__emitChange();
+                    break;
+            }
+        }
+    }]);
+
+    return MessageStore;
+}(_utils.Store);
+
+module.exports = new MessageStore(dispatcher);
+
+},{"../dispatcher":198,"flux/utils":21}],204:[function(require,module,exports){
 "use strict";
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -28152,4 +28279,4 @@ var UserStore = function (_Store) {
 
 module.exports = new UserStore(dispatcher);
 
-},{"../dispatcher":197,"flux/utils":21}]},{},[198]);
+},{"../dispatcher":198,"flux/utils":21}]},{},[199]);

@@ -2647,6 +2647,20 @@ header {
   header nav ul {
     float: right; }
 
+div#messages {
+  position: fixed;
+  top: 5rem;
+  right: 0;
+  z-index: 10; }
+  div#messages .usa-alert {
+    opacity: 1;
+    border: 1px solid black;
+    -webkit-transition: opacity 0.4s ease-in-out;
+    -moz-transition: opacity 0.4s ease-in-out;
+    transition: opacity 0.4s ease-in-out; }
+    div#messages .usa-alert.alert-hidden {
+      opacity: 0; }
+
 .flight-list-search > input[type="text"] {
   border-color: #d9d9d9 #ccc #b3b3b3;
   border-radius: 4px;
@@ -2694,77 +2708,3 @@ header {
       background-color: #e1f3f8; }
   .flight + .flight {
     margin-top: 3rem; }
-
-/*
-.flight {
-    background-color: $color-base;
-    color: white;
-    margin-top: 2rem;
-    border-radius: 0.5rem;
-}
-
-.flight-status {
-    background-color: $color-gray-lighter;
-    position: relative;
-    margin: 10px 0 10px 0;
-}
-
-.flight-status-name {
-    text-align: center;
-    color: black;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    z-index: 10;
-}
-
-.flight-status-progress {
-    background-color: $color-primary-alt;
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-
-    &.preflight { width: 0; }
-    &.climbing { width: 16.67%; }
-    &.in-flight { width: 33.33%; }
-    &.descent { width: 50%; }
-    &.landed { width: 66.67%; }
-    &.at-the-gate { width: 83.33%; }
-    &.complete { width: 100%; }
-}
-
-img.flight-status-icon {
-    width: 100px;
-
-    &.preflight, &.complete {
-        opacity: 0;
-    }
-
-    &.climbing {
-        transform: rotate(-20deg);
-        margin-left: 16.67%;
-    }
-
-    &.in-flight {
-        margin-left: 33.33%;
-    }
-
-    &.descent {
-        transform: rotate(20deg);
-        margin-left: 50%;
-    }
-
-    &.landed {
-        margin-left: 66.67%;
-    }
-
-    &.at-the-gate {
-        margin-left: 83.33%;
-    }
-}
-
-.flight-leader {
-    font-weight: bold;
-}*/
