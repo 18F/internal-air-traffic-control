@@ -69,6 +69,7 @@ class Sheet {
                             // Stash off the row and some relevant links.
                             let row = {
                                 _id: r.id.$t,
+                                _rowNumber: rows.length + 2, // rows start at 1; row 1 is the header, so actual data starts on row 2
                                 _links: {
                                     edit: ""
                                 }
