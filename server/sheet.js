@@ -7,8 +7,8 @@ class Sheet {
         return Promise.resolve(this.id);
     }
 
-    getListFeedURL(accessToken) {
-        if(!this.listFeedURL) {
+    getFeedURL(accessToken, feedRel) {
+        if(!this[feedRel]) {
             // If we haven't gotten the feed URL yet, go get it.
             return new Promise((resolve, reject) => {
                 request.get(`https://spreadsheets.google.com/feeds/worksheets/${this.id}/private/full?alt=json`, { headers: { "Authorization": `Bearer ${accessToken}` }}, (err, res, body) => {
@@ -27,19 +27,19 @@ class Sheet {
                     }
 
                     for(let link of body.feed.entry[0].link) {
-                        if(link.rel.indexOf("#listfeed") >= 0) {
+                        if(link.rel == feedRel) {
                             // Now save the feed URL, and resolve the promise.
-                            this.listFeedURL = link.href;
+                            this[feedRel] = link.href;
                             return resolve(link.href)
                         }
                     }
 
-                    reject(new Error("Could not find list feed link"));
+                    reject(new Error("Could not find feed link"));
                 });
             });
         } else {
             // If we already have it, resolve it immediately.
-            return Promise.resolve(this.listFeedURL);
+            return Promise.resolve(this[feedRel]);
         }
     }
 
@@ -48,7 +48,7 @@ class Sheet {
             // The sheet feed URL comes from Google, so calling this
             // before we try to get the feed guarantees that we've
             // got the feed URL.
-            this.getListFeedURL(accessToken)
+            this.getFeedURL(accessToken, "http://schemas.google.com/spreadsheets/2006#listfeed")
                 .then(listFeed => {
                     // With that, we can then get the actual rows.
                     request.get(`${listFeed}?alt=json`, { headers: { "Authorization": `Bearer ${accessToken}` } }, (err, res, body) => {
