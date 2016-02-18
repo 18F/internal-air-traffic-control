@@ -11,7 +11,7 @@ module.exports = {
             clientSecret: process.env["GOOG_CLIENT_SECRET"],
             callbackURL: process.env["GOOG_CALLBACK_URL"]
         }, function(accessToken, refreshToken, profile, done) {
-            sheet.getListFeedURL(accessToken)
+            sheet.getFeedURL(accessToken, "http://schemas.google.com/spreadsheets/2006#listfeed")
                 .then(() => done(null, { accessToken, refreshToken, expires: (Date.now() + (30 * 60 * 1000)), name: profile.displayName }))
                 .catch(e => done(e, false));
         }));
