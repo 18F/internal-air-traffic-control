@@ -86,7 +86,7 @@ module.exports = React.createClass({
       visibleStatuses = getAllStatusObjects();
     }
 
-    this.setState({ flights, visibleStatuses, visibleFlights: this.getVisibleFlights(flights, visibleStatuses) });
+    this.setState({ flights, visibleStatuses, visibleFlights: this.getVisibleFlights(flights, visibleStatuses, this.state.searchField) });
   },
 
   render() {
