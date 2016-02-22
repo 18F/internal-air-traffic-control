@@ -154,8 +154,8 @@ class Sheet {
           }
         })
         .then(cellFeedURL => {
-          if(cellFeedURL) {
-            return new Promise((cellUpdateResolve, cellUpdateReject) => {
+          return new Promise((cellUpdateResolve, cellUpdateReject) => {
+            if(cellFeedURL) {
               request.get(`${cellFeedURL}?alt=json`, { headers: { 'Authorization': `Bearer ${accessToken}` } }, (err, res, body) => {
                 if(err) {
                   console.log(err);
@@ -171,13 +171,13 @@ class Sheet {
 
                 let colNumber = -1;
                 for(let cell of body.feed.entry) {
-                  if(cell.gs$cell.row === 1 && cell.content.$t.toLowerCase().replace(' ', '') === cellsToChange[0]) {
-                    colNumber = cell.gs$cell.col;
+                  if(Number(cell.gs$cell.row) === 1 && cell.content.$t.toLowerCase().replace(' ', '') === cellsToChange[0]) {
+                    colNumber = Number(cell.gs$cell.col);
                     break;
                   }
                 }
 
-                const targetCell = body.feed.entry.find(c => (c.gs$cell.row === targetRow._rowNumber && c.gs$cell.col === colNumber));
+                const targetCell = body.feed.entry.find(c => (Number(c.gs$cell.row) === targetRow._rowNumber && Number(c.gs$cell.col) === colNumber));
                 if(targetCell) {
                   const cellID = targetCell.id.$t;
                   const editURL = targetCell.link.find(l => l.rel === 'edit');
@@ -191,18 +191,19 @@ class Sheet {
                     cellUpdateResolve();
                   });
                 } else {
-                  throw new Error(`Could not find target cell (row ${targetRow._rowNumber}, cell ${targetCell})`);
+                  cellUpdateReject(new Error(`Could not find target cell (row ${targetRow._rowNumber}, column ${colNumber})`));
                 }
               });
-            });
-          } else if(cellsToChange.length > 1) {
-            request.put(targetRow._links.edit, { headers: { 'Content-type': 'application/atom+xml', 'Authorization': `Bearer ${accessToken}` }, body: this.atomizeRow(row) }, (err) => {
-              if(err) {
-                console.log(err);
-                throw err;
-              }
-            });
-          }
+            } else if(cellsToChange.length > 1) {
+              request.put(targetRow._links.edit, { headers: { 'Content-type': 'application/atom+xml', 'Authorization': `Bearer ${accessToken}` }, body: this.atomizeRow(row) }, (err) => {
+                if(err) {
+                  console.log(err);
+                  return cellUpdateReject(err);
+                }
+                cellUpdateResolve();
+              });
+            }
+          });
         })
         .then(resolve)
         .catch(err => {
