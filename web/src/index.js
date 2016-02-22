@@ -4,9 +4,12 @@ const ReactDOM = require('react-dom');
 const Auth = require('./components/auth');
 const Message = require('./components/message');
 const FlightList = require('./components/flight-list');
+const service = require('./service');
 
-require('./service').getFlights();
-require('./service').getUser();
+service.getFlights();
+service.getUser();
+
+io().on('flights changed', () => service.getFlights());
 
 ReactDOM.render(
   <Auth/>,

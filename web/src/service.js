@@ -38,11 +38,7 @@ module.exports = {
   saveFlight(flight) {
     dispatcher.dispatch({ type: 'network-ops', payload: { error: null, title: 'Updating flight...' }});
     request.put({ url: '/api/flights', body: flight, json: true }, (err) => {
-      if(!err) {
-        this.getFlights();
-      } else {
-        dispatcher.dispatch({ type: 'error', payload: { error: err.message, title: 'Network error '}});
-      }
+      dispatcher.dispatch({ type: 'network-ops', payload: false });
     });
   }
 };

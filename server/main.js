@@ -2,6 +2,7 @@
 
 const restify = require('restify');
 const passport = require('passport');
+const io = require('socket.io');
 const googleAuth = require('./auth/google');
 const sessions = require('client-sessions');
 const sheet = require('./sheet');
@@ -41,6 +42,7 @@ server.use(sessions({
     httpOnly: true
   }
 }));
+const sockets = io.listen(server.server);
 
 server.use(require('restify-redirect')());
 server.use(restify.queryParser());
@@ -115,7 +117,10 @@ server.get('/api/flights', (req, res, next) => {
 
 server.put('/api/flights', restify.bodyParser(), (req, res, next) => {
   sheet.updateRow(req.body, req.user.accessToken)
-    .then(() => res.send({}))
+    .then(() => {
+      res.send({});
+      sockets.emit('flights changed');
+    })
     .catch(e => {
       console.log('Error updating flight');
       console.log(e);

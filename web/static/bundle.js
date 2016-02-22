@@ -28026,9 +28026,14 @@ var ReactDOM = require('react-dom');
 var Auth = require('./components/auth');
 var Message = require('./components/message');
 var FlightList = require('./components/flight-list');
+var service = require('./service');
 
-require('./service').getFlights();
-require('./service').getUser();
+service.getFlights();
+service.getUser();
+
+io().on('flights changed', function () {
+  return service.getFlights();
+});
 
 ReactDOM.render(React.createElement(Auth, null), document.getElementById('auth'));
 
@@ -28074,15 +28079,9 @@ module.exports = {
     });
   },
   saveFlight: function saveFlight(flight) {
-    var _this = this;
-
     dispatcher.dispatch({ type: 'network-ops', payload: { error: null, title: 'Updating flight...' } });
     request.put({ url: '/api/flights', body: flight, json: true }, function (err) {
-      if (!err) {
-        _this.getFlights();
-      } else {
-        dispatcher.dispatch({ type: 'error', payload: { error: err.message, title: 'Network error ' } });
-      }
+      dispatcher.dispatch({ type: 'network-ops', payload: false });
     });
   }
 };
