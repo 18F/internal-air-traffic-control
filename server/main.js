@@ -7,6 +7,7 @@ const googleAuth = require('./auth/google');
 const sessions = require('client-sessions');
 const sheet = require('./sheet');
 const PORT = process.env.PORT || 5000;
+require('dotenv').config();
 
 if(!process.env.GOOG_CLIENT_ID) {
   console.error('Google client ID not set.  Cannot continue.');
