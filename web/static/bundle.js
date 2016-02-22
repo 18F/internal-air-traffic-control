@@ -28026,9 +28026,14 @@ var ReactDOM = require('react-dom');
 var Auth = require('./components/auth');
 var Message = require('./components/message');
 var FlightList = require('./components/flight-list');
+var service = require('./service');
 
-require('./service').getFlights();
-require('./service').getUser();
+service.getFlights();
+service.getUser();
+
+io().on('flights changed', function () {
+  return service.getFlights();
+});
 
 ReactDOM.render(React.createElement(Auth, null), document.getElementById('auth'));
 

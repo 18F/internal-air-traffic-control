@@ -18,7 +18,8 @@
     "passport-google-oauth20": "^1.0.0",
     "request": "^2.69.0",
     "restify": "^4.0.3",
-    "restify-redirect": "^1.0.0"
+    "restify-redirect": "^1.0.0",
+    "socket.io": "^1.4.5"
   },
   "devDependencies": {
     "18f-contrib-web-design-standards": "^1.0.1",
