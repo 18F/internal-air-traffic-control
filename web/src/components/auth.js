@@ -1,30 +1,31 @@
-const React = require("react");
-const userStore = require("../stores/userStore");
+'use strict';
+const React = require('react');
+const userStore = require('../stores/userStore');
 
 module.exports = React.createClass({
-    getInitialState() {
-        return {
-            user: userStore.getUser()
-        };
-    },
+  getInitialState() {
+    return {
+      user: userStore.getUser()
+    };
+  },
 
-    componentDidMount() {
-        this.userStoreListenerToken = userStore.addListener(this._storeChanged);
-    },
+  componentDidMount() {
+    this.userStoreListenerToken = userStore.addListener(this._storeChanged);
+  },
 
-    componentWillUnmount() {
-        this.userStoreListenerToken.remove();
-    },
+  componentWillUnmount() {
+    this.userStoreListenerToken.remove();
+  },
 
-    _storeChanged() {
-        this.setState({ user: userStore.getUser() });
-    },
+  _storeChanged() {
+    this.setState({ user: userStore.getUser() });
+  },
 
-    render() {
-        return (
-            <a className="usa-button auth-status" href={ this.state.user.loggedIn ? "#" : "/auth/google" }>
-                { this.state.user.loggedIn ? `Logged In (${this.state.user.user.name})` : "Login with Google" }
-            </a>
-        );
-    }
+  render() {
+    return (
+      <a className='usa-button auth-status' href={ this.state.user.loggedIn ? '#' : '/auth/google' }>
+        { this.state.user.loggedIn ? `Logged In (${this.state.user.user.name})` : 'Login with Google' }
+      </a>
+    );
+  }
 });

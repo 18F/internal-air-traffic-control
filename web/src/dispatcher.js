@@ -1,1 +1,2 @@
-module.exports = new (require("flux").Dispatcher)();
+'use strict';
+module.exports = new (require('flux').Dispatcher)();
