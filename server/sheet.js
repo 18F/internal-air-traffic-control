@@ -129,9 +129,9 @@ class Sheet {
 
       row.staff3 = row.staff4 = '';
       if(row.staff.length) {
-          row.staff3 = row.shift();
+          row.staff3 = row.staff.shift();
           if(row.staff.length) {
-              row.staff = row.shift();
+              row.staff = row.staff.shift();
           }
       }
       delete row.staff;
