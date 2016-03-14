@@ -1,5 +1,6 @@
 'use strict';
 
+require('dotenv').config();
 const restify = require('restify');
 const passport = require('passport');
 const io = require('socket.io');
@@ -7,7 +8,7 @@ const googleAuth = require('./auth/google');
 const sessions = require('client-sessions');
 const sheet = require('./sheet');
 const PORT = process.env.PORT || 5000;
-require('dotenv').config();
+const bpaTrello = require('bpa-trello-dashboard/app');
 
 if(!process.env.GOOG_CLIENT_ID) {
   console.error('Google client ID not set.  Cannot continue.');
@@ -82,6 +83,10 @@ server.use((req, res, next) => {
 server.get('/api/flights', (req, res, next) => {
   sheet.getRows(req.user.accessToken)
     .then(rows => {
+
+      let delay = 1000;
+      const cardCreator = new bpaTrello.CardCreator(null, process.env.TRELLO_BOARD_ID);
+
       for(let r of rows) {
         switch(r.lead.toLowerCase()) {
           case 'none':
@@ -105,6 +110,17 @@ server.get('/api/flights', (req, res, next) => {
         }
         delete r.staff3;
         delete r.staff4;
+
+        /*
+        setTimeout(() => {
+          cardCreator.createCard({
+            project: r.description,
+            order: '',
+            stage: r.status
+          });
+        }, delay);
+        delay += 1000;
+        */
       }
       res.send(rows);
     })

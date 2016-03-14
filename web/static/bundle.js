@@ -27905,8 +27905,33 @@ module.exports = React.createClass({
   displayName: 'exports',
   _onStatusChange: function _onStatusChange(newStatus) {
     var flight = JSON.parse(JSON.stringify(this.props.flight));
+    console.log('_onStatusChange [' + newStatus + '] ' + flight.description);
     flight.status = newStatus;
     service.saveFlight(flight);
+
+    /*if(newStatus === 'In Flight' && flight.description.match(/(^|\W)bpa($|\W)/i) /* && not-already-a-trello-card* /) {
+        setTimeout(() => {
+          if(window.confirm('Create a BPA Trello card for this project?')) {
+            console.log("Create a card!");
+          }
+        }, 10);
+      }*/
+  },
+  _getTrelloLink: function _getTrelloLink(flight) {
+    if (flight.status === 'In Flight' && flight.description.match(/(^|\W)bpa($|\W)/i)) {
+      if (true) {
+        // flight does not have trello card
+        return React.createElement(
+          'span',
+          null,
+          'Create Trello Card'
+        );
+      } else {
+        // does already, so link it
+      }
+    } else {
+        return null;
+      }
   },
   render: function render() {
     return React.createElement(
@@ -27925,6 +27950,11 @@ module.exports = React.createClass({
           'div',
           { className: 'usa-width-one-whole flight-status-picker' },
           React.createElement(StatusPicker, { status: this.props.flight.status, onStatusChange: this._onStatusChange })
+        ),
+        React.createElement(
+          'div',
+          { className: 'usa-width-one-whole' },
+          this._getTrelloLink(this.props.flight)
         )
       ),
       React.createElement(
