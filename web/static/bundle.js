@@ -27905,7 +27905,6 @@ module.exports = React.createClass({
   displayName: 'exports',
   _onStatusChange: function _onStatusChange(newStatus) {
     var flight = JSON.parse(JSON.stringify(this.props.flight));
-    console.log('_onStatusChange [' + newStatus + '] ' + flight.description);
     flight.status = newStatus;
     service.saveFlight(flight);
 
@@ -28109,9 +28108,14 @@ module.exports = {
     });
   },
   saveFlight: function saveFlight(flight) {
+    var _this = this;
+
     dispatcher.dispatch({ type: 'network-ops', payload: { error: null, title: 'Updating flight...' } });
     request.put({ url: '/api/flights', body: flight, json: true }, function (err) {
       dispatcher.dispatch({ type: 'network-ops', payload: false });
+      if (!err) {
+        _this.getFlights();
+      }
     });
   }
 };

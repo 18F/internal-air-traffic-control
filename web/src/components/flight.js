@@ -8,7 +8,6 @@ const service = require('../service');
 module.exports = React.createClass({
   _onStatusChange(newStatus) {
     let flight = JSON.parse(JSON.stringify(this.props.flight));
-    console.log(`_onStatusChange [${newStatus}] ${flight.description}`);
     flight.status = newStatus;
     service.saveFlight(flight);
 
