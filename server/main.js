@@ -5,8 +5,10 @@ const restify = require('restify');
 const passport = require('passport');
 const io = require('socket.io');
 const googleAuth = require('./auth/google');
+const trelloAuth = require('./auth/trello');
 const sessions = require('client-sessions');
 const sheet = require('./sheet');
+const board = require('./board');
 const PORT = process.env.PORT || 5000;
 const bpaTrello = require('bpa-trello-dashboard/app');
 
@@ -63,13 +65,15 @@ server.get('/auth/error', (req, res, next) => {
 });
 
 googleAuth.setupMiddleware(server, passport, '/auth/error');
+trelloAuth.setupMiddleware(server, passport, '/auth/trello');
 
 server.use((req, res, next) => {
   if(!req.user) {
-    res.redirect('/auth/google');
+    res.redirect('/auth/trello');
     next();
   } else {
     res.charSet('utf-8');
+    /*
     googleAuth.refresh(req)
       .then(next)
       .catch(e => {
@@ -77,11 +81,13 @@ server.use((req, res, next) => {
         console.error(e);
         return next(new restify.InternalServerError('Could not refresh authentication token'));
       });
+    */
+    next();
   }
 });
 
 server.get('/api/flights', (req, res, next) => {
-  sheet.getRows(req.user.accessToken)
+  board.getCards(req.user.accessToken)
     .then(rows => {
 
       let delay = 1000;
@@ -101,11 +107,12 @@ server.get('/api/flights', (req, res, next) => {
             break;
         }
 
+        /*
         r.staff = [ ];
-        if(r.staff3.length) {
+        if(r.staff3 && r.staff3.length) {
           r.staff.push(r.staff3);
         }
-        if(r.staff4.length) {
+        if(r.staff4 && r.staff4.length) {
           r.staff.push(r.staff4);
         }
         delete r.staff3;
@@ -133,7 +140,7 @@ server.get('/api/flights', (req, res, next) => {
 });
 
 server.put('/api/flights', restify.bodyParser(), (req, res, next) => {
-  sheet.updateRow(req.body, req.user.accessToken)
+  /*sheet.updateRow(req.body, req.user.accessToken)
     .then(() => {
       res.send({});
       sockets.emit('flights changed');
@@ -143,6 +150,8 @@ server.put('/api/flights', restify.bodyParser(), (req, res, next) => {
       console.log(e);
       res.send(new restify.InternalServerError());
     });
+  */
+  res.send(new restify.InternalServerError());
   next();
 });
 
