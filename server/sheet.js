@@ -1,10 +1,14 @@
 'use strict';
 const request = require('request');
 
+const REL = {
+  list: 'http://schemas.google.com/spreadsheets/2006#listfeed',
+  cells: 'http://schemas.google.com/spreadsheets/2006#cellsfeed'
+}
+
 class Sheet {
   setSheetID(sheetID) {
     this.id = sheetID;
-    return Promise.resolve(this.id);
   }
 
   objDiff(o1, o2) {
@@ -69,7 +73,7 @@ class Sheet {
       // The sheet feed URL comes from Google, so calling this
       // before we try to get the feed guarantees that we've
       // got the feed URL.
-      this.getFeedURL(accessToken, 'http://schemas.google.com/spreadsheets/2006#listfeed')
+      this.getFeedURL(accessToken, REL.list)
         .then(listFeed => {
           // With that, we can then get the actual rows.
           request.get(`${listFeed}?alt=json`, { headers: { 'Authorization': `Bearer ${accessToken}` } }, (err, res, body) => {
@@ -146,7 +150,7 @@ class Sheet {
           if(targetRow) {
               cellsToChange = this.objDiff(row, targetRow);
               if(cellsToChange.length === 1) {
-                  return this.getFeedURL(accessToken, 'http://schemas.google.com/spreadsheets/2006#cellsfeed');
+                  return this.getFeedURL(accessToken, REL.cells);
               }
               return false;
           } else {

@@ -6,3 +6,14 @@
     height: 36px;
     margin: 0;
 }
+
+.Select .Select-control {
+  .Select-value {
+    .Select-value-icon, .Select-value-label {
+      color: #00007a;
+    }
+  }
+  .Select-clear-zone .Select-clear {
+    color: #767676;
+  }
+}
