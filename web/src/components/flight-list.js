@@ -96,7 +96,7 @@ module.exports = React.createClass({
           <h3 className='usa-width-one-whole'>Flights on the Board</h3>
           <ReactSelect className='usa-width-three-fourths' multi={true} value={ this.state.visibleStatuses } delimiter=':' onChange={this._onStatusesChanged} placeholder='Show statuses...' options={ getAllStatusObjects() } />
           <div className='usa-width-one-fourth flight-list-search'>
-            <input type='text' onChange={ this._onSearchChanged } placeholder='Filter...' />
+            <input type='text' onChange={ this._onSearchChanged } placeholder='Filter...' aria-label='Flight filter' />
           </div>
         </div>
         <br/>

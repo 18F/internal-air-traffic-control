@@ -27766,7 +27766,7 @@ module.exports = React.createClass({
         React.createElement(
           'div',
           { className: 'usa-width-one-fourth flight-list-search' },
-          React.createElement('input', { type: 'text', onChange: this._onSearchChanged, placeholder: 'Filter...' })
+          React.createElement('input', { type: 'text', onChange: this._onSearchChanged, placeholder: 'Filter...', 'aria-label': 'Flight filter' })
         )
       ),
       React.createElement('br', null),
@@ -27825,7 +27825,7 @@ module.exports = React.createClass({
   render: function render() {
     return React.createElement(
       'select',
-      { value: this.props.status.toLowerCase(), onChange: this._onChange },
+      { value: this.props.status.toLowerCase(), onChange: this._onChange, 'aria-label': 'Flight status' },
       Statuses.getAll().map(function (s) {
         return React.createElement(
           'option',
