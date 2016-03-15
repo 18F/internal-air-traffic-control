@@ -12,11 +12,15 @@ function getRequestChainable(accessToken) {
 
 function getMembers(req) {
   return new Promise((resolve, reject) => {
-    request.get(buildURL('/members', req.accessToken), (err, res, body) => {
+    request.get(buildURL('/members', req.accessToken), { json: true }, (err, res, body) => {
       if(err) {
         return reject(err);
       }
-      req.members = JSON.parse(body).reduce((p, v) => { p[v.id] = v; return p; }, { });
+      if(Array.isArray(body)) {
+        req.members = body.reduce((p, v) => { p[v.id] = v; return p; }, { });
+      } else {
+        req.members = { };
+      }
       resolve(req);
     });
   });
@@ -35,11 +39,15 @@ function getMemberName(req, id) {
 
 function getLists(req) {
   return new Promise((resolve, reject) => {
-    request.get(buildURL('/lists', req.accessToken), (err, res, body) => {
+    request.get(buildURL('/lists', req.accessToken), { json: true }, (err, res, body) => {
       if(err) {
         return reject(err);
       }
-      req.lists = JSON.parse(body).reduce((p, v) => { p[v.id] = v; return p; }, { });
+      if(Array.isArray(body)) {
+        req.lists = body.reduce((p, v) => { p[v.id] = v; return p; }, { });
+      } else {
+        req.lists = { };
+      }
       resolve(req);
     });
   });
@@ -54,22 +62,26 @@ function getListName(req, id) {
 
 function getCards(req) {
   return new Promise((resolve, reject) => {
-    request.get(buildURL('/cards', req.accessToken), (err, res, body) => {
-      req.cards = JSON.parse(body).map(card => {
-        return {
-          _id: card.id,
-          description: card.name,
-          status: getListName(req, card.idList),
-          lead: '',
-          pair: '',
-          staff: card.idMembers
-        }
-      });
-      req.cards.forEach(card => {
-        for(let i = 0; i < card.staff.length; i++) {
-          card.staff[i] = getMemberName(req, card.staff[i]);
-        }
-      });
+    request.get(buildURL('/cards', req.accessToken), { json: true }, (err, res, body) => {
+      if(Array.isArray(body)) {
+        req.cards = body.map(card => {
+          return {
+            _id: card.id,
+            description: card.name,
+            status: getListName(req, card.idList),
+            lead: '',
+            pair: '',
+            staff: card.idMembers
+          }
+        });
+        req.cards.forEach(card => {
+          for(let i = 0; i < card.staff.length; i++) {
+            card.staff[i] = getMemberName(req, card.staff[i]);
+          }
+        });
+      } else {
+        req.cards = [ ];
+      }
       resolve(req);
     });
   });
