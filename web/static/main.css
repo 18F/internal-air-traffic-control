@@ -2671,6 +2671,12 @@ div#messages {
   height: 36px;
   margin: 0; }
 
+.Select .Select-control .Select-value .Select-value-icon, .Select .Select-control .Select-value .Select-value-label {
+  color: #00007a; }
+
+.Select .Select-control .Select-clear-zone .Select-clear {
+  color: #767676; }
+
 .flight {
   background: #205493;
   color: white;
