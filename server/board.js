@@ -60,6 +60,17 @@ function getListName(req, id) {
   return '';
 }
 
+function getListID(req, name) {
+  if(req.lists) {
+    for(let listID of Object.keys(req.lists)) {
+      if(req.lists[listID].name === name) {
+        return listID;
+      }
+    }
+  }
+  return '';
+}
+
 function getCards(req) {
   return new Promise((resolve, reject) => {
     request.get(buildURL('/cards', req.accessToken), { json: true }, (err, res, body) => {
@@ -96,6 +107,28 @@ module.exports = {
       .then(req => req.cards)
       .catch(err => {
         console.log('Error getting cards:');
+        console.log(err);
+      });
+  },
+
+  moveCard(id, listName, accessToken) {
+    return getRequestChainable(accessToken)
+      .then(getLists)
+      .then(req => {
+        return new Promise((resolve, reject) => {
+          const listID = getListID(req, listName);
+          console.log(`https://api.trello.com/1/cards/${id}?key=${process.env.TRELLO_API_KEY}&token=${accessToken}`);
+          request.put(`https://api.trello.com/1/cards/${id}?key=${process.env.TRELLO_API_KEY}&token=${accessToken}`, { json: true, body: { idList: listID }}, function(err, req, body) {
+            if(err) {
+              return reject(err);
+            }
+            console.log(body);
+            resolve();
+          });
+        });
+      })
+      .catch(err => {
+        console.log('Error updating card:');
         console.log(err);
       });
   }

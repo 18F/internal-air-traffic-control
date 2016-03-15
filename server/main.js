@@ -104,7 +104,9 @@ server.get('/api/flights', (req, res, next) => {
 });
 
 server.put('/api/flights', restify.bodyParser(), (req, res, next) => {
-  res.send(new restify.InternalServerError());
+  board.moveCard(req.body._id, req.body.status, req.user.accessToken)
+    .then(() => res.send({}))
+    .catch(e => res.send(new restify.InternalServerError(e)));
   next();
 });
 
