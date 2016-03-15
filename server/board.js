@@ -117,12 +117,10 @@ module.exports = {
       .then(req => {
         return new Promise((resolve, reject) => {
           const listID = getListID(req, listName);
-          console.log(`https://api.trello.com/1/cards/${id}?key=${process.env.TRELLO_API_KEY}&token=${accessToken}`);
           request.put(`https://api.trello.com/1/cards/${id}?key=${process.env.TRELLO_API_KEY}&token=${accessToken}`, { json: true, body: { idList: listID }}, function(err, req, body) {
             if(err) {
               return reject(err);
             }
-            console.log(body);
             resolve();
           });
         });
