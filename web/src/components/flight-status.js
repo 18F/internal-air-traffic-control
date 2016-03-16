@@ -11,8 +11,17 @@ function getUnitLength() {
   return 100 / statuses.length;
 }
 
+function getStatusIndex(statusName) {
+  for(let i = 0; i < statuses.length; i++) {
+    if(statuses[i].name === statusName.toLowerCase()) {
+      return i;
+    }
+  }
+  return -1;
+}
+
 function getPreStyle(status) {
-  const i = statuses.indexOf(status.toLowerCase());
+  const i = getStatusIndex(status);
   const style = { width: '0%' };
   if(i >= 0) {
     style.width = `${(i / statuses.length) * 100}%`;
@@ -21,7 +30,7 @@ function getPreStyle(status) {
 }
 
 function getPostStyle(status) {
-  const i = statuses.indexOf(status.toLowerCase());
+  const i = getStatusIndex(status);
   const style = { width: '0%' };
   if(i >= 0) {
     style.width = `${((statuses.length - i - 1) / statuses.length) * 100}%`;

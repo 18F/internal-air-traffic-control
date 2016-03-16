@@ -27784,13 +27784,7 @@ var React = require('react');
 var FlightStatus = require('./flight-status');
 
 function getStaff(flight) {
-  var staff = [];
-  if (flight.pair) {
-    staff.push(flight.pair);
-  }
-  staff = staff.concat(flight.staff);
-
-  return (staff.length > 0 ? ', ' : '') + staff.join(', ');
+  return flight.staff.join(', ');
 }
 
 module.exports = React.createClass({
@@ -27799,11 +27793,6 @@ module.exports = React.createClass({
     return React.createElement(
       'div',
       { className: 'flight-staff' },
-      React.createElement(
-        'span',
-        { className: 'flight-leader' },
-        this.props.flight.lead
-      ),
       getStaff(this.props.flight)
     );
   }
@@ -27829,7 +27818,7 @@ module.exports = React.createClass({
       Statuses.getAll().map(function (s) {
         return React.createElement(
           'option',
-          { key: s, value: s },
+          { key: s.id, value: s.name },
           Statuses.getPrettyName(s)
         );
       })
@@ -27852,8 +27841,17 @@ function getUnitLength() {
   return 100 / statuses.length;
 }
 
+function getStatusIndex(statusName) {
+  for (var i = 0; i < statuses.length; i++) {
+    if (statuses[i].name === statusName.toLowerCase()) {
+      return i;
+    }
+  }
+  return -1;
+}
+
 function getPreStyle(status) {
-  var i = statuses.indexOf(status.toLowerCase());
+  var i = getStatusIndex(status);
   var style = { width: '0%' };
   if (i >= 0) {
     style.width = i / statuses.length * 100 + '%';
@@ -27862,7 +27860,7 @@ function getPreStyle(status) {
 }
 
 function getPostStyle(status) {
-  var i = statuses.indexOf(status.toLowerCase());
+  var i = getStatusIndex(status);
   var style = { width: '0%' };
   if (i >= 0) {
     style.width = (statuses.length - i - 1) / statuses.length * 100 + '%';
@@ -28126,7 +28124,7 @@ module.exports = {
 var ucfirst = require('ucfirst');
 var flightStore = require('./stores/flightStore');
 
-var known = ['preflight', 'taxiing', 'climbing', 'in flight', 'landing', 'landed', 'at gate', 'complete'];
+var known = [{ name: 'grounded', id: 0 }, { name: 'tarmac', id: 0 }, { name: 'preflight', id: 0 }, { name: 'taxiing', id: 0 }, { name: 'climbing', id: 0 }, { name: 'in flight', id: 0 }, { name: 'landing', id: 0 }, { name: 'landed', id: 0 }, { name: 'at gate', id: 0 }, { name: 'autopilot', id: 0 }];
 
 var all = [].concat(known);
 function getAll() {
@@ -28141,12 +28139,21 @@ flightStore.addListener(function () {
   var _iteratorError = undefined;
 
   try {
-    for (var _iterator = flights[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+    var _loop = function _loop() {
       var flight = _step.value;
 
-      if (all.indexOf(flight.status.toLowerCase()) < 0) {
-        all.push(flight.status.toLowerCase());
+      var existing = all.filter(function (f) {
+        return f.name === flight.status.toLowerCase();
+      });
+      if (existing.length) {
+        existing[0].id = flight.listID;
+      } else {
+        all.push({ name: flight.status.toLowerCase(), id: flight.listID });
       }
+    };
+
+    for (var _iterator = flights[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+      _loop();
     }
   } catch (err) {
     _didIteratorError = true;
@@ -28162,13 +28169,15 @@ flightStore.addListener(function () {
       }
     }
   }
+
+  console.log(all);
 });
 
 module.exports = {
   known: known,
   getAll: getAll,
   getPrettyName: function getPrettyName(status) {
-    var parts = status.split(' ');
+    var parts = status.name.split(' ');
     for (var i = 0; i < parts.length; i++) {
       parts[i] = ucfirst(parts[i]);
     }
