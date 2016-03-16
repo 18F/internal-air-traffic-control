@@ -27766,7 +27766,7 @@ module.exports = React.createClass({
         React.createElement(
           'div',
           { className: 'usa-width-one-fourth flight-list-search' },
-          React.createElement('input', { type: 'text', onChange: this._onSearchChanged, placeholder: 'Filter...' })
+          React.createElement('input', { type: 'text', onChange: this._onSearchChanged, placeholder: 'Filter...', 'aria-label': 'Flight filter' })
         )
       ),
       React.createElement('br', null),
@@ -27825,7 +27825,7 @@ module.exports = React.createClass({
   render: function render() {
     return React.createElement(
       'select',
-      { value: this.props.status.toLowerCase(), onChange: this._onChange },
+      { value: this.props.status.toLowerCase(), onChange: this._onChange, 'aria-label': 'Flight status' },
       Statuses.getAll().map(function (s) {
         return React.createElement(
           'option',
@@ -27907,6 +27907,30 @@ module.exports = React.createClass({
     var flight = JSON.parse(JSON.stringify(this.props.flight));
     flight.status = newStatus;
     service.saveFlight(flight);
+
+    /*if(newStatus === 'In Flight' && flight.description.match(/(^|\W)bpa($|\W)/i) /* && not-already-a-trello-card* /) {
+        setTimeout(() => {
+          if(window.confirm('Create a BPA Trello card for this project?')) {
+            console.log("Create a card!");
+          }
+        }, 10);
+      }*/
+  },
+  _getTrelloLink: function _getTrelloLink(flight) {
+    if (flight.status === 'In Flight' && flight.description.match(/(^|\W)bpa($|\W)/i)) {
+      if (true) {
+        // flight does not have trello card
+        return React.createElement(
+          'span',
+          null,
+          'Create Trello Card'
+        );
+      } else {
+        // does already, so link it
+      }
+    } else {
+        return null;
+      }
   },
   render: function render() {
     return React.createElement(
@@ -27925,6 +27949,11 @@ module.exports = React.createClass({
           'div',
           { className: 'usa-width-one-whole flight-status-picker' },
           React.createElement(StatusPicker, { status: this.props.flight.status, onStatusChange: this._onStatusChange })
+        ),
+        React.createElement(
+          'div',
+          { className: 'usa-width-one-whole' },
+          this._getTrelloLink(this.props.flight)
         )
       ),
       React.createElement(
@@ -28079,9 +28108,14 @@ module.exports = {
     });
   },
   saveFlight: function saveFlight(flight) {
+    var _this = this;
+
     dispatcher.dispatch({ type: 'network-ops', payload: { error: null, title: 'Updating flight...' } });
     request.put({ url: '/api/flights', body: flight, json: true }, function (err) {
       dispatcher.dispatch({ type: 'network-ops', payload: false });
+      if (!err) {
+        _this.getFlights();
+      }
     });
   }
 };

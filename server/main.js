@@ -1,37 +1,36 @@
 'use strict';
 
+require('dotenv').config();
 const restify = require('restify');
 const passport = require('passport');
 const io = require('socket.io');
-const googleAuth = require('./auth/google');
+const trelloAuth = require('./auth/trello');
 const sessions = require('client-sessions');
-const sheet = require('./sheet');
+const board = require('./board');
 const PORT = process.env.PORT || 5000;
-require('dotenv').config();
+const bpaTrello = require('bpa-trello-dashboard/app');
 
-if(!process.env.GOOG_CLIENT_ID) {
-  console.error('Google client ID not set.  Cannot continue.');
+if(!process.env.TRELLO_API_KEY) {
+  console.error('Trello API key not set.  Cannot continue.');
   process.exit(1);
 }
-if(!process.env.GOOG_CLIENT_SECRET) {
-  console.error('Google client secret not set.  Cannot continue.');
+if(!process.env.TRELLO_CLIENT_SECRET) {
+  console.error('Trello client secret not set.  Cannot continue.');
   process.exit(1);
 }
-if(!process.env.GOOG_CALLBACK_URL) {
-  console.error('Google callback URL not set.  Cannot continue.');
+if(!process.env.TRELLO_CALLBACK_URL) {
+  console.error('Trello callback URL not set.  Cannot continue.');
   process.exit(1);
 }
 
-if(!process.env.GOOG_SHEET_ID) {
-  console.error('Google sheet ID not set.  Cannot continue.');
+if(!process.env.TRELLO_BOARD_ID) {
+  console.error('Trello board ID not set.  Cannot continue.');
   process.exit(1);
 }
 
 if(!process.env.SESSION_SECRET) {
   console.warn('No SESSION_SECRET set.  Using less secure default.');
 }
-
-sheet.setSheetID(process.env.GOOG_SHEET_ID);
 
 const server = restify.createServer({ name: 'Traffic Control API' });
 server.use(sessions({
@@ -61,27 +60,40 @@ server.get('/auth/error', (req, res, next) => {
   return next(new restify.UnauthorizedError(''));
 });
 
-googleAuth.setupMiddleware(server, passport, '/auth/error');
+trelloAuth.setupMiddleware(server, passport, '/auth/trello');
 
 server.use((req, res, next) => {
   if(!req.user) {
-    res.redirect('/auth/google');
+    res.redirect('/auth/trello');
     next();
   } else {
     res.charSet('utf-8');
-    googleAuth.refresh(req)
-      .then(next)
-      .catch(e => {
-        console.log('Error refreshing Google OAuth token');
-        console.error(e);
-        return next(new restify.InternalServerError('Could not refresh authentication token'));
-      });
+    next();
   }
 });
 
+server.get('/api/statuses', (req, res, next) => {
+  board.getLists(req.user.accessToken)
+    .then(req => {
+      const statuses = [ ];
+      for(let list of Object.keys(req.lists)) {
+        statuses.push({
+          id: list,
+          name: req.lists[list].name
+        });
+      }
+      res.send(statuses);
+    });
+  next();
+});
+
 server.get('/api/flights', (req, res, next) => {
-  sheet.getRows(req.user.accessToken)
+  board.getCards(req.user.accessToken)
     .then(rows => {
+
+      let delay = 1000;
+      const cardCreator = new bpaTrello.CardCreator(null, process.env.TRELLO_BOARD_ID);
+
       for(let r of rows) {
         switch(r.lead.toLowerCase()) {
           case 'none':
@@ -95,16 +107,6 @@ server.get('/api/flights', (req, res, next) => {
             r.pair = '';
             break;
         }
-
-        r.staff = [ ];
-        if(r.staff3.length) {
-          r.staff.push(r.staff3);
-        }
-        if(r.staff4.length) {
-          r.staff.push(r.staff4);
-        }
-        delete r.staff3;
-        delete r.staff4;
       }
       res.send(rows);
     })
@@ -117,16 +119,9 @@ server.get('/api/flights', (req, res, next) => {
 });
 
 server.put('/api/flights', restify.bodyParser(), (req, res, next) => {
-  sheet.updateRow(req.body, req.user.accessToken)
-    .then(() => {
-      res.send({});
-      sockets.emit('flights changed');
-    })
-    .catch(e => {
-      console.log('Error updating flight');
-      console.log(e);
-      res.send(new restify.InternalServerError());
-    });
+  board.moveCard(req.body._id, req.body.status, req.user.accessToken)
+    .then(() => res.send({}))
+    .catch(e => res.send(new restify.InternalServerError(e)));
   next();
 });
 
