@@ -1,7 +1,12 @@
 'use strict';
 const request = require('request');
 
-const baseURL = `https://api.trello.com/1/boards/${process.env.TRELLO_BOARD_ID}`
+const cache = {
+  members: null,
+  lists: null
+};
+
+const baseURL = `https://api.trello.com/1/boards/${process.env.TRELLO_BOARD_ID}`;
 function buildURL(partial, token) {
   return `${baseURL}${partial}?key=${process.env.TRELLO_API_KEY}&token=${token}`;
 }
@@ -11,6 +16,11 @@ function getRequestChainable(accessToken) {
 }
 
 function getMembers(req) {
+  if(cache.members) {
+    req.members = cache.members;
+    return Promise.resolve(req);
+  }
+
   return new Promise((resolve, reject) => {
     request.get(buildURL('/members', req.accessToken), { json: true }, (err, res, body) => {
       if(err) {
@@ -18,6 +28,7 @@ function getMembers(req) {
       }
       if(Array.isArray(body)) {
         req.members = body.reduce((p, v) => { p[v.id] = v; return p; }, { });
+        cache.members = req.members;
       } else {
         req.members = { };
       }
@@ -38,6 +49,11 @@ function getMemberName(req, id) {
 }
 
 function getLists(req) {
+  if(cache.lists) {
+    req.lists = cache.lists;
+    return Promise.resolve(req);
+  }
+
   return new Promise((resolve, reject) => {
     request.get(buildURL('/lists', req.accessToken), { json: true }, (err, res, body) => {
       if(err) {
@@ -45,6 +61,7 @@ function getLists(req) {
       }
       if(Array.isArray(body)) {
         req.lists = body.reduce((p, v) => { p[v.id] = v; return p; }, { });
+        cache.lists = req.lists;
       } else {
         req.lists = { };
       }
