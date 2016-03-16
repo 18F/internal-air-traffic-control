@@ -80,6 +80,7 @@ function getCards(req) {
             _id: card.id,
             description: card.name,
             status: getListName(req, card.idList),
+            listID: card.idList,
             lead: '',
             pair: '',
             staff: card.idMembers
@@ -93,6 +94,21 @@ function getCards(req) {
       } else {
         req.cards = [ ];
       }
+      resolve(req);
+    });
+  });
+}
+
+function moveCard(req) {
+  return new Promise((resolve, reject) => {
+    request.put(`https://api.trello.com/1/cards/${req.cardID}?key=${process.env.TRELLO_API_KEY}&token=${req.accessToken}`, { json: true, body: { idList: req.listID }}, function(err, req, body) {
+      if(err) {
+        return reject(err);
+      }
+      req.card = {
+        _id: body.id,
+        listID: body.idList
+      };
       resolve(req);
     });
   });
@@ -112,26 +128,19 @@ module.exports = {
       .catch(err => {
         console.log('Error getting cards:');
         console.log(err);
+        throw err;
       });
   },
 
-  moveCard(id, listName, accessToken) {
+  moveCard(id, listID, accessToken) {
     return getRequestChainable(accessToken)
-      .then(getLists)
-      .then(req => {
-        return new Promise((resolve, reject) => {
-          const listID = getListID(req, listName);
-          request.put(`https://api.trello.com/1/cards/${id}?key=${process.env.TRELLO_API_KEY}&token=${accessToken}`, { json: true, body: { idList: listID }}, function(err, req, body) {
-            if(err) {
-              return reject(err);
-            }
-            resolve();
-          });
-        });
-      })
+      .then(req => { req.cardID = id; return req; })
+      .then(req => { req.listID = listID; return req; })
+      .then(moveCard)
       .catch(err => {
-        console.log('Error updating card:');
+        console.log('Error moving card:');
         console.log(err);
+        throw err;
       });
   }
 }

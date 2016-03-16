@@ -37,11 +37,15 @@ module.exports = {
 
   saveFlight(flight) {
     dispatcher.dispatch({ type: 'network-ops', payload: { error: null, title: 'Updating flight...' }});
-    request.put({ url: '/api/flights', body: flight, json: true }, (err) => {
+    request.put({ url: '/api/flights', body: flight, json: true }, err => {
       dispatcher.dispatch({ type: 'network-ops', payload: false });
-      if(!err) {
-        this.getFlights();
+      if(err) {
+        dispatcher.dispatch({ type: 'error', payload: { error: 'Error moving flight', title: 'Error' }});
       }
     });
+  },
+
+  mutateFlight(flight) {
+    dispatcher.dispatch({ type: 'flight-update', payload: flight});
   }
 };

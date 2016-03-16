@@ -9,7 +9,9 @@ const service = require('./service');
 service.getFlights();
 service.getUser();
 
-io().on('flights changed', () => service.getFlights());
+io().on('flight changed', flight => {
+  service.mutateFlight(flight);
+});
 
 ReactDOM.render(
   <Auth/>,
