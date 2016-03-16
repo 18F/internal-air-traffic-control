@@ -80,6 +80,7 @@ function getCards(req) {
             _id: card.id,
             description: card.name,
             status: getListName(req, card.idList),
+            listID: card.idList,
             lead: '',
             pair: '',
             staff: card.idMembers
