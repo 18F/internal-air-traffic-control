@@ -99,6 +99,10 @@ function getCards(req) {
 }
 
 module.exports = {
+  getLists(accessToken) {
+    return getLists({ accessToken });
+  },
+
   getCards(accessToken) {
     return getRequestChainable(accessToken)
       .then(getMembers)

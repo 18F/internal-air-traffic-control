@@ -72,6 +72,21 @@ server.use((req, res, next) => {
   }
 });
 
+server.get('/api/statuses', (req, res, next) => {
+  board.getLists(req.user.accessToken)
+    .then(req => {
+      const statuses = [ ];
+      for(let list of Object.keys(req.lists)) {
+        statuses.push({
+          id: list,
+          name: req.lists[list].name
+        });
+      }
+      res.send(statuses);
+    });
+  next();
+});
+
 server.get('/api/flights', (req, res, next) => {
   board.getCards(req.user.accessToken)
     .then(rows => {
