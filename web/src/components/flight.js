@@ -6,9 +6,9 @@ const StatusPicker = require('./flight-status-picker');
 const service = require('../service');
 
 module.exports = React.createClass({
-  _onStatusChange(newStatus) {
+  _onStatusChange(newStatusID) {
     let flight = JSON.parse(JSON.stringify(this.props.flight));
-    flight.status = newStatus;
+    flight.listID = newStatusID;
     service.saveFlight(flight);
 
   /*if(newStatus === 'In Flight' && flight.description.match(/(^|\W)bpa($|\W)/i) /* && not-already-a-trello-card* /) {
@@ -41,7 +41,7 @@ module.exports = React.createClass({
           {this.props.flight.description}
         </div>
         <div className='usa-width-two-thirds'>
-          <FlightStatus status={this.props.flight.status} onStatusChange={ this._onStatusChange }/>
+          <FlightStatus status={this.props.flight.status}/>
           <div className='usa-width-one-whole flight-status-picker'>
             <StatusPicker status={ this.props.flight.status } onStatusChange={ this._onStatusChange }/>
           </div>

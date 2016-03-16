@@ -5,7 +5,12 @@ const Statuses = require('../statuses');
 module.exports = React.createClass({
   _onChange(event) {
     if(typeof this.props.onStatusChange === 'function') {
-      this.props.onStatusChange(Statuses.getPrettyName(event.target.value));
+      Statuses.getAll().some(s => {
+        if(s.name === event.target.value) {
+          this.props.onStatusChange(s.id);
+          return true;
+        }
+      })
     }
   },
 

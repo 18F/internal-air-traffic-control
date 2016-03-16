@@ -27636,7 +27636,6 @@ module.exports = React.createClass({
           return vs.value;
         });
         visibleFlights = flights.filter(function (f) {
-          //(statusNames.indexOf(f.status.toLowerCase()) >= 0));
           return statusNames.some(function (s) {
             return s.name === f.status.toLowerCase();
           });
@@ -27810,8 +27809,15 @@ var Statuses = require('../statuses');
 module.exports = React.createClass({
   displayName: 'exports',
   _onChange: function _onChange(event) {
+    var _this = this;
+
     if (typeof this.props.onStatusChange === 'function') {
-      this.props.onStatusChange(Statuses.getPrettyName(event.target.value));
+      Statuses.getAll().some(function (s) {
+        if (s.name === event.target.value) {
+          _this.props.onStatusChange(s.id);
+          return true;
+        }
+      });
     }
   },
   render: function render() {
@@ -27873,11 +27879,6 @@ function getPostStyle(status) {
 
 module.exports = React.createClass({
   displayName: 'exports',
-  _onStatusChange: function _onStatusChange(newStatus) {
-    if (typeof this.props.onStatusChange === 'function') {
-      this.props.onStatusChange(newStatus);
-    }
-  },
   render: function render() {
     return React.createElement(
       'div',
@@ -27904,9 +27905,9 @@ var service = require('../service');
 
 module.exports = React.createClass({
   displayName: 'exports',
-  _onStatusChange: function _onStatusChange(newStatus) {
+  _onStatusChange: function _onStatusChange(newStatusID) {
     var flight = JSON.parse(JSON.stringify(this.props.flight));
-    flight.status = newStatus;
+    flight.listID = newStatusID;
     service.saveFlight(flight);
 
     /*if(newStatus === 'In Flight' && flight.description.match(/(^|\W)bpa($|\W)/i) /* && not-already-a-trello-card* /) {
@@ -27945,7 +27946,7 @@ module.exports = React.createClass({
       React.createElement(
         'div',
         { className: 'usa-width-two-thirds' },
-        React.createElement(FlightStatus, { status: this.props.flight.status, onStatusChange: this._onStatusChange }),
+        React.createElement(FlightStatus, { status: this.props.flight.status }),
         React.createElement(
           'div',
           { className: 'usa-width-one-whole flight-status-picker' },

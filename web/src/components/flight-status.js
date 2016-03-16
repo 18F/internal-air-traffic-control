@@ -39,12 +39,6 @@ function getPostStyle(status) {
 }
 
 module.exports = React.createClass({
-  _onStatusChange(newStatus) {
-    if(typeof this.props.onStatusChange === 'function') {
-      this.props.onStatusChange(newStatus);
-    }
-  },
-
   render() {
     return (
       <div className={ 'flight-status-bar ' + getStatusClassName(this.props.status) }>
