@@ -6,6 +6,15 @@ const Message = require('./components/message');
 const FlightList = require('./components/flight-list');
 const service = require('./service');
 
+import { createStore } from 'redux';
+import reducers from './reducers';
+
+const store = createStore(reducers, { flights: [ ] });
+
+import * as actions from './actions';
+const act = actions.Flights.ReplaceList([ 'asdf' ]);
+store.dispatch(act);
+
 service.getFlights();
 service.getUser();
 
