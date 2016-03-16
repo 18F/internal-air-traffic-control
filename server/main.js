@@ -119,7 +119,7 @@ server.get('/api/flights', (req, res, next) => {
 });
 
 server.put('/api/flights', restify.bodyParser(), (req, res, next) => {
-  board.moveCard(req.body._id, req.body.status, req.user.accessToken)
+  board.moveCard(req.body._id, req.body.listID, req.user.accessToken)
     .then(() => res.send({}))
     .catch(e => res.send(new restify.InternalServerError(e)));
   next();

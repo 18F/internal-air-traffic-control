@@ -116,23 +116,14 @@ module.exports = {
       });
   },
 
-  moveCard(id, listName, accessToken) {
-    return getRequestChainable(accessToken)
-      .then(getLists)
-      .then(req => {
-        return new Promise((resolve, reject) => {
-          const listID = getListID(req, listName);
-          request.put(`https://api.trello.com/1/cards/${id}?key=${process.env.TRELLO_API_KEY}&token=${accessToken}`, { json: true, body: { idList: listID }}, function(err, req, body) {
-            if(err) {
-              return reject(err);
-            }
-            resolve();
-          });
-        });
-      })
-      .catch(err => {
-        console.log('Error updating card:');
-        console.log(err);
+  moveCard(id, listID, accessToken) {
+    return new Promise((resolve, reject) => {
+      request.put(`https://api.trello.com/1/cards/${id}?key=${process.env.TRELLO_API_KEY}&token=${accessToken}`, { json: true, body: { idList: listID }}, function(err, req, body) {
+        if(err) {
+          return reject(err);
+        }
+        resolve();
       });
+    });
   }
 }
