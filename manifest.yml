@@ -1,0 +1,6 @@
+---
+applications:
+- name: acq-atc
+  memory: 512M
+  instances: 1
+  host: acq-atc
