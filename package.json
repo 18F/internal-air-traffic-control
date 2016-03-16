@@ -39,7 +39,8 @@
     "react": "^0.14.7",
     "react-dom": "^0.14.7",
     "react-select": "^1.0.0-beta8",
-    "ucfirst": "^1.0.0"
+    "ucfirst": "^1.0.0",
+    "updeep": "^0.13.0"
   },
   "engines": {
     "node": "4.2.5",
