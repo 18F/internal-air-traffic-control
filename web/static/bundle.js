@@ -27636,7 +27636,10 @@ module.exports = React.createClass({
           return vs.value;
         });
         visibleFlights = flights.filter(function (f) {
-          return statusNames.indexOf(f.status.toLowerCase()) >= 0;
+          //(statusNames.indexOf(f.status.toLowerCase()) >= 0));
+          return statusNames.some(function (s) {
+            return s.name === f.status.toLowerCase();
+          });
         });
       })();
     }
@@ -28169,8 +28172,6 @@ flightStore.addListener(function () {
       }
     }
   }
-
-  console.log(all);
 });
 
 module.exports = {
