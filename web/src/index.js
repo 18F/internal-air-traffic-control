@@ -14,16 +14,16 @@ io().on('flight changed', flight => {
 });
 
 ReactDOM.render(
-  <Auth/>,
+  <Auth />,
   document.getElementById('auth')
 );
 
 ReactDOM.render(
-  <Message/>,
+  <Message />,
   document.getElementById('messages')
 );
 
 ReactDOM.render(
-  <FlightList/>,
+  <FlightList />,
   document.getElementById('content')
 );

@@ -8,28 +8,28 @@ const trelloAuth = require('./auth/trello');
 const sessions = require('client-sessions');
 const board = require('./board');
 const PORT = process.env.PORT || 5000;
-const bpaTrello = require('bpa-trello-dashboard/app');
+const log = require('./getLogger')('main');
 
-if(!process.env.TRELLO_API_KEY) {
-  console.error('Trello API key not set.  Cannot continue.');
+if (!process.env.TRELLO_API_KEY) {
+  log.error('Trello API key not set.  Cannot continue.');
   process.exit(1);
 }
-if(!process.env.TRELLO_CLIENT_SECRET) {
-  console.error('Trello client secret not set.  Cannot continue.');
+if (!process.env.TRELLO_CLIENT_SECRET) {
+  log.error('Trello client secret not set.  Cannot continue.');
   process.exit(1);
 }
-if(!process.env.TRELLO_CALLBACK_URL) {
-  console.error('Trello callback URL not set.  Cannot continue.');
-  process.exit(1);
-}
-
-if(!process.env.TRELLO_BOARD_ID) {
-  console.error('Trello board ID not set.  Cannot continue.');
+if (!process.env.TRELLO_CALLBACK_URL) {
+  log.error('Trello callback URL not set.  Cannot continue.');
   process.exit(1);
 }
 
-if(!process.env.SESSION_SECRET) {
-  console.warn('No SESSION_SECRET set.  Using less secure default.');
+if (!process.env.TRELLO_BOARD_ID) {
+  log.error('Trello board ID not set.  Cannot continue.');
+  process.exit(1);
+}
+
+if (!process.env.SESSION_SECRET) {
+  log.warn('No SESSION_SECRET set.  Using less secure default.');
 }
 
 const server = restify.createServer({ name: 'Traffic Control API' });
@@ -56,14 +56,12 @@ server.get('/auth/reset', (req, res, next) => {
   next();
 });
 
-server.get('/auth/error', (req, res, next) => {
-  return next(new restify.UnauthorizedError(''));
-});
+server.get('/auth/error', (req, res, next) => next(new restify.UnauthorizedError('')));
 
 trelloAuth.setupMiddleware(server, passport, '/auth/trello');
 
 server.use((req, res, next) => {
-  if(!req.user) {
+  if (!req.user) {
     res.redirect('/auth/trello');
     next();
   } else {
@@ -74,12 +72,12 @@ server.use((req, res, next) => {
 
 server.get('/api/statuses', (req, res, next) => {
   board.getLists(req.user.accessToken)
-    .then(req => {
-      const statuses = [ ];
-      for(let list of Object.keys(req.lists)) {
+    .then(out => {
+      const statuses = [];
+      for (const list of Object.keys(out.lists)) {
         statuses.push({
           id: list,
-          name: req.lists[list].name
+          name: out.lists[list].name
         });
       }
       res.send(statuses);
@@ -89,30 +87,12 @@ server.get('/api/statuses', (req, res, next) => {
 
 server.get('/api/flights', (req, res, next) => {
   board.getCards(req.user.accessToken)
-    .then(rows => {
-
-      let delay = 1000;
-      const cardCreator = new bpaTrello.CardCreator(null, process.env.TRELLO_BOARD_ID);
-
-      for(let r of rows) {
-        switch(r.lead.toLowerCase()) {
-          case 'none':
-          case 'tbd':
-            r.lead = '';
-            break;
-        }
-        switch(r.pair.toLowerCase()) {
-          case 'none':
-          case 'tbd':
-            r.pair = '';
-            break;
-        }
-      }
-      res.send(rows);
+    .then(cards => {
+      res.send(cards);
     })
     .catch(e => {
-      console.log('Error getting rows from sheet:');
-      console.log(e);
+      log.error('Error getting rows from sheet:');
+      log.error(e);
       res.send(new restify.InternalServerError());
     });
   next();
@@ -120,9 +100,9 @@ server.get('/api/flights', (req, res, next) => {
 
 server.put('/api/flights', restify.bodyParser(), (req, res, next) => {
   board.moveCard(req.body._id, req.body.listID, req.user.accessToken)
-    .then(req => {
+    .then(out => {
       res.send({ });
-      sockets.emit('flight changed', req.card);
+      sockets.emit('flight changed', out.card);
     })
     .catch(e => res.send(new restify.InternalServerError(e)));
   next();
@@ -140,5 +120,5 @@ server.get(/.*/, restify.serveStatic({
 }));
 
 server.listen(PORT, () => {
-  console.log(`${server.name} listening at ${server.url}`);
+  log.info(`${server.name} listening at ${server.url}`);
 });

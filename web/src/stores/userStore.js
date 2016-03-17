@@ -1,10 +1,9 @@
-'use strict';
 const dispatcher = require('../dispatcher');
 import { Store } from 'flux/utils';
 
 class UserStore extends Store {
-  constructor(dispatcher) {
-    super(dispatcher);
+  constructor(d) {
+    super(d);
     this._user = { };
   }
 
@@ -13,10 +12,13 @@ class UserStore extends Store {
   }
 
   __onDispatch(event) {
-    switch(event.type) {
+    switch (event.type) {
       case 'user-in':
         this._user = event.payload;
         this.__emitChange();
+        break;
+
+      default:
         break;
     }
   }

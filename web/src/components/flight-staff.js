@@ -1,17 +1,18 @@
-'use strict';
 const React = require('react');
-const FlightStatus = require('./flight-status');
+const Base = require('./base');
 
-function getStaff(flight) {
-  return flight.staff.join(', ');
-}
+class FlightStaff extends Base {
+  getStaff(flight) {
+    return flight.staff.join(', ');
+  }
 
-module.exports = React.createClass({
   render() {
     return (
-      <div className='flight-staff'>
-        {getStaff(this.props.flight)}
+      <div className="flight-staff">
+        {this.getStaff(this.props.flight)}
       </div>
     );
   }
-});
+}
+
+module.exports = FlightStaff;

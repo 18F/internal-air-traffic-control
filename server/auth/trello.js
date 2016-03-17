@@ -1,22 +1,22 @@
 'use strict';
 
 const TrelloStrategy = require('passport-trello').Strategy;
-//const request = require('request');
-//const sheet = require('../sheet');
+// const request = require('request');
+// const sheet = require('../sheet');
 
 module.exports = {
-  setupMiddleware: function(server, passport, errorURL) {
+  setupMiddleware: (server, passport, errorURL) => {
     passport.use(new TrelloStrategy({
       consumerKey: process.env.TRELLO_API_KEY,
       consumerSecret: process.env.TRELLO_CLIENT_SECRET,
       callbackURL: process.env.TRELLO_CALLBACK_URL,
       passReqToCallback: true,
       trelloParams: {
-        scope: "read,write",
-        name: "AirTraffic Control",
-        expiration: "30days"
+        scope: 'read,write',
+        name: 'AirTraffic Control',
+        expiration: '30days'
       }
-    }, function(req, token, tokenSecret, profile, done) {
+    }, (req, token, tokenSecret, profile, done) => {
       done(null, {
         accessToken: token,
         name: profile.displayName
@@ -37,5 +37,5 @@ module.exports = {
       (req, res) => {
         res.redirect('/');
       });
-  },
+  }
 };

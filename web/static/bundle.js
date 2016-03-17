@@ -32191,38 +32191,131 @@ module.exports = toString;
 },{"./_Symbol":213,"./isSymbol":316}],331:[function(require,module,exports){
 'use strict';
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 var React = require('react');
+var Base = require('./base');
 var userStore = require('../stores/userStore');
 
-module.exports = React.createClass({
-  displayName: 'exports',
-  getInitialState: function getInitialState() {
-    return {
+var Auth = function (_Base) {
+  _inherits(Auth, _Base);
+
+  function Auth(props) {
+    _classCallCheck(this, Auth);
+
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Auth).call(this, props));
+
+    _this.state = {
       user: userStore.getUser()
     };
-  },
-  componentDidMount: function componentDidMount() {
-    this.userStoreListenerToken = userStore.addListener(this._storeChanged);
-  },
-  componentWillUnmount: function componentWillUnmount() {
-    this.userStoreListenerToken.remove();
-  },
-  _storeChanged: function _storeChanged() {
-    this.setState({ user: userStore.getUser() });
-  },
-  render: function render() {
-    return React.createElement(
-      'a',
-      { className: 'usa-button auth-status', href: this.state.user.loggedIn ? '#' : '/auth/google' },
-      this.state.user.loggedIn ? 'Logged In (' + this.state.user.user.name + ')' : 'Login with Google'
-    );
+    return _this;
   }
-});
 
-},{"../stores/userStore":344,"react":189}],332:[function(require,module,exports){
+  _createClass(Auth, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      this.userStoreListenerToken = userStore.addListener(this._storeChanged.bind(this));
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      this.userStoreListenerToken.remove();
+    }
+  }, {
+    key: '_storeChanged',
+    value: function _storeChanged() {
+      this.setState({ user: userStore.getUser() });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return React.createElement(
+        'a',
+        { className: 'usa-button auth-status', href: this.state.user.loggedIn ? '#' : '/auth/trello' },
+        this.state.user.loggedIn ? 'Logged In (' + this.state.user.user.name + ')' : 'Login with Trello'
+      );
+    }
+  }]);
+
+  return Auth;
+}(Base);
+
+module.exports = Auth;
+
+},{"../stores/userStore":345,"./base":332,"react":189}],332:[function(require,module,exports){
 'use strict';
 
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 var React = require('react');
+
+var Base = function (_React$Component) {
+  _inherits(Base, _React$Component);
+
+  function Base(props) {
+    _classCallCheck(this, Base);
+
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Base).call(this, props));
+
+    var methodNames = Object.getOwnPropertyNames(Object.getPrototypeOf(_this));
+    var _iteratorNormalCompletion = true;
+    var _didIteratorError = false;
+    var _iteratorError = undefined;
+
+    try {
+      for (var _iterator = methodNames[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+        var name = _step.value;
+
+        if (name !== 'constructor' && typeof _this[name] === 'function') {
+          _this[name] = _this[name].bind(_this);
+        }
+      }
+    } catch (err) {
+      _didIteratorError = true;
+      _iteratorError = err;
+    } finally {
+      try {
+        if (!_iteratorNormalCompletion && _iterator.return) {
+          _iterator.return();
+        }
+      } finally {
+        if (_didIteratorError) {
+          throw _iteratorError;
+        }
+      }
+    }
+
+    return _this;
+  }
+
+  return Base;
+}(React.Component);
+
+module.exports = Base;
+
+},{"react":189}],333:[function(require,module,exports){
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var React = require('react');
+var Base = require('./base');
 var Flight = require('./flight');
 var ReactSelect = require('react-select');
 var flightStore = require('../stores/flightStore');
@@ -32237,450 +32330,602 @@ function getAllStatusObjects() {
   });
 }
 
-module.exports = React.createClass({
-  displayName: 'exports',
-  getInitialState: function getInitialState() {
-    return {
-      visibleStatuses: false,
+var FlightList = function (_Base) {
+  _inherits(FlightList, _Base);
+
+  function FlightList(props) {
+    _classCallCheck(this, FlightList);
+
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(FlightList).call(this, props));
+
+    _this.state = {
+      visibleStatuses: localStorage(STORAGE_KEY),
       flights: flightStore.getFlights(),
       visibleFlights: [],
       searchField: ''
     };
-  },
-  componentDidMount: function componentDidMount() {
-    this.flightStoreListenerToken = flightStore.addListener(this._storeChanged);
-    var visibleStatusesFromStorage = localStorage(STORAGE_KEY);
-    if (visibleStatusesFromStorage) {
-      this.setState({ visibleStatuses: visibleStatusesFromStorage, visibleFlights: this.getVisibleFlights(this.state.flights, visibleStatusesFromStorage, this.state.searchField) });
-    }
-  },
-  componentWillUnmount: function componentWillUnmount() {
-    this.flightStoreListenerToken.remove();
-  },
-  getVisibleFlights: function getVisibleFlights(flights, visibleStatuses) {
-    var searchText = arguments.length <= 2 || arguments[2] === undefined ? '' : arguments[2];
+    return _this;
+  }
 
-    var visibleFlights = flights.slice(0);
-    if (visibleStatuses) {
-      (function () {
-        var statusNames = visibleStatuses.map(function (vs) {
-          return vs.value;
-        });
-        visibleFlights = flights.filter(function (f) {
-          return statusNames.some(function (s) {
-            return s.name === f.status.toLowerCase();
+  _createClass(FlightList, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      this.flightStoreListenerToken = flightStore.addListener(this._storeChanged);
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      this.flightStoreListenerToken.remove();
+    }
+  }, {
+    key: 'getVisibleFlights',
+    value: function getVisibleFlights(flights, visibleStatuses) {
+      var searchText = arguments.length <= 2 || arguments[2] === undefined ? '' : arguments[2];
+
+      var visibleFlights = flights.slice(0);
+      if (visibleStatuses) {
+        (function () {
+          var statusNames = visibleStatuses.map(function (vs) {
+            return vs.value;
           });
-        });
-      })();
-    }
+          visibleFlights = flights.filter(function (f) {
+            return statusNames.some(function (s) {
+              return s.name === f.status.toLowerCase();
+            });
+          });
+        })();
+      }
 
-    var majorSearchProperties = ['description', 'status', 'lead', 'pair'];
+      var majorSearchProperties = ['description', 'status', 'lead', 'pair'];
 
-    searchText = searchText.trim().toLowerCase();
-    if (visibleFlights.length && searchText.length) {
-      (function () {
-        var terms = searchText.split(' ');
-        visibleFlights = visibleFlights.filter(function (flight) {
-          var _iteratorNormalCompletion = true;
-          var _didIteratorError = false;
-          var _iteratorError = undefined;
+      var cleanSearchText = searchText.trim().toLowerCase();
+      if (visibleFlights.length && cleanSearchText.length) {
+        (function () {
+          var terms = cleanSearchText.split(' ');
+          visibleFlights = visibleFlights.filter(function (flight) {
+            var _iteratorNormalCompletion = true;
+            var _didIteratorError = false;
+            var _iteratorError = undefined;
 
-          try {
-            for (var _iterator = terms[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-              var term = _step.value;
-              var _iteratorNormalCompletion2 = true;
-              var _didIteratorError2 = false;
-              var _iteratorError2 = undefined;
-
-              try {
-                for (var _iterator2 = majorSearchProperties[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-                  var property = _step2.value;
-
-                  if (flight[property].toLowerCase().indexOf(term) >= 0) {
-                    return true;
-                  }
-                }
-              } catch (err) {
-                _didIteratorError2 = true;
-                _iteratorError2 = err;
-              } finally {
-                try {
-                  if (!_iteratorNormalCompletion2 && _iterator2.return) {
-                    _iterator2.return();
-                  }
-                } finally {
-                  if (_didIteratorError2) {
-                    throw _iteratorError2;
-                  }
-                }
-              }
-
-              var _iteratorNormalCompletion3 = true;
-              var _didIteratorError3 = false;
-              var _iteratorError3 = undefined;
-
-              try {
-                for (var _iterator3 = flight.staff[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-                  var staff = _step3.value;
-
-                  if (staff.toLowerCase().indexOf(term) >= 0) {
-                    return true;
-                  }
-                }
-              } catch (err) {
-                _didIteratorError3 = true;
-                _iteratorError3 = err;
-              } finally {
-                try {
-                  if (!_iteratorNormalCompletion3 && _iterator3.return) {
-                    _iterator3.return();
-                  }
-                } finally {
-                  if (_didIteratorError3) {
-                    throw _iteratorError3;
-                  }
-                }
-              }
-            }
-          } catch (err) {
-            _didIteratorError = true;
-            _iteratorError = err;
-          } finally {
             try {
-              if (!_iteratorNormalCompletion && _iterator.return) {
-                _iterator.return();
+              for (var _iterator = terms[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                var term = _step.value;
+                var _iteratorNormalCompletion2 = true;
+                var _didIteratorError2 = false;
+                var _iteratorError2 = undefined;
+
+                try {
+                  for (var _iterator2 = majorSearchProperties[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+                    var property = _step2.value;
+
+                    if (flight[property].toLowerCase().indexOf(term) >= 0) {
+                      return true;
+                    }
+                  }
+                } catch (err) {
+                  _didIteratorError2 = true;
+                  _iteratorError2 = err;
+                } finally {
+                  try {
+                    if (!_iteratorNormalCompletion2 && _iterator2.return) {
+                      _iterator2.return();
+                    }
+                  } finally {
+                    if (_didIteratorError2) {
+                      throw _iteratorError2;
+                    }
+                  }
+                }
+
+                var _iteratorNormalCompletion3 = true;
+                var _didIteratorError3 = false;
+                var _iteratorError3 = undefined;
+
+                try {
+                  for (var _iterator3 = flight.staff[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+                    var staff = _step3.value;
+
+                    if (staff.toLowerCase().indexOf(term) >= 0) {
+                      return true;
+                    }
+                  }
+                } catch (err) {
+                  _didIteratorError3 = true;
+                  _iteratorError3 = err;
+                } finally {
+                  try {
+                    if (!_iteratorNormalCompletion3 && _iterator3.return) {
+                      _iterator3.return();
+                    }
+                  } finally {
+                    if (_didIteratorError3) {
+                      throw _iteratorError3;
+                    }
+                  }
+                }
               }
+            } catch (err) {
+              _didIteratorError = true;
+              _iteratorError = err;
             } finally {
-              if (_didIteratorError) {
-                throw _iteratorError;
+              try {
+                if (!_iteratorNormalCompletion && _iterator.return) {
+                  _iterator.return();
+                }
+              } finally {
+                if (_didIteratorError) {
+                  throw _iteratorError;
+                }
               }
             }
-          }
 
-          return false;
-        });
-      })();
+            return false;
+          });
+        })();
+      }
+      return visibleFlights;
     }
-    return visibleFlights;
-  },
-  _onSearchChanged: function _onSearchChanged(event) {
-    this.setState({ searchField: event.target.value, visibleFlights: this.getVisibleFlights(this.state.flights, this.state.visibleStatuses, event.target.value) });
-  },
-  _onStatusesChanged: function _onStatusesChanged(selected) {
-    this.setState({ visibleStatuses: selected, visibleFlights: this.getVisibleFlights(this.state.flights, selected, this.state.searchField) });
-    localStorage(STORAGE_KEY, selected);
-  },
-  _onSearchChanged: function _onSearchChanged(event) {
-    this.setState({ searchField: event.target.value, visibleFlights: this.getVisibleFlights(this.state.flights, this.state.visibleStatuses, event.target.value) });
-  },
-  _storeChanged: function _storeChanged() {
-    var flights = flightStore.getFlights();
-    var visibleStatuses = this.state.visibleStatuses;
-
-    if (visibleStatuses === false) {
-      visibleStatuses = getAllStatusObjects();
+  }, {
+    key: '_onSearchChanged',
+    value: function _onSearchChanged(event) {
+      this.setState({ searchField: event.target.value, visibleFlights: this.getVisibleFlights(this.state.flights, this.state.visibleStatuses, event.target.value) });
     }
+  }, {
+    key: '_onStatusesChanged',
+    value: function _onStatusesChanged(selected) {
+      this.setState({ visibleStatuses: selected, visibleFlights: this.getVisibleFlights(this.state.flights, selected, this.state.searchField) });
+      localStorage(STORAGE_KEY, selected);
+    }
+  }, {
+    key: '_storeChanged',
+    value: function _storeChanged() {
+      var flights = flightStore.getFlights();
+      var visibleStatuses = this.state.visibleStatuses;
 
-    this.setState({ flights: flights, visibleStatuses: visibleStatuses, visibleFlights: this.getVisibleFlights(flights, visibleStatuses, this.state.searchField) });
-  },
-  render: function render() {
-    return React.createElement(
-      'div',
-      null,
-      React.createElement(
+      if (visibleStatuses === false) {
+        visibleStatuses = getAllStatusObjects();
+      }
+
+      this.setState({ flights: flights, visibleStatuses: visibleStatuses, visibleFlights: this.getVisibleFlights(flights, visibleStatuses, this.state.searchField) });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return React.createElement(
         'div',
-        { className: 'usa-grid' },
-        React.createElement(
-          'h3',
-          { className: 'usa-width-one-whole' },
-          'Flights on the Board'
-        ),
-        React.createElement(ReactSelect, { className: 'usa-width-three-fourths', multi: true, value: this.state.visibleStatuses, delimiter: ':', onChange: this._onStatusesChanged, placeholder: 'Show statuses...', options: getAllStatusObjects() }),
+        null,
         React.createElement(
           'div',
-          { className: 'usa-width-one-fourth flight-list-search' },
-          React.createElement('input', { type: 'text', onChange: this._onSearchChanged, placeholder: 'Filter...', 'aria-label': 'Flight filter' })
-        )
-      ),
-      React.createElement('br', null),
-      this.state.visibleFlights.map(function (flight) {
-        return React.createElement(Flight, { key: flight.id, flight: flight });
-      })
-    );
-  }
-});
+          { className: 'usa-grid' },
+          React.createElement(
+            'h3',
+            { className: 'usa-width-one-whole' },
+            'Flights on the Board'
+          ),
+          React.createElement(ReactSelect, { className: 'usa-width-three-fourths', multi: true, value: this.state.visibleStatuses, delimiter: ':', onChange: this._onStatusesChanged, placeholder: 'Show statuses...', options: getAllStatusObjects() }),
+          React.createElement(
+            'div',
+            { className: 'usa-width-one-fourth flight-list-search' },
+            React.createElement('input', { type: 'text', onChange: this._onSearchChanged, placeholder: 'Filter...', 'aria-label': 'Flight filter' })
+          )
+        ),
+        React.createElement('br', null),
+        this.state.visibleFlights.map(function (flight) {
+          return React.createElement(Flight, { key: flight.id, flight: flight });
+        })
+      );
+    }
+  }]);
 
-},{"../statuses":341,"../stores/flightStore":342,"./flight":336,"local-storage":23,"react":189,"react-select":31}],333:[function(require,module,exports){
+  return FlightList;
+}(Base);
+
+module.exports = FlightList;
+
+},{"../statuses":342,"../stores/flightStore":343,"./base":332,"./flight":337,"local-storage":23,"react":189,"react-select":31}],334:[function(require,module,exports){
 'use strict';
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 var React = require('react');
-var FlightStatus = require('./flight-status');
+var Base = require('./base');
 
-function getStaff(flight) {
-  return flight.staff.join(', ');
-}
+var FlightStaff = function (_Base) {
+  _inherits(FlightStaff, _Base);
 
-module.exports = React.createClass({
-  displayName: 'exports',
-  render: function render() {
-    return React.createElement(
-      'div',
-      { className: 'flight-staff' },
-      getStaff(this.props.flight)
-    );
+  function FlightStaff() {
+    _classCallCheck(this, FlightStaff);
+
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(FlightStaff).apply(this, arguments));
   }
-});
 
-},{"./flight-status":335,"react":189}],334:[function(require,module,exports){
+  _createClass(FlightStaff, [{
+    key: 'getStaff',
+    value: function getStaff(flight) {
+      return flight.staff.join(', ');
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return React.createElement(
+        'div',
+        { className: 'flight-staff' },
+        this.getStaff(this.props.flight)
+      );
+    }
+  }]);
+
+  return FlightStaff;
+}(Base);
+
+module.exports = FlightStaff;
+
+},{"./base":332,"react":189}],335:[function(require,module,exports){
 'use strict';
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 var React = require('react');
+var Base = require('./base');
 var Statuses = require('../statuses');
 
-module.exports = React.createClass({
-  displayName: 'exports',
-  _onChange: function _onChange(event) {
-    var _this = this;
+var FlightStatusPicker = function (_Base) {
+  _inherits(FlightStatusPicker, _Base);
 
-    if (typeof this.props.onStatusChange === 'function') {
-      Statuses.getAll().some(function (s) {
-        if (s.name === event.target.value) {
-          _this.props.onStatusChange(s.id);
-          return true;
-        }
-      });
-    }
-  },
-  render: function render() {
-    return React.createElement(
-      'select',
-      { value: this.props.status.toLowerCase(), onChange: this._onChange, 'aria-label': 'Flight status' },
-      Statuses.getAll().map(function (s) {
-        return React.createElement(
-          'option',
-          { key: s.id, value: s.name },
-          Statuses.getPrettyName(s)
-        );
-      })
-    );
+  function FlightStatusPicker() {
+    _classCallCheck(this, FlightStatusPicker);
+
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(FlightStatusPicker).apply(this, arguments));
   }
-});
 
-},{"../statuses":341,"react":189}],335:[function(require,module,exports){
+  _createClass(FlightStatusPicker, [{
+    key: '_onChange',
+    value: function _onChange(event) {
+      var _this2 = this;
+
+      if (typeof this.props.onStatusChange === 'function') {
+        Statuses.getAll().some(function (s) {
+          if (s.name === event.target.value) {
+            _this2.props.onStatusChange(s.id);
+            return true;
+          }
+          return false;
+        });
+      }
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return React.createElement(
+        'select',
+        { value: this.props.status.toLowerCase(), onChange: this._onChange, 'aria-label': 'Flight status' },
+        Statuses.getAll().map(function (s) {
+          return React.createElement(
+            'option',
+            { key: s.id, value: s.name },
+            Statuses.getPrettyName(s)
+          );
+        })
+      );
+    }
+  }]);
+
+  return FlightStatusPicker;
+}(Base);
+
+module.exports = FlightStatusPicker;
+
+},{"../statuses":342,"./base":332,"react":189}],336:[function(require,module,exports){
 'use strict';
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 var React = require('react');
-var StatusPicker = require('./flight-status-picker');
+var Base = require('./base');
 var statuses = require('../statuses').known;
 
-function getStatusClassName(status) {
-  return 'flight-status-' + status.replace(/ /g, '-').toLowerCase();
-}
+var FlightStatus = function (_Base) {
+  _inherits(FlightStatus, _Base);
 
-function getUnitLength() {
-  return 100 / statuses.length;
-}
+  function FlightStatus() {
+    _classCallCheck(this, FlightStatus);
 
-function getStatusIndex(statusName) {
-  for (var i = 0; i < statuses.length; i++) {
-    if (statuses[i].name === statusName.toLowerCase()) {
-      return i;
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(FlightStatus).apply(this, arguments));
+  }
+
+  _createClass(FlightStatus, [{
+    key: 'getStatusClassName',
+    value: function getStatusClassName(status) {
+      return 'flight-status-' + status.replace(/ /g, '-').toLowerCase();
     }
-  }
-  return -1;
-}
-
-function getPreStyle(status) {
-  var i = getStatusIndex(status);
-  var style = { width: '0%' };
-  if (i >= 0) {
-    style.width = i / statuses.length * 100 + '%';
-  }
-  return style;
-}
-
-function getPostStyle(status) {
-  var i = getStatusIndex(status);
-  var style = { width: '0%' };
-  if (i >= 0) {
-    style.width = (statuses.length - i - 1) / statuses.length * 100 + '%';
-  }
-  return style;
-}
-
-module.exports = React.createClass({
-  displayName: 'exports',
-  render: function render() {
-    return React.createElement(
-      'div',
-      { className: 'flight-status-bar ' + getStatusClassName(this.props.status) },
-      React.createElement('div', { className: 'flight-status-journey flight-status-journey-done', style: getPreStyle(this.props.status) }),
-      React.createElement(
+  }, {
+    key: 'getUnitLength',
+    value: function getUnitLength() {
+      return 100 / statuses.length;
+    }
+  }, {
+    key: 'getStatusIndex',
+    value: function getStatusIndex(statusName) {
+      for (var i = 0; i < statuses.length; i++) {
+        if (statuses[i].name === statusName.toLowerCase()) {
+          return i;
+        }
+      }
+      return -1;
+    }
+  }, {
+    key: 'getPreStyle',
+    value: function getPreStyle(status) {
+      var i = this.getStatusIndex(status);
+      var style = { width: '0%' };
+      if (i >= 0) {
+        style.width = i / statuses.length * 100 + '%';
+      }
+      return style;
+    }
+  }, {
+    key: 'getPostStyle',
+    value: function getPostStyle(status) {
+      var i = this.getStatusIndex(status);
+      var style = { width: '0%' };
+      if (i >= 0) {
+        style.width = (statuses.length - i - 1) / statuses.length * 100 + '%';
+      }
+      return style;
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return React.createElement(
         'div',
-        { className: 'flight-status-icon', style: { width: getUnitLength() + '%' } },
-        React.createElement('img', { className: 'flight-status-icon', src: 'images/plane.svg', alt: '' })
-      ),
-      React.createElement('div', { className: 'flight-status-journey flight-status-journey-pending', style: getPostStyle(this.props.status) })
-    );
-  }
-});
+        { className: 'flight-status-bar ' + this.getStatusClassName(this.props.status) },
+        React.createElement('div', { className: 'flight-status-journey flight-status-journey-done', style: this.getPreStyle(this.props.status) }),
+        React.createElement(
+          'div',
+          { className: 'flight-status-icon', style: { width: this.getUnitLength() + '%' } },
+          React.createElement('img', { className: 'flight-status-icon', src: 'images/plane.svg', alt: '' })
+        ),
+        React.createElement('div', { className: 'flight-status-journey flight-status-journey-pending', style: this.getPostStyle(this.props.status) })
+      );
+    }
+  }]);
 
-},{"../statuses":341,"./flight-status-picker":334,"react":189}],336:[function(require,module,exports){
+  return FlightStatus;
+}(Base);
+
+module.exports = FlightStatus;
+
+},{"../statuses":342,"./base":332,"react":189}],337:[function(require,module,exports){
 'use strict';
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 var React = require('react');
+var Base = require('./base');
 var FlightStatus = require('./flight-status');
 var FlightStaff = require('./flight-staff');
 var StatusPicker = require('./flight-status-picker');
 var service = require('../service');
 
-module.exports = React.createClass({
-  displayName: 'exports',
-  _onStatusChange: function _onStatusChange(newStatusID) {
-    var flight = JSON.parse(JSON.stringify(this.props.flight));
-    flight.listID = newStatusID;
-    service.saveFlight(flight);
+var Flight = function (_Base) {
+  _inherits(Flight, _Base);
 
-    /*if(newStatus === 'In Flight' && flight.description.match(/(^|\W)bpa($|\W)/i) /* && not-already-a-trello-card* /) {
-        setTimeout(() => {
-          if(window.confirm('Create a BPA Trello card for this project?')) {
-            console.log("Create a card!");
-          }
-        }, 10);
-      }*/
-  },
-  _getTrelloLink: function _getTrelloLink(flight) {
-    if (flight.status === 'In Flight' && flight.description.match(/(^|\W)bpa($|\W)/i)) {
-      if (true) {
-        // flight does not have trello card
-        return React.createElement(
-          'span',
-          null,
-          'Create Trello Card'
-        );
-      } else {
+  function Flight() {
+    _classCallCheck(this, Flight);
+
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(Flight).apply(this, arguments));
+  }
+
+  _createClass(Flight, [{
+    key: '_onStatusChange',
+    value: function _onStatusChange(newStatusID) {
+      var flight = JSON.parse(JSON.stringify(this.props.flight));
+      flight.listID = newStatusID;
+      service.saveFlight(flight);
+
+      /* if(newStatus === 'In Flight' && flight.description.match(/(^|\W)bpa($|\W)/i) /* && not-already-a-trello-card* /) {
+          setTimeout(() => {
+            if(window.confirm('Create a BPA Trello card for this project?')) {
+              console.log("Create a card!");
+            }
+          }, 10);
+        }*/
+    }
+  }, {
+    key: '_getTrelloLink',
+    value: function _getTrelloLink(flight) {
+      if (flight.status === 'In Flight' && flight.description.match(/(^|\W)bpa($|\W)/i)) {
+        if (true) {
+          // flight does not have trello card
+          return React.createElement(
+            'span',
+            null,
+            'Create Trello Card'
+          );
+        }
         // does already, so link it
+        return React.createElement('span', null);
       }
-    } else {
-        return null;
-      }
-  },
-  render: function render() {
-    return React.createElement(
-      'div',
-      { className: 'usa-grid flight' },
-      React.createElement(
+      return null;
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return React.createElement(
         'div',
-        { className: 'usa-width-one-sixth flight-name' },
-        this.props.flight.description
-      ),
-      React.createElement(
-        'div',
-        { className: 'usa-width-two-thirds' },
-        React.createElement(FlightStatus, { status: this.props.flight.status }),
+        { className: 'usa-grid flight' },
         React.createElement(
           'div',
-          { className: 'usa-width-one-whole flight-status-picker' },
-          React.createElement(StatusPicker, { status: this.props.flight.status, onStatusChange: this._onStatusChange })
+          { className: 'usa-width-one-sixth flight-name' },
+          this.props.flight.description
         ),
         React.createElement(
           'div',
-          { className: 'usa-width-one-whole' },
-          this._getTrelloLink(this.props.flight)
+          { className: 'usa-width-two-thirds' },
+          React.createElement(FlightStatus, { status: this.props.flight.status }),
+          React.createElement(
+            'div',
+            { className: 'usa-width-one-whole flight-status-picker' },
+            React.createElement(StatusPicker, { status: this.props.flight.status, onStatusChange: this._onStatusChange })
+          ),
+          React.createElement(
+            'div',
+            { className: 'usa-width-one-whole' },
+            this._getTrelloLink(this.props.flight)
+          )
+        ),
+        React.createElement(
+          'div',
+          { className: 'usa-width-one-sixth' },
+          React.createElement(FlightStaff, { flight: this.props.flight })
         )
-      ),
-      React.createElement(
-        'div',
-        { className: 'usa-width-one-sixth' },
-        React.createElement(FlightStaff, { flight: this.props.flight })
-      )
-    );
-  }
-});
+      );
+    }
+  }]);
 
-},{"../service":340,"./flight-staff":333,"./flight-status":335,"./flight-status-picker":334,"react":189}],337:[function(require,module,exports){
+  return Flight;
+}(Base);
+
+module.exports = Flight;
+
+},{"../service":341,"./base":332,"./flight-staff":334,"./flight-status":336,"./flight-status-picker":335,"react":189}],338:[function(require,module,exports){
 'use strict';
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 var React = require('react');
+var Base = require('./base');
 var messageStore = require('../stores/messageStore');
 
-module.exports = React.createClass({
-  displayName: 'exports',
-  getInitialState: function getInitialState() {
-    return {
+var Message = function (_Base) {
+  _inherits(Message, _Base);
+
+  function Message(props) {
+    _classCallCheck(this, Message);
+
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Message).call(this, props));
+
+    _this.state = {
       visible: false,
       type: 'info',
       title: '',
       message: ''
     };
-  },
-  componentDidMount: function componentDidMount() {
-    this.messageStoreListenerToken = messageStore.addListener(this._storeChanged);
-  },
-  componentWillUnmount: function componentWillUnmount() {
-    this.messageStoreListenerToken.remove();
-  },
-  _close: function _close() {
-    this.setState({ visible: false });
-  },
-  _storeChanged: function _storeChanged() {
-    var _this = this;
-
-    var message = messageStore.getMessage();
-    var visible = message.title.length > 0;
-
-    // If there's already a pending message text change, cancel
-    // it now, or else get weird behavior.
-    clearTimeout(this.messageChangeTimeout);
-
-    // If the message is becoming visible (or is already visible),
-    // just update everything immediately.
-    if (visible) {
-      this.setState({ visible: visible, title: message.title, message: message.error, type: message.error ? 'error' : 'info' });
-    } else {
-      // If the message is being hidden, only change the visibility
-      // first.  Wait until after the visibility animation has
-      // finished before changing the text.
-      this.setState({ visible: visible });
-      this.messageChangeTimeout = setTimeout(function () {
-        _this.setState({ title: message.title, message: message.error, type: message.error ? 'error' : 'info' });
-      }, 500);
-    }
-  },
-  render: function render() {
-    return React.createElement(
-      'div',
-      { className: 'usa-alert usa-alert-' + this.state.type + ' alert-' + (this.state.visible ? 'visible' : 'hidden') },
-      React.createElement(
-        'div',
-        { className: 'usa-alert-body' },
-        React.createElement(
-          'h3',
-          { className: 'usa-alert-heading' },
-          this.state.title
-        ),
-        this.state.message ? React.createElement(
-          'p',
-          { className: 'usa-alert-text' },
-          this.state.message,
-          React.createElement('br', null),
-          React.createElement(
-            'a',
-            { onClick: this._close },
-            'Close'
-          )
-        ) : null
-      )
-    );
+    return _this;
   }
-});
 
-},{"../stores/messageStore":343,"react":189}],338:[function(require,module,exports){
+  _createClass(Message, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      this.messageStoreListenerToken = messageStore.addListener(this._storeChanged);
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      this.messageStoreListenerToken.remove();
+    }
+  }, {
+    key: '_close',
+    value: function _close() {
+      this.setState({ visible: false });
+    }
+  }, {
+    key: '_storeChanged',
+    value: function _storeChanged() {
+      var _this2 = this;
+
+      var message = messageStore.getMessage();
+      var visible = message.title.length > 0;
+
+      // If there's already a pending message text change, cancel
+      // it now, or else get weird behavior.
+      clearTimeout(this.messageChangeTimeout);
+
+      // If the message is becoming visible (or is already visible),
+      // just update everything immediately.
+      if (visible) {
+        this.setState({ visible: visible, title: message.title, message: message.error, type: message.error ? 'error' : 'info' });
+      } else {
+        // If the message is being hidden, only change the visibility
+        // first.  Wait until after the visibility animation has
+        // finished before changing the text.
+        this.setState({ visible: visible });
+        this.messageChangeTimeout = setTimeout(function () {
+          _this2.setState({ title: message.title, message: message.error, type: message.error ? 'error' : 'info' });
+        }, 500);
+      }
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return React.createElement(
+        'div',
+        { className: 'usa-alert usa-alert-' + this.state.type + ' alert-' + (this.state.visible ? 'visible' : 'hidden') },
+        React.createElement(
+          'div',
+          { className: 'usa-alert-body' },
+          React.createElement(
+            'h3',
+            { className: 'usa-alert-heading' },
+            this.state.title
+          ),
+          this.state.message ? React.createElement(
+            'p',
+            { className: 'usa-alert-text' },
+            this.state.message,
+            React.createElement('br', null),
+            React.createElement(
+              'a',
+              { onClick: this._close },
+              'Close'
+            )
+          ) : null
+        )
+      );
+    }
+  }]);
+
+  return Message;
+}(Base);
+
+module.exports = Message;
+
+},{"../stores/messageStore":344,"./base":332,"react":189}],339:[function(require,module,exports){
 'use strict';
 
 module.exports = new (require('flux').Dispatcher)();
 
-},{"flux":12}],339:[function(require,module,exports){
+},{"flux":12}],340:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -32703,7 +32948,7 @@ ReactDOM.render(React.createElement(Message, null), document.getElementById('mes
 
 ReactDOM.render(React.createElement(FlightList, null), document.getElementById('content'));
 
-},{"./components/auth":331,"./components/flight-list":332,"./components/message":337,"./service":340,"react":189,"react-dom":27}],340:[function(require,module,exports){
+},{"./components/auth":331,"./components/flight-list":333,"./components/message":338,"./service":341,"react":189,"react-dom":27}],341:[function(require,module,exports){
 'use strict';
 
 var request = require('browser-request');
@@ -32733,6 +32978,7 @@ module.exports = {
             payload: JSON.parse(res.body)
           });
         } catch (e) {
+          console.log(e);
           dispatcher.dispatch({ type: 'error', payload: { error: 'Invalid flight data', title: 'Error' } });
         }
       } else {
@@ -32754,7 +33000,7 @@ module.exports = {
   }
 };
 
-},{"./dispatcher":338,"browser-request":1}],341:[function(require,module,exports){
+},{"./dispatcher":339,"browser-request":1}],342:[function(require,module,exports){
 'use strict';
 
 var ucfirst = require('ucfirst');
@@ -32819,7 +33065,7 @@ module.exports = {
   }
 };
 
-},{"./stores/flightStore":342,"ucfirst":190}],342:[function(require,module,exports){
+},{"./stores/flightStore":343,"ucfirst":190}],343:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -32843,10 +33089,10 @@ var dispatcher = require('../dispatcher');
 var FlightStore = function (_Store) {
   _inherits(FlightStore, _Store);
 
-  function FlightStore(dispatcher) {
+  function FlightStore(d) {
     _classCallCheck(this, FlightStore);
 
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(FlightStore).call(this, dispatcher));
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(FlightStore).call(this, d));
 
     _this._flights = [];
     return _this;
@@ -32883,6 +33129,9 @@ var FlightStore = function (_Store) {
           }
           this.__emitChange();
           break;
+
+        default:
+          break;
       }
     }
   }]);
@@ -32892,7 +33141,7 @@ var FlightStore = function (_Store) {
 
 module.exports = new FlightStore(dispatcher);
 
-},{"../dispatcher":338,"../statuses":341,"flux/utils":21,"updeep":195}],343:[function(require,module,exports){
+},{"../dispatcher":339,"../statuses":342,"flux/utils":21,"updeep":195}],344:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -32910,10 +33159,10 @@ var dispatcher = require('../dispatcher');
 var MessageStore = function (_Store) {
   _inherits(MessageStore, _Store);
 
-  function MessageStore(dispatcher) {
+  function MessageStore(d) {
     _classCallCheck(this, MessageStore);
 
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(MessageStore).call(this, dispatcher));
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(MessageStore).call(this, d));
 
     _this._message = { error: null, title: '' };
     return _this;
@@ -32936,6 +33185,9 @@ var MessageStore = function (_Store) {
           }
           this.__emitChange();
           break;
+
+        default:
+          break;
       }
     }
   }]);
@@ -32945,7 +33197,7 @@ var MessageStore = function (_Store) {
 
 module.exports = new MessageStore(dispatcher);
 
-},{"../dispatcher":338,"flux/utils":21}],344:[function(require,module,exports){
+},{"../dispatcher":339,"flux/utils":21}],345:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -32963,10 +33215,10 @@ var dispatcher = require('../dispatcher');
 var UserStore = function (_Store) {
   _inherits(UserStore, _Store);
 
-  function UserStore(dispatcher) {
+  function UserStore(d) {
     _classCallCheck(this, UserStore);
 
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(UserStore).call(this, dispatcher));
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(UserStore).call(this, d));
 
     _this._user = {};
     return _this;
@@ -32985,6 +33237,9 @@ var UserStore = function (_Store) {
           this._user = event.payload;
           this.__emitChange();
           break;
+
+        default:
+          break;
       }
     }
   }]);
@@ -32994,4 +33249,4 @@ var UserStore = function (_Store) {
 
 module.exports = new UserStore(dispatcher);
 
-},{"../dispatcher":338,"flux/utils":21}]},{},[339]);
+},{"../dispatcher":339,"flux/utils":21}]},{},[340]);
