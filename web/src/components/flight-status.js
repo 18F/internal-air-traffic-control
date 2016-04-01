@@ -1,53 +1,54 @@
-'use strict';
 const React = require('react');
-const StatusPicker = require('./flight-status-picker');
+const Base = require('./base');
 const statuses = require('../statuses').known;
 
-function getStatusClassName(status) {
-  return `flight-status-${status.replace(/ /g, '-').toLowerCase()}`;
-}
+class FlightStatus extends Base {
+  getStatusClassName(status) {
+    return `flight-status-${status.replace(/ /g, '-').toLowerCase()}`;
+  }
 
-function getUnitLength() {
-  return 100 / statuses.length;
-}
+  getUnitLength() {
+    return 100 / statuses.length;
+  }
 
-function getStatusIndex(statusName) {
-  for(let i = 0; i < statuses.length; i++) {
-    if(statuses[i].name === statusName.toLowerCase()) {
-      return i;
+  getStatusIndex(statusName) {
+    for (let i = 0; i < statuses.length; i++) {
+      if (statuses[i].name === statusName.toLowerCase()) {
+        return i;
+      }
     }
+    return -1;
   }
-  return -1;
-}
 
-function getPreStyle(status) {
-  const i = getStatusIndex(status);
-  const style = { width: '0%' };
-  if(i >= 0) {
-    style.width = `${(i / statuses.length) * 100}%`;
+  getPreStyle(status) {
+    const i = this.getStatusIndex(status);
+    const style = { width: '0%' };
+    if (i >= 0) {
+      style.width = `${(i / statuses.length) * 100}%`;
+    }
+    return style;
   }
-  return style;
-}
 
-function getPostStyle(status) {
-  const i = getStatusIndex(status);
-  const style = { width: '0%' };
-  if(i >= 0) {
-    style.width = `${((statuses.length - i - 1) / statuses.length) * 100}%`;
+  getPostStyle(status) {
+    const i = this.getStatusIndex(status);
+    const style = { width: '0%' };
+    if (i >= 0) {
+      style.width = `${((statuses.length - i - 1) / statuses.length) * 100}%`;
+    }
+    return style;
   }
-  return style;
-}
 
-module.exports = React.createClass({
   render() {
     return (
-      <div className={ 'flight-status-bar ' + getStatusClassName(this.props.status) }>
-        <div className='flight-status-journey flight-status-journey-done' style={ getPreStyle(this.props.status) }/>
-        <div className='flight-status-icon' style={ { width: getUnitLength() + '%' } }>
-          <img className='flight-status-icon' src='images/plane.svg' alt='' />
+      <div className={ `flight-status-bar ${this.getStatusClassName(this.props.status)}` }>
+        <div className="flight-status-journey flight-status-journey-done" style={ this.getPreStyle(this.props.status) } />
+        <div className="flight-status-icon" style={ { width: `${this.getUnitLength()}%` } }>
+          <img className="flight-status-icon" src="images/plane.svg" alt="" />
         </div>
-        <div className='flight-status-journey flight-status-journey-pending' style={ getPostStyle(this.props.status) }/>
+        <div className="flight-status-journey flight-status-journey-pending" style={ this.getPostStyle(this.props.status) } />
       </div>
     );
   }
-});
+}
+
+module.exports = FlightStatus;
