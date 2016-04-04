@@ -6,7 +6,7 @@ const ReactSelect = require('react-select');
 const flightStore = require('../stores/flightStore');
 const localStorage = require('local-storage');
 
-const statuses = require('../statuses');
+const statusStore = require('../stores/statusStore');
 const STORAGE_KEY = 'flight-list-visible-statuses';
 
 function makeStatusObject(s) {
@@ -14,7 +14,7 @@ function makeStatusObject(s) {
 }
 
 function getAllStatusObjects() {
-  return statuses.getAll().map(makeStatusObject);
+  return statusStore.getStatuses().map(makeStatusObject);
 }
 
 class FlightList extends Base {

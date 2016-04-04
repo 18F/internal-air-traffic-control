@@ -6,6 +6,7 @@ const Message = require('./components/message');
 const FlightList = require('./components/flight-list');
 const service = require('./service');
 
+service.getStatuses();
 service.getFlights();
 service.getUser();
 

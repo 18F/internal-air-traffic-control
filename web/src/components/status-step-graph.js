@@ -1,7 +1,7 @@
 const React = require('react');
 const Base = require('./base');
 const flightStore = require('../stores/flightStore');
-const statuses = require('../statuses');
+const statusStore = require('../stores/statusStore');
 const c3 = require('c3');
 
 let number = 0;
@@ -44,14 +44,14 @@ class StatusStepGraph extends Base {
 
   _dataClicked(d, el) {
     if(typeof this.props.clicked === 'function') {
-      this.props.clicked(statuses.getAll()[d.index]);
+      this.props.clicked(statusStore.getStatuses()[d.index]);
     }
   }
 
   _storeChanged() {
     const flights = flightStore.getFlights();
     const data = [ ];
-    statuses.getAll().forEach(status => {
+    statusStore.getStatuses().forEach(status => {
       data.push({
         status: status.name,
         Projects: flights.filter(f => f.status === status.name).length

@@ -15,6 +15,19 @@ module.exports = {
     });
   },
 
+  getStatuses() {
+    request.get('/api/statuses', (err, res) => {
+      if(!err && res.body) {
+        try {
+          dispatcher.dispatch({
+            type: 'statuses-in',
+            payload: JSON.parse(res.body)
+          });
+        } catch (e) { }
+      }
+    })
+  },
+
   getFlights() {
     dispatcher.dispatch({ type: 'network-ops', payload: { error: null, title: 'Fetching flights...' } });
     request.get('/api/flights', (err, res) => {

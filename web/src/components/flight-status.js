@@ -1,6 +1,6 @@
 const React = require('react');
 const Base = require('./base');
-const Statuses = require('../statuses');
+const statusStore = require('../stores/statusStore');
 
 class FlightStatus extends Base {
   getStatusClassName(status) {
@@ -8,11 +8,11 @@ class FlightStatus extends Base {
   }
 
   getUnitLength() {
-    return 100 / Statuses.getAll().length;
+    return 100 / statusStore.getStatuses().length;
   }
 
   getStatusIndex(statusName) {
-    const statuses = Statuses.getAll();
+    const statuses = statusStore.getStatuses();
     for (let i = 0; i < statuses.length; i++) {
       if (statuses[i].name === statusName) {
         return i;
@@ -22,7 +22,7 @@ class FlightStatus extends Base {
   }
 
   getPreStyle(status) {
-    const statuses = Statuses.getAll();
+    const statuses = statusStore.getStatuses();
     const i = this.getStatusIndex(status);
     const style = { width: '0%' };
     if (i >= 0) {
@@ -32,7 +32,7 @@ class FlightStatus extends Base {
   }
 
   getPostStyle(status) {
-    const statuses = Statuses.getAll();
+    const statuses = statusStore.getStatuses();
     const i = this.getStatusIndex(status);
     const style = { width: '0%' };
     if (i >= 0) {

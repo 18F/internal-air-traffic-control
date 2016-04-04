@@ -24,7 +24,7 @@ class FlightStore extends Store {
           if (this._flights[i]._id === event.payload._id) {
             const update = { };
             update[i] = event.payload;
-            const status = require('../statuses').getAll().filter(s => s.id === event.payload.listID);
+            const status = require('../stores/statusStore').getStatuses().filter(s => s.id === event.payload.listID);
             if (status.length) {
               update[i].status = status[0].name;
             }
