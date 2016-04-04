@@ -10,7 +10,7 @@ const statuses = require('../statuses');
 const STORAGE_KEY = 'flight-list-visible-statuses';
 
 function getAllStatusObjects() {
-  return statuses.getAll().map(s => ({ value: s, label: statuses.getPrettyName(s) }));
+  return statuses.getAll().map(s => ({ value: s, label: s.name }));
 }
 
 class FlightList extends Base {
