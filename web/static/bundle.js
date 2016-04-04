@@ -48972,7 +48972,7 @@ var Auth = function (_Base) {
 
 module.exports = Auth;
 
-},{"../stores/userStore":347,"./base":333,"react":191}],333:[function(require,module,exports){
+},{"../stores/userStore":348,"./base":333,"react":191}],333:[function(require,module,exports){
 'use strict';
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -49028,6 +49028,43 @@ var Base = function (_React$Component) {
 module.exports = Base;
 
 },{"react":191}],334:[function(require,module,exports){
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var React = require('react');
+var Base = require('./base');
+
+var Filters = function (_Base) {
+  _inherits(Filters, _Base);
+
+  function Filters() {
+    _classCallCheck(this, Filters);
+
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(Filters).apply(this, arguments));
+  }
+
+  _createClass(Filters, [{
+    key: 'render',
+    value: function render() {
+      return React.createElement('div', null);
+    }
+  }]);
+
+  return Filters;
+}(Base);
+
+;
+
+module.exports = Filters;
+
+},{"./base":333,"react":191}],335:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -49256,7 +49293,7 @@ var FlightList = function (_Base) {
 
 module.exports = FlightList;
 
-},{"../stores/flightStore":344,"../stores/statusStore":346,"./base":333,"./flight":338,"./status-step-graph":340,"local-storage":25,"react":191,"react-select":33}],335:[function(require,module,exports){
+},{"../stores/flightStore":345,"../stores/statusStore":347,"./base":333,"./flight":339,"./status-step-graph":341,"local-storage":25,"react":191,"react-select":33}],336:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -49300,7 +49337,7 @@ var FlightStaff = function (_Base) {
 
 module.exports = FlightStaff;
 
-},{"./base":333,"react":191}],336:[function(require,module,exports){
+},{"./base":333,"react":191}],337:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -49361,7 +49398,7 @@ var FlightStatusPicker = function (_Base) {
 
 module.exports = FlightStatusPicker;
 
-},{"../stores/statusStore":346,"./base":333,"react":191}],337:[function(require,module,exports){
+},{"../stores/statusStore":347,"./base":333,"react":191}],338:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -49450,7 +49487,7 @@ var FlightStatus = function (_Base) {
 
 module.exports = FlightStatus;
 
-},{"../stores/statusStore":346,"./base":333,"react":191}],338:[function(require,module,exports){
+},{"../stores/statusStore":347,"./base":333,"react":191}],339:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -49519,7 +49556,7 @@ var Flight = function (_Base) {
 
 module.exports = Flight;
 
-},{"../service":343,"./base":333,"./flight-staff":335,"./flight-status":337,"./flight-status-picker":336,"react":191}],339:[function(require,module,exports){
+},{"../service":344,"./base":333,"./flight-staff":336,"./flight-status":338,"./flight-status-picker":337,"react":191}],340:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -49627,7 +49664,7 @@ var Message = function (_Base) {
 
 module.exports = Message;
 
-},{"../stores/messageStore":345,"./base":333,"react":191}],340:[function(require,module,exports){
+},{"../stores/messageStore":346,"./base":333,"react":191}],341:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -49732,12 +49769,12 @@ var StatusStepGraph = function (_Base) {
 
 module.exports = StatusStepGraph;
 
-},{"../stores/flightStore":344,"../stores/statusStore":346,"./base":333,"c3":2,"react":191}],341:[function(require,module,exports){
+},{"../stores/flightStore":345,"../stores/statusStore":347,"./base":333,"c3":2,"react":191}],342:[function(require,module,exports){
 'use strict';
 
 module.exports = new (require('flux').Dispatcher)();
 
-},{"flux":14}],342:[function(require,module,exports){
+},{"flux":14}],343:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -49745,6 +49782,7 @@ var ReactDOM = require('react-dom');
 var Auth = require('./components/auth');
 var Message = require('./components/message');
 var FlightList = require('./components/flight-list');
+var Filters = require('./components/filters');
 var service = require('./service');
 
 service.getStatuses();
@@ -49757,11 +49795,13 @@ io().on('flight changed', function (flight) {
 
 ReactDOM.render(React.createElement(Auth, null), document.getElementById('auth'));
 
+ReactDOM.render(React.createElement(Filters, null), document.getElementById('filters'));
+
 ReactDOM.render(React.createElement(Message, null), document.getElementById('messages'));
 
 ReactDOM.render(React.createElement(FlightList, null), document.getElementById('content'));
 
-},{"./components/auth":332,"./components/flight-list":334,"./components/message":339,"./service":343,"react":191,"react-dom":29}],343:[function(require,module,exports){
+},{"./components/auth":332,"./components/filters":334,"./components/flight-list":335,"./components/message":340,"./service":344,"react":191,"react-dom":29}],344:[function(require,module,exports){
 'use strict';
 
 var request = require('browser-request');
@@ -49825,7 +49865,7 @@ module.exports = {
   }
 };
 
-},{"./dispatcher":341,"browser-request":1}],344:[function(require,module,exports){
+},{"./dispatcher":342,"browser-request":1}],345:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -49901,7 +49941,7 @@ var FlightStore = function (_Store) {
 
 module.exports = new FlightStore(dispatcher);
 
-},{"../dispatcher":341,"../stores/statusStore":346,"flux/utils":23,"updeep":196}],345:[function(require,module,exports){
+},{"../dispatcher":342,"../stores/statusStore":347,"flux/utils":23,"updeep":196}],346:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -49957,7 +49997,7 @@ var MessageStore = function (_Store) {
 
 module.exports = new MessageStore(dispatcher);
 
-},{"../dispatcher":341,"flux/utils":23}],346:[function(require,module,exports){
+},{"../dispatcher":342,"flux/utils":23}],347:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -50035,7 +50075,7 @@ var StatusStore = function (_Store) {
 
 module.exports = new StatusStore(dispatcher);
 
-},{"../dispatcher":341,"flux/utils":23}],347:[function(require,module,exports){
+},{"../dispatcher":342,"flux/utils":23}],348:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -50087,4 +50127,4 @@ var UserStore = function (_Store) {
 
 module.exports = new UserStore(dispatcher);
 
-},{"../dispatcher":341,"flux/utils":23}]},{},[342]);
+},{"../dispatcher":342,"flux/utils":23}]},{},[343]);

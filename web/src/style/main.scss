@@ -12,18 +12,17 @@
 header {
     background-color: $color-primary-darkest;
     color: white;
-    height: 7rem;
     padding: 1rem;
 
     nav {
         .logo {
-            float: left;
             h1 {
+                clear: none;
                 padding: 0 10px 0 0;
                 margin: 0;
             }
         }
-        ul {
+        #auth {
             float: right;
         }
     }

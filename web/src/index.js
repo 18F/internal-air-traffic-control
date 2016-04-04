@@ -4,6 +4,7 @@ const ReactDOM = require('react-dom');
 const Auth = require('./components/auth');
 const Message = require('./components/message');
 const FlightList = require('./components/flight-list');
+const Filters = require('./components/filters');
 const service = require('./service');
 
 service.getStatuses();
@@ -17,6 +18,11 @@ io().on('flight changed', flight => {
 ReactDOM.render(
   <Auth />,
   document.getElementById('auth')
+);
+
+ReactDOM.render(
+  <Filters />,
+  document.getElementById('filters')
 );
 
 ReactDOM.render(
