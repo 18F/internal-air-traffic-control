@@ -34,7 +34,7 @@ class FlightList extends Base {
 
   getVisibleFlights(flights, visibleStatuses, searchText = '') {
     let visibleFlights = flights.slice(0);
-    if (visibleStatuses) {
+    if (visibleStatuses && visibleStatuses.length) {
       const statusNames = visibleStatuses.map(vs => vs.value);
       visibleFlights = flights.filter(f =>
         statusNames.some(s => s.name === f.status)
@@ -97,7 +97,7 @@ class FlightList extends Base {
           </div>
         </div>
         <br />
-        { this.state.visibleFlights.map(flight => <Flight key={flight.id} flight={flight} />) }
+        { this.state.visibleFlights.map(flight => <Flight key={flight._id} flight={flight} />) }
       </div>
     );
   }
