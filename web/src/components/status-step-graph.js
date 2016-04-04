@@ -24,7 +24,8 @@ class StatusStepGraph extends Base {
       data: {
         json: [ ],
         types: { 'Flights': 'area-step' },
-        labels: true
+        labels: true,
+        onclick: this._dataClicked
       },
       axis: {
         x: {
@@ -39,6 +40,12 @@ class StatusStepGraph extends Base {
 
   componentWillUnmount() {
     this.flightStoreListenerToken.remove();
+  }
+
+  _dataClicked(d, el) {
+    if(typeof this.props.clicked === 'function') {
+      this.props.clicked(statuses.getAll()[d.index]);
+    }
   }
 
   _storeChanged() {

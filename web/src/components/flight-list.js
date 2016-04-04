@@ -9,8 +9,12 @@ const localStorage = require('local-storage');
 const statuses = require('../statuses');
 const STORAGE_KEY = 'flight-list-visible-statuses';
 
+function makeStatusObject(s) {
+  return { value: s, label: s.name };
+}
+
 function getAllStatusObjects() {
-  return statuses.getAll().map(s => ({ value: s, label: s.name }));
+  return statuses.getAll().map(makeStatusObject);
 }
 
 class FlightList extends Base {
@@ -85,12 +89,17 @@ class FlightList extends Base {
     this.setState({ flights, visibleStatuses, visibleFlights: this.getVisibleFlights(flights, visibleStatuses, this.state.searchField) });
   }
 
+  _onGraphClicked(status) {
+    let sObj = makeStatusObject(status);
+    this.setState({ visibleStatuses: [ sObj ], visibleFlights: this.getVisibleFlights(this.state.flights, [ sObj ], this.state.searchField )});
+  }
+
   render() {
     return (
       <div>
         <div className="usa-grid">
           <h3 className="usa-width-one-whole">Flights on the Board</h3>
-          <StatusGraph className="usa-width-one-whole"/>
+          <StatusGraph clicked={this._onGraphClicked} className="usa-width-one-whole"/>
           <ReactSelect className="usa-width-three-fourths" multi value={ this.state.visibleStatuses } delimiter=":" onChange={this._onStatusesChanged} placeholder="Show statuses..." options={ getAllStatusObjects() } />
           <div className="usa-width-one-fourth flight-list-search">
             <input type="text" onChange={ this._onSearchChanged } placeholder="Filter..." aria-label="Flight filter" />
