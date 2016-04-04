@@ -49057,10 +49057,12 @@ var localStorage = require('local-storage');
 var statuses = require('../statuses');
 var STORAGE_KEY = 'flight-list-visible-statuses';
 
+function makeStatusObject(s) {
+  return { value: s, label: s.name };
+}
+
 function getAllStatusObjects() {
-  return statuses.getAll().map(function (s) {
-    return { value: s, label: s.name };
-  });
+  return statuses.getAll().map(makeStatusObject);
 }
 
 var FlightList = function (_Base) {
@@ -49222,6 +49224,12 @@ var FlightList = function (_Base) {
       this.setState({ flights: flights, visibleStatuses: visibleStatuses, visibleFlights: this.getVisibleFlights(flights, visibleStatuses, this.state.searchField) });
     }
   }, {
+    key: '_onGraphClicked',
+    value: function _onGraphClicked(status) {
+      var sObj = makeStatusObject(status);
+      this.setState({ visibleStatuses: [sObj], visibleFlights: this.getVisibleFlights(this.state.flights, [sObj], this.state.searchField) });
+    }
+  }, {
     key: 'render',
     value: function render() {
       return React.createElement(
@@ -49235,7 +49243,7 @@ var FlightList = function (_Base) {
             { className: 'usa-width-one-whole' },
             'Flights on the Board'
           ),
-          React.createElement(StatusGraph, { className: 'usa-width-one-whole' }),
+          React.createElement(StatusGraph, { clicked: this._onGraphClicked, className: 'usa-width-one-whole' }),
           React.createElement(ReactSelect, { className: 'usa-width-three-fourths', multi: true, value: this.state.visibleStatuses, delimiter: ':', onChange: this._onStatusesChanged, placeholder: 'Show statuses...', options: getAllStatusObjects() }),
           React.createElement(
             'div',
@@ -49672,8 +49680,9 @@ var StatusStepGraph = function (_Base) {
         bindto: "#" + this.id,
         data: {
           json: [],
-          types: { 'Flights': 'area-step' },
-          labels: true
+          types: { 'Projects': 'area-step' },
+          labels: true,
+          onclick: this._dataClicked
         },
         axis: {
           x: {
@@ -49691,6 +49700,13 @@ var StatusStepGraph = function (_Base) {
       this.flightStoreListenerToken.remove();
     }
   }, {
+    key: '_dataClicked',
+    value: function _dataClicked(d, el) {
+      if (typeof this.props.clicked === 'function') {
+        this.props.clicked(statuses.getAll()[d.index]);
+      }
+    }
+  }, {
     key: '_storeChanged',
     value: function _storeChanged() {
       var flights = flightStore.getFlights();
@@ -49698,7 +49714,7 @@ var StatusStepGraph = function (_Base) {
       statuses.getAll().forEach(function (status) {
         data.push({
           status: status.name,
-          Flights: flights.filter(function (f) {
+          Projects: flights.filter(function (f) {
             return f.status === status.name;
           }).length
         });
@@ -49708,7 +49724,7 @@ var StatusStepGraph = function (_Base) {
         json: data,
         keys: {
           x: 'status',
-          value: ['Flights']
+          value: ['Projects']
         }
       });
     }

@@ -23,7 +23,7 @@ class StatusStepGraph extends Base {
       bindto: "#" + this.id,
       data: {
         json: [ ],
-        types: { 'Flights': 'area-step' },
+        types: { 'Projects': 'area-step' },
         labels: true,
         onclick: this._dataClicked
       },
@@ -54,7 +54,7 @@ class StatusStepGraph extends Base {
     statuses.getAll().forEach(status => {
       data.push({
         status: status.name,
-        Flights: flights.filter(f => f.status === status.name).length
+        Projects: flights.filter(f => f.status === status.name).length
       });
     });
 
@@ -62,7 +62,7 @@ class StatusStepGraph extends Base {
       json: data,
       keys: {
         x: 'status',
-        value: [ 'Flights' ]
+        value: [ 'Projects' ]
       }
     });
   }
