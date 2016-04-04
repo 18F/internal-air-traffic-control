@@ -106,7 +106,7 @@ class FlightList extends Base {
           </div>
         </div>
         <br />
-        { this.state.visibleFlights.map(flight => <Flight key={flight._id} flight={flight} />) }
+        { this.state.visibleFlights.map(flight => <Flight key={flight.id} flight={flight} />) }
       </div>
     );
   }

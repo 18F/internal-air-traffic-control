@@ -49245,7 +49245,7 @@ var FlightList = function (_Base) {
         ),
         React.createElement('br', null),
         this.state.visibleFlights.map(function (flight) {
-          return React.createElement(Flight, { key: flight._id, flight: flight });
+          return React.createElement(Flight, { key: flight.id, flight: flight });
         })
       );
     }
@@ -49411,7 +49411,6 @@ var FlightStatus = function (_Base) {
     value: function getPreStyle(status) {
       var statuses = statusStore.getStatuses();
       var i = this.getStatusIndex(status);
-      console.log('\'' + status + '\' is at index ' + i);
       var style = { width: '0%' };
       if (i >= 0) {
         style.width = i / statuses.length * 100 + '%';
@@ -49875,7 +49874,7 @@ var FlightStore = function (_Store) {
 
         case 'flight-update':
           for (var i = 0; i < this._flights.length; i++) {
-            if (this._flights[i]._id === event.payload._id) {
+            if (this._flights[i].id === event.payload.id) {
               var update = {};
               update[i] = event.payload;
               var status = require('../stores/statusStore').getStatuses().filter(function (s) {
