@@ -1,11 +1,10 @@
 'use strict';
 const request = require('request');
 const log = require('./getLogger')('board');
+const Cache = require('timed-cache');
 
-const cache = {
-  members: null,
-  lists: null
-};
+// 30-minute cache
+const cache = new Cache({ defaultTtl: 1800000 });
 
 const baseURL = `https://api.trello.com/1/boards/${process.env.TRELLO_BOARD_ID}`;
 function buildURL(partial, token) {
@@ -17,8 +16,8 @@ function getRequestChainable(accessToken) {
 }
 
 function getMembers(req) {
-  if (cache.members) {
-    req.members = cache.members;
+  if (cache.get('members')) {
+    req.members = cache.get('members');
     return Promise.resolve(req);
   }
 
@@ -29,7 +28,7 @@ function getMembers(req) {
       }
       if (Array.isArray(body)) {
         req.members = body.reduce((p, v) => { p[v.id] = v; return p; }, { });
-        cache.members = req.members;
+        cache.put('members', req.members);
       } else {
         req.members = { };
       }
@@ -50,8 +49,8 @@ function getMemberName(req, id) {
 }
 
 function getLists(req) {
-  if (cache.lists) {
-    req.lists = cache.lists;
+  if (cache.get('lists')) {
+    req.lists = cache.get('lists');
     return Promise.resolve(req);
   }
 
@@ -61,6 +60,7 @@ function getLists(req) {
         return reject(err);
       }
       if (Array.isArray(body)) {
+        body.sort((a, b) => a.pos - b.pos);
         req.lists = body.reduce((p, v) => {
           // Don't even show grounded flights
           if(v.name !== 'Grounded') {
@@ -68,7 +68,7 @@ function getLists(req) {
           }
           return p;
         }, { });
-        cache.lists = req.lists;
+        cache.put('lists', req.lists);
       } else {
         req.lists = { };
       }
@@ -84,6 +84,13 @@ function getListName(req, id) {
   return '';
 }
 
+function getListPosition(req, id) {
+  if (req.lists && req.lists[id]) {
+    return req.lists[id].pos;
+  }
+  return '';
+}
+
 function getCards(req) {
   return new Promise((resolve, reject) => {
     request.get(buildURL('/cards', req.accessToken), { json: true }, (err, res, body) => {
@@ -91,6 +98,8 @@ function getCards(req) {
         return reject(err);
       }
       if (Array.isArray(body)) {
+        body.sort((a, b) => getListPosition(req, a.idList) - getListPosition(req, b.idList));
+
         req.cards = body.map(card => ({
           _id: card.id,
           description: card.name,
@@ -100,6 +109,7 @@ function getCards(req) {
           pair: '',
           staff: card.idMembers
         }));
+
         for(let j = 0; j < req.cards.length; j++) {
           const card = req.cards[j];
           if(!card.status) {
