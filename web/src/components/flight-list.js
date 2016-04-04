@@ -1,6 +1,7 @@
 const React = require('react');
 const Base = require('./base');
 const Flight = require('./flight');
+const StatusGraph = require('./status-step-graph');
 const ReactSelect = require('react-select');
 const flightStore = require('../stores/flightStore');
 const localStorage = require('local-storage');
@@ -89,6 +90,7 @@ class FlightList extends Base {
       <div>
         <div className="usa-grid">
           <h3 className="usa-width-one-whole">Flights on the Board</h3>
+          <StatusGraph className="usa-width-one-whole"/>
           <ReactSelect className="usa-width-three-fourths" multi value={ this.state.visibleStatuses } delimiter=":" onChange={this._onStatusesChanged} placeholder="Show statuses..." options={ getAllStatusObjects() } />
           <div className="usa-width-one-fourth flight-list-search">
             <input type="text" onChange={ this._onSearchChanged } placeholder="Filter..." aria-label="Flight filter" />
