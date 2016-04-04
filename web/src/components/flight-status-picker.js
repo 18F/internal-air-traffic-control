@@ -17,8 +17,8 @@ class FlightStatusPicker extends Base {
 
   render() {
     return (
-      <select value={ this.props.status.toLowerCase() } onChange={ this._onChange } aria-label="Flight status">
-        { Statuses.getAll().map(s => <option key={s.id} value={s.name}>{ Statuses.getPrettyName(s) }</option>) }
+      <select value={ this.props.status } onChange={ this._onChange } aria-label="Flight status">
+        { Statuses.getAll().map(s => <option key={s.id} value={s.name}>{ s.name }</option>) }
       </select>
     );
   }

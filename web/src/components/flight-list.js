@@ -37,7 +37,7 @@ class FlightList extends Base {
     if (visibleStatuses) {
       const statusNames = visibleStatuses.map(vs => vs.value);
       visibleFlights = flights.filter(f =>
-        statusNames.some(s => s.name === f.status.toLowerCase())
+        statusNames.some(s => s.name === f.status)
       );
     }
 
