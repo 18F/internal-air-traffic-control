@@ -85,6 +85,21 @@ server.get('/api/statuses', (req, res, next) => {
   next();
 });
 
+server.get('/api/labels', (req, res, next) => {
+  board.getLabels(req.user.accessToken)
+    .then(out => {
+      const labels = [];
+      for(const label of Object.keys(out.labels)) {
+        labels.push({
+          id: label,
+          name: out.labels[label].name
+        });
+      }
+      res.send(labels);
+    });
+  next();
+})
+
 server.get('/api/flights', (req, res, next) => {
   board.getCards(req.user.accessToken)
     .then(cards => {
@@ -99,7 +114,7 @@ server.get('/api/flights', (req, res, next) => {
 });
 
 server.put('/api/flights', restify.bodyParser(), (req, res, next) => {
-  board.moveCard(req.body._id, req.body.listID, req.user.accessToken)
+  board.moveCard(req.body.id, req.body.listID, req.user.accessToken)
     .then(out => {
       res.send({ });
       sockets.emit('flight changed', out.card);

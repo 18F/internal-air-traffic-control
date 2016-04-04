@@ -91,6 +91,41 @@ function getListPosition(req, id) {
   return '';
 }
 
+function getLabels(req) {
+  if (cache.get('labels')) {
+    req.labels = cache.get('labels');
+    return Promise.resolve(req);
+  }
+
+  return new Promise((resolve, reject) => {
+    request.get(buildURL('/labels', req.accessToken), { json: true }, (err, res, body) => {
+      if (err) {
+        return reject(err);
+      }
+      if (Array.isArray(body)) {
+        req.labels = body.reduce((p, v) => {
+          // Only stash labels with names
+          if(v.name) {
+            p[v.id] = v;
+          }
+          return p;
+        }, { });
+        cache.put('labels', req.labels);
+      } else {
+        req.labels = { };
+      }
+      return resolve(req);
+    });
+  });
+}
+
+function getLabelName(req, id) {
+  if(req.labels && req.labels[id]) {
+    return req.labels[id].name;
+  }
+  return '';
+}
+
 function getCards(req) {
   return new Promise((resolve, reject) => {
     request.get(buildURL('/cards', req.accessToken), { json: true }, (err, res, body) => {
@@ -101,10 +136,11 @@ function getCards(req) {
         body.sort((a, b) => getListPosition(req, a.idList) - getListPosition(req, b.idList));
 
         req.cards = body.map(card => ({
-          _id: card.id,
+          id: card.id,
           description: card.name,
           status: getListName(req, card.idList),
           listID: card.idList,
+          labels: card.idLabels.map(l => getLabelName(req, l)),
           lead: '',
           pair: '',
           staff: card.idMembers
@@ -136,7 +172,7 @@ function moveCard(req) {
         return reject(err);
       }
       req.card = {
-        _id: body.id,
+        id: body.id,
         listID: body.idList
       };
       return resolve(req);
@@ -149,10 +185,15 @@ module.exports = {
     return getLists({ accessToken });
   },
 
+  getLabels(accessToken) {
+    return getLabels({ accessToken });
+  },
+
   getCards(accessToken) {
     return getRequestChainable(accessToken)
       .then(getMembers)
       .then(getLists)
+      .then(getLabels)
       .then(getCards)
       .then(req => req.cards)
       .catch(err => {
