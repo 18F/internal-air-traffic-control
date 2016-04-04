@@ -61,7 +61,13 @@ function getLists(req) {
         return reject(err);
       }
       if (Array.isArray(body)) {
-        req.lists = body.reduce((p, v) => { p[v.id] = v; return p; }, { });
+        req.lists = body.reduce((p, v) => {
+          // Don't even show grounded flights
+          if(v.name !== 'Grounded') {
+            p[v.id] = v;
+          }
+          return p;
+        }, { });
         cache.lists = req.lists;
       } else {
         req.lists = { };
@@ -94,11 +100,17 @@ function getCards(req) {
           pair: '',
           staff: card.idMembers
         }));
-        req.cards.forEach(card => {
-          for (let i = 0; i < card.staff.length; i++) {
-            card.staff[i] = getMemberName(req, card.staff[i]);
+        for(let j = 0; j < req.cards.length; j++) {
+          const card = req.cards[j];
+          if(!card.status) {
+            req.cards.splice(j, 1);
+            j--;
+          } else {
+            for (let i = 0; i < card.staff.length; i++) {
+              card.staff[i] = getMemberName(req, card.staff[i]);
+            }
           }
-        });
+        }
       } else {
         req.cards = [];
       }
