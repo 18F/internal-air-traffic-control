@@ -1,14 +1,15 @@
 import { connect } from 'react-redux'
 import Presentation from '../presentation/flight-list';
 
-function getVisibleFlights(flights, filter) {
-  return flights;
+function getNonEmptyStatuses(state) {
+  return state.statuses.filter(s => {
+    return (state.visibleFlights.filter(f => f.status == s.name).length > 0)
+  });
 }
 
 function mapStateToProps(state) {
   return {
-    flights: getVisibleFlights(state.flights, null),
-    statuses: state.statuses
+    statuses: getNonEmptyStatuses(state)
   };
 }
 

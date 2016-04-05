@@ -2641,25 +2641,26 @@ header {
   header nav .logo h1 {
     clear: none;
     padding: 0 10px 0 0;
-    margin: 0; }
-  header nav #auth {
-    float: right; }
+    margin: 0;
+    font-size: 2rem; }
 
-div#messages {
-  position: fixed;
-  top: 5rem;
-  right: 0;
-  z-index: 10; }
-  div#messages .usa-alert {
-    opacity: 1;
-    border: 1px solid black;
-    -webkit-transition: opacity 0.4s ease-in-out;
-    -moz-transition: opacity 0.4s ease-in-out;
-    transition: opacity 0.4s ease-in-out; }
-    div#messages .usa-alert.alert-hidden {
-      opacity: 0; }
-    div#messages .usa-alert a {
-      cursor: pointer; }
+.status-toolbar > div {
+  margin-top: 10px; }
+  .status-toolbar > div > button {
+    margin-top: 0; }
+
+.status-toolbar .button button {
+  background-color: #0071bc !important; }
+
+.status-list-popover label {
+  margin-top: 0; }
+
+.status-group {
+  margin: 1rem; }
+  .status-group .status-group-header {
+    background-color: #0071bc; }
+    .status-group .status-group-header * {
+      color: white !important; }
 
 .status-card {
   margin: 1rem 0; }

@@ -20,34 +20,40 @@ header {
                 clear: none;
                 padding: 0 10px 0 0;
                 margin: 0;
+                font-size: 2rem;
             }
-        }
-        #auth {
-            float: right;
         }
     }
 }
 
-div#messages {
-    position: fixed;
-    top: 5rem;
-    right: 0;
-    z-index: 10;
-
-    .usa-alert {
-        opacity: 1;
-        border: 1px solid black;
-
-        @include transition(opacity 0.4s ease-in-out);
-
-        &.alert-hidden {
-            opacity: 0;
-        }
-
-        a {
-            cursor: pointer;
-        }
+.status-toolbar {
+  > div {
+    margin-top: 10px;
+    > button {
+      margin-top: 0;
     }
+  }
+
+  .button button {
+    background-color: #0071bc !important;
+  }
+}
+
+.status-list-popover {
+  label {
+    margin-top: 0;
+  }
+}
+
+.status-group {
+  margin: 1rem;
+
+  .status-group-header {
+    background-color: #0071bc;
+    * {
+      color: white!important;
+    }
+  }
 }
 
 @import './status-card.scss';

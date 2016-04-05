@@ -7,7 +7,7 @@ export default function flights(state = [ ], action) {
       return action.list;
 
     case actions.Flights.ONE_IN:
-      const index = state.indexOf(action.flight._id);
+      const index = state.indexOf(action.flight.id);
       if(index >= 0) {
         const update = { };
         update[index] = action.flight;

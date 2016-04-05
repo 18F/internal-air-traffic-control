@@ -11,6 +11,7 @@ const React = require('react');
 const ReactDOM = require('react-dom');
 import { Provider } from 'react-redux'
 import StatusList from './containers/status-list';
+import FlightList from './containers/flight-list';
 
 import { createStore } from 'redux';
 import reducers from './reducers';
@@ -30,7 +31,10 @@ io().on('flight changed', flight => {
 
 ReactDOM.render(
   <Provider store={store}>
-    <StatusList />
+    <div>
+      <StatusList />
+      <FlightList />
+    </div>
   </Provider>,
   document.getElementById('content')
 );
