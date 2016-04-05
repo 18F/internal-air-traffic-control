@@ -49,6 +49,19 @@ server.use(restify.queryParser());
 server.use(passport.initialize());
 server.use(passport.session());
 
+sockets.use((socket, next) => {
+  passport.session()(socket.request, { }, next);
+  sessions({
+    cookieName: 'session',
+    secret: process.env.SESSION_SECRET || 'N4JnqJmmMjjEHHq22yIAkN0owlsMVJeYzsgBkSQ0zSPGrHmdxLVLfnFYGhccog7',
+    duration: 24 * 60 * 60 * 1000, // how long the session will stay valid in ms
+    activeDuration: 1000 * 60 * 5, // if expiresIn < activeDuration, the session will be extended by activeDuration milliseconds
+    cookie: {
+      httpOnly: true
+    }
+  })(socket.request, { }, next);
+});
+
 server.get('/auth/reset', (req, res, next) => {
   req.logout();
   req.session.destroy();
@@ -68,6 +81,26 @@ server.use((req, res, next) => {
     res.charSet('utf-8');
     next();
   }
+});
+
+function getBigObjectAsArray(obj, property) {
+  const arr = [ ];
+  for(const propertyName of Object.keys(obj[property])) {
+    arr.push(obj[property][propertyName]);
+  }
+  return arr;
+}
+
+sockets.on('connect', function(s) {
+  const token = JSON.parse(s.request.session.passport.user).accessToken;
+  board.getCards(token)
+    .then(out => {
+      const members = getBigObjectAsArray(out, 'members');
+      const statuses = getBigObjectAsArray(out, 'lists');
+      const labels = getBigObjectAsArray(out, 'labels');
+
+      s.emit('initial', { members, statuses, labels, flights: out.cards });
+    });
 });
 
 server.get('/api/statuses', (req, res, next) => {
@@ -102,8 +135,8 @@ server.get('/api/labels', (req, res, next) => {
 
 server.get('/api/flights', (req, res, next) => {
   board.getCards(req.user.accessToken)
-    .then(cards => {
-      res.send(cards);
+    .then(out => {
+      res.send(out.cards);
     })
     .catch(e => {
       log.error('Error getting rows from sheet:');

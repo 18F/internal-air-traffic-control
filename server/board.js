@@ -195,7 +195,7 @@ module.exports = {
       .then(getLists)
       .then(getLabels)
       .then(getCards)
-      .then(req => req.cards)
+      //.then(req => req.cards)
       .catch(err => {
         log.error('Error getting cards:');
         log.error(err);

@@ -2661,6 +2661,9 @@ div#messages {
     div#messages .usa-alert a {
       cursor: pointer; }
 
+.status-card {
+  margin: 1rem 0; }
+
 .flight-list-search > input[type="text"] {
   border-color: #d9d9d9 #ccc #b3b3b3;
   border-radius: 4px;

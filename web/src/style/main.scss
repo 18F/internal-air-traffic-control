@@ -50,6 +50,8 @@ div#messages {
     }
 }
 
+@import './status-card.scss';
+
 @import "./flight-list.scss";
 @import "./flight.scss";
 @import "./status-step-graph.scss";
