@@ -6,7 +6,30 @@ import Divider from 'material-ui/lib/divider';
 
 import Flight from './flight';
 
-class Status extends React.Component {
+class StatusGroup extends React.Component {
+  getTags(flight) {
+    return flight.labels.map(l => <div className='chip'>{l}</div>);
+  }
+
+  getFlights() {
+    const nodes = [ ];
+    for(let i = 0; i < this.props.flights.length; i++) {
+      const flight = this.props.flights[i];
+      if(i > 0) {
+        nodes.push(<Divider/>);
+      }
+      nodes.push(
+        <div key={flight.id}>
+          <h3>{flight.description}</h3>
+          <div className='flight-tags'>
+            {this.getTags(flight)}
+          </div>
+        </div>
+      );
+    }
+    return nodes;
+  }
+
   render() {
     return(
       <Card className='status-group' initiallyExpanded={true}>
@@ -17,13 +40,11 @@ class Status extends React.Component {
           actAsExpander={true}
           showExpandableButton={true}/>
         <CardText expandable={true}>
-          <ul>
-            {this.props.flights.map(f => <li>{f.description}</li> )}
-          </ul>
+          {this.getFlights()}
         </CardText>
       </Card>
     );
   }
 }
 
-export default Status;
+export default StatusGroup;
