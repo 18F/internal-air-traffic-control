@@ -2,8 +2,17 @@
 // is in the build script of package.json
 @import "all";
 
+// Fix for React
+input[type="checkbox"], input[type="radio"] {
+  left: auto;
+  opacity: 0;
+}
+
 // This gets the react-select SCSS.  Same story with the include path.
 @import "default";
+
+$chip-bg-color: #D6D6D6;
+@import "./node_modules/materialize-css/sass/components/chips";
 
 * {
     font-family: $font-sans!important;
@@ -35,7 +44,7 @@ header {
   }
 
   .button button {
-    background-color: #0071bc !important;
+    background-color: $color-primary !important;
   }
 }
 
@@ -49,7 +58,7 @@ header {
   margin: 1rem;
 
   .status-group-header {
-    background-color: #0071bc;
+    background-color: $color-primary;
     * {
       color: white!important;
     }

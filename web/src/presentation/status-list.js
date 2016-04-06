@@ -33,14 +33,18 @@ class StatusList extends React.Component {
   render() {
     return(
       <Toolbar className='status-toolbar'>
-        <RaisedButton className='button' label='Statuses' primary={true} icon={<DropdownIcon color='white'/>} onTouchTap={this.handleStatusButtonTap} />
+        <button onClick={this.handleStatusButtonTap}><DropdownIcon color='white'/> Statuses</button>
         <Popover
           open={this.state.popoverOpen}
           anchorEl={this.state.popoverTarget}
           onRequestClose={this.handlePopoverClose}
           className='status-list-popover'
+          style={{ padding: '1rem' }}
         >
-          {this.props.statuses.map(s => <Checkbox key={s.id} checked={s.checked} label={`${s.name} (${s.flightCount})`} style={{ margin: '1rem' }} onCheck={this.props.getToggleHandler(s.real)}></Checkbox>)}
+          <fieldset className='usa-fieldset-inputs'>
+            <legend className='usa-sr-only'>Available flight statuses</legend>
+            {this.props.statuses.map(s => <span key={s.id} style={{ margin: '1rem' }}><input type='checkbox' name={`status-toggle-${s.name}`} value={s.name} checked={s.checked} onChange={this.props.getToggleHandler(s.real)}/><label htmlFor={`status-toggle-${s.name}`}>{s.name} ({s.flightCount} projects)</label></span>)}
+          </fieldset>
         </Popover>
       </Toolbar>
     );

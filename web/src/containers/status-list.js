@@ -21,7 +21,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     getToggleHandler(status) {
-      return (event, enabled) => {
+      return (event) => {
+        const enabled = event.target.checked;
         let action;
         if(enabled) {
           action = actions.Filter.AddStatus;
