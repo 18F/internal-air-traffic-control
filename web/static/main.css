@@ -2671,6 +2671,11 @@ header {
     margin: 0;
     font-size: 2rem; }
 
+button svg {
+  height: 1em !important;
+  width: 1em !important;
+  vertical-align: middle; }
+
 .status-toolbar > div {
   margin-top: 10px; }
   .status-toolbar > div > button {

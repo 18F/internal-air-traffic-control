@@ -35,6 +35,12 @@ header {
     }
 }
 
+button svg {
+  height: 1em !important;
+  width: 1em !important;
+  vertical-align: middle;
+}
+
 .status-toolbar {
   > div {
     margin-top: 10px;
@@ -60,7 +66,7 @@ header {
   .status-group-header {
     background-color: $color-primary;
     * {
-      color: white!important;
+      color: white !important;
     }
   }
 }
