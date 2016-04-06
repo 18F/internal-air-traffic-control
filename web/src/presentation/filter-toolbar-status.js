@@ -40,7 +40,7 @@ class FilterToolbarStatus extends React.Component {
         >
           <fieldset className='usa-fieldset-inputs'>
             <legend className='usa-sr-only'>Available flight statuses</legend>
-            {this.props.statuses.map(s => <span key={s.id} style={{ margin: '1rem' }}><input type='checkbox' name={`status-toggle-${s.name}`} value={s.name} checked={s.checked} onChange={this.props.getToggleHandler(s.real)}/><label htmlFor={`status-toggle-${s.name}`}>{s.name} ({s.flightCount} projects)</label></span>)}
+            {this.props.statuses.map(s => <span key={s.id}><input type='checkbox' id={`status-toggle-${s.name}`} title={`Toggle ${s.name}`} value={s.name} checked={s.checked} onChange={this.props.getToggleHandler(s.real)}/><label htmlFor={`status-toggle-${s.name}`}>{s.name} ({s.flightCount} projects)</label></span>)}
           </fieldset>
         </Popover>
       </div>

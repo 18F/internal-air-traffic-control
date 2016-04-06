@@ -6,6 +6,10 @@
 input[type="checkbox"], input[type="radio"] {
   left: auto;
   opacity: 0;
+
+  & + label::before {
+    margin-left: 1px;
+  }
 }
 
 // This gets the react-select SCSS.  Same story with the include path.
@@ -39,6 +43,12 @@ button svg {
   height: 1em !important;
   width: 1em !important;
   vertical-align: middle;
+}
+
+.status-group-header button svg {
+  height: 24px !important;
+  width: 24px !important;
+  fill: white !important;
 }
 
 .status-toolbar {

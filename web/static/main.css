@@ -2320,6 +2320,8 @@ fieldset {
 input[type="checkbox"], input[type="radio"] {
   left: auto;
   opacity: 0; }
+  input[type="checkbox"] + label::before, input[type="radio"] + label::before {
+    margin-left: 1px; }
 
 /**
  * React Select
@@ -2675,6 +2677,11 @@ button svg {
   height: 1em !important;
   width: 1em !important;
   vertical-align: middle; }
+
+.status-group-header button svg {
+  height: 24px !important;
+  width: 24px !important;
+  fill: white !important; }
 
 .status-toolbar > div {
   margin-top: 10px; }
