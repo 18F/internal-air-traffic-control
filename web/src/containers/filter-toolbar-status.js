@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import Presentation from '../presentation/status-list';
+import Presentation from '../presentation/filter-toolbar-status';
 import * as actions from '../actions';
 
 function getUIStatuses(statuses, flights, filter) {

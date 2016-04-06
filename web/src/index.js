@@ -10,7 +10,7 @@ injectTapEventPlugin();
 const React = require('react');
 const ReactDOM = require('react-dom');
 import { Provider } from 'react-redux'
-import StatusList from './containers/status-list';
+import FilterToolbar from './presentation/filter-toolbar';
 import FlightList from './containers/flight-list';
 
 import { createStore } from 'redux';
@@ -32,7 +32,7 @@ io().on('flight changed', flight => {
 ReactDOM.render(
   <Provider store={store}>
     <div>
-      <StatusList />
+      <FilterToolbar />
       <FlightList />
     </div>
   </Provider>,

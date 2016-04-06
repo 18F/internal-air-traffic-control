@@ -1,12 +1,9 @@
 import React from 'react';
-//import Tabs from 'material-ui/lib/tabs/tabs';
-import Toolbar from 'material-ui/lib/toolbar/toolbar';
-import RaisedButton from 'material-ui/lib/raised-button';
 import Popover from 'material-ui/lib/popover/popover';
 import Checkbox from 'material-ui/lib/checkbox';
 import DropdownIcon from 'material-ui/lib/svg-icons/navigation/arrow-drop-down-circle';
 
-class StatusList extends React.Component {
+class FilterToolbarStatus extends React.Component {
   constructor(props) {
     super(props);
 
@@ -31,8 +28,8 @@ class StatusList extends React.Component {
   }
 
   render() {
-    return(
-      <Toolbar className='status-toolbar'>
+    return (
+      <div>
         <button onClick={this.handleStatusButtonTap}><DropdownIcon color='white'/> Statuses</button>
         <Popover
           open={this.state.popoverOpen}
@@ -46,9 +43,9 @@ class StatusList extends React.Component {
             {this.props.statuses.map(s => <span key={s.id} style={{ margin: '1rem' }}><input type='checkbox' name={`status-toggle-${s.name}`} value={s.name} checked={s.checked} onChange={this.props.getToggleHandler(s.real)}/><label htmlFor={`status-toggle-${s.name}`}>{s.name} ({s.flightCount} projects)</label></span>)}
           </fieldset>
         </Popover>
-      </Toolbar>
+      </div>
     );
   }
 }
 
-export default StatusList;
+export default FilterToolbarStatus;

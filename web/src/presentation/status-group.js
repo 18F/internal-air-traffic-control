@@ -8,7 +8,7 @@ import Flight from './flight';
 
 class StatusGroup extends React.Component {
   getTags(flight) {
-    return flight.labels.map(l => <div className='chip'>{l}</div>);
+    return flight.labels.map(l => <div className='chip' key={l}>{l}</div>);
   }
 
   getFlights() {
@@ -16,7 +16,7 @@ class StatusGroup extends React.Component {
     for(let i = 0; i < this.props.flights.length; i++) {
       const flight = this.props.flights[i];
       if(i > 0) {
-        nodes.push(<Divider/>);
+        nodes.push(<Divider key={`divider-${i}`}/>);
       }
       nodes.push(
         <div key={flight.id}>
