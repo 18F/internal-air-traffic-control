@@ -31,8 +31,23 @@ export const Filter = {
   },
   RemoveStatus(status) {
     return { type: Filter.REMOVE_STATUS, status };
+  },
+
+  AddUser(user) {
+    return { type: Filter.ADD_USER, user };
+  },
+  RemoveUser(user) {
+    return { type: Filter.REMOVE_USER, user };
   }
-}
+};
+
+export const Members = {
+  LIST_IN: 'Incoming list of members',
+
+  ReplaceList(list) {
+    return { type: this.LIST_IN, list };
+  }
+};
 
 export const User = {
   IN: 'Current user incoming'

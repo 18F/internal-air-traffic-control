@@ -39,11 +39,7 @@ function getMembers(req) {
 
 function getMemberName(req, id) {
   if (req.members && req.members[id]) {
-    let name = req.members[id].fullName;
-    if (name && name.indexOf(' ') > 0) {
-      name = name.substr(0, name.indexOf(' ') + 2);
-    }
-    return name;
+    return req.members[id].fullName;
   }
   return '';
 }

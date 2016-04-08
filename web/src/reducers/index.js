@@ -2,6 +2,7 @@ import { combineReducers } from 'redux';
 import filter from './filter';
 import flights from './flights';
 import statuses from './statuses';
+import members from './members';
 import visibleFlights from './visibleFlights';
 
 const stateShape = {
@@ -10,6 +11,7 @@ const stateShape = {
   },
   filters: [ ],
   statuses: [ ],
+  members: [ ],
   visibleFlights: [ ]
 };
 
@@ -17,6 +19,7 @@ const distinctReducers = combineReducers({
   filter,
   flights,
   statuses,
+  members,
   visibleFlights: state => [ ]
 });
 
