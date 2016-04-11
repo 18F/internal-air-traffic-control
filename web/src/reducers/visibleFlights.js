@@ -33,6 +33,35 @@ function getVisibleFlights(state) {
     return false;
   });
 
+  const filterTerms = state.filter.text.trim().toLowerCase().split(' ');
+  console.log(filterTerms);
+  filtered = filtered.filter(flight => {
+    if(filterTerms.length === 0) {
+      return true;
+    }
+
+    for(const term of filterTerms) {
+      if(flight.description.toLowerCase().indexOf(term) >= 0) {
+        return true;
+      }
+      if(flight.status.toLowerCase().indexOf(term) >= 0) {
+        return true;
+      }
+      for(const staff of flight.staff) {
+        if(staff.toLowerCase().indexOf(term) >= 0) {
+          return true;
+        }
+      }
+      for(const label of flight.labels) {
+        if(label.toLowerCase().indexOf(term) >= 0) {
+          return true;
+        }
+      }
+    }
+
+    return false;
+  });
+
   return filtered;
 }
 

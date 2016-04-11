@@ -27,6 +27,7 @@ export const Filter = {
   REMOVE_USER: 'Remove user from the filter',
   ADD_LABEL: 'Add label to the filter',
   REMOVE_LABEL: 'Remove label from the filter',
+  CHANGE_TEXT: 'Change filter text',
 
   AddStatus(status) {
     return { type: Filter.ADD_STATUS, status };
@@ -47,6 +48,10 @@ export const Filter = {
   },
   RemoveUser(user) {
     return { type: Filter.REMOVE_USER, user };
+  },
+
+  ChangeText(text) {
+    return { type: Filter.CHANGE_TEXT, text };
   }
 };
 

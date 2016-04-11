@@ -1,7 +1,7 @@
 import updeep from 'updeep';
 import * as actions from '../actions';
 
-export default function filter(state = { statuses: [ ], labels: [ ], users: [ ] }, action) {
+export default function filter(state = { statuses: [ ], labels: [ ], users: [ ], text: '' }, action) {
   const newStatusList = state.statuses.concat();
   const newLabelList = state.labels.concat();
   const newUserList = state.users.concat();
@@ -45,6 +45,9 @@ export default function filter(state = { statuses: [ ], labels: [ ], users: [ ] 
         }
       }
       return updeep({ users: newUserList }, state);
+
+    case actions.Filter.CHANGE_TEXT:
+      return updeep({ text: action.text }, state);
 
     default:
       return state;
