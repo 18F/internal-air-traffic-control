@@ -23,7 +23,7 @@ if (!process.env.HOST) {
   process.exit(1);
 }
 
-if (!process.env.ATC_TRELLO_BOARD) {
+if (!process.env.ATC_TRELLO_BOARD_ID) {
   log.error('Trello board ID not set.  Cannot continue.');
   process.exit(1);
 }
