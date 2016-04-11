@@ -1,29 +1,42 @@
 'use strict';
+import injectTapEventPlugin from 'react-tap-event-plugin';
+
+// Needed for onTouchTap
+// Can go away when react 1.0 release
+// Check this repo:
+// https://github.com/zilverline/react-tap-event-plugin
+injectTapEventPlugin();
+
 const React = require('react');
 const ReactDOM = require('react-dom');
-const Auth = require('./components/auth');
-const Message = require('./components/message');
-const FlightList = require('./components/flight-list');
-const service = require('./service');
+import { Provider } from 'react-redux'
+import FilterToolbar from './containers/filter-toolbar';
+import FlightList from './containers/flight-list';
 
-service.getFlights();
-service.getUser();
+import { createStore } from 'redux';
+import reducers from './reducers';
+
+const store = createStore(reducers, { flights: [ ], statuses: [ ] });
+
+import * as actions from './actions';
+
+io().on('initial', data => {
+  store.dispatch(actions.Flights.replaceList(data.flights));
+  store.dispatch(actions.Statuses.replaceList(data.statuses));
+  store.dispatch(actions.Labels.replaceList(data.labels));
+  store.dispatch(actions.Members.replaceList(data.members));
+});
 
 io().on('flight changed', flight => {
   service.mutateFlight(flight);
 });
 
 ReactDOM.render(
-  <Auth />,
-  document.getElementById('auth')
-);
-
-ReactDOM.render(
-  <Message />,
-  document.getElementById('messages')
-);
-
-ReactDOM.render(
-  <FlightList />,
+  <Provider store={store}>
+    <div>
+      <FilterToolbar />
+      <FlightList />
+    </div>
+  </Provider>,
   document.getElementById('content')
 );

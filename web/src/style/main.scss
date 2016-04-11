@@ -2,8 +2,21 @@
 // is in the build script of package.json
 @import "all";
 
+// Fix for React
+input[type="checkbox"], input[type="radio"] {
+  left: auto;
+  opacity: 0;
+
+  & + label::before {
+    margin-left: 1px;
+  }
+}
+
 // This gets the react-select SCSS.  Same story with the include path.
 @import "default";
+
+$chip-bg-color: #D6D6D6;
+@import "./node_modules/materialize-css/sass/components/chips";
 
 * {
     font-family: $font-sans!important;
@@ -12,44 +25,53 @@
 header {
     background-color: $color-primary-darkest;
     color: white;
-    height: 7rem;
     padding: 1rem;
 
     nav {
         .logo {
-            float: left;
             h1 {
+                clear: none;
                 padding: 0 10px 0 0;
                 margin: 0;
+                font-size: 2rem;
             }
         }
-        ul {
-            float: right;
-        }
     }
 }
 
-div#messages {
-    position: fixed;
-    top: 5rem;
-    right: 0;
-    z-index: 10;
-
-    .usa-alert {
-        opacity: 1;
-        border: 1px solid black;
-
-        @include transition(opacity 0.4s ease-in-out);
-
-        &.alert-hidden {
-            opacity: 0;
-        }
-
-        a {
-            cursor: pointer;
-        }
-    }
+button svg {
+  height: 1em !important;
+  width: 1em !important;
+  vertical-align: middle;
 }
+
+.status-group-header button svg {
+  height: 24px !important;
+  width: 24px !important;
+  fill: white !important;
+}
+
+.status-group {
+  margin: 1rem;
+
+  .status-group-header {
+    background-color: $color-primary;
+    * {
+      color: white !important;
+    }
+  }
+}
+
+@import './filter-toolbar';
+@import './flight-tag';
+
+
+
+
+
+
+@import './status-card.scss';
 
 @import "./flight-list.scss";
 @import "./flight.scss";
+@import "./status-step-graph.scss";

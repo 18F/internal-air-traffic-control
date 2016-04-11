@@ -1,0 +1,35 @@
+.chip {
+  color: black;
+
+  &.green {
+    background: #2e8540;
+    color: white;
+  }
+
+  &.purple {
+    background: #8c6bd2;
+    color: white;
+  }
+
+  &.sky {
+    background: #9bdaf1;
+  }
+
+  &.red {
+    background: #e31c3d;
+    color: white;
+  }
+
+  &.pink {
+    background: #f9dede;
+  }
+
+  &.orange {
+    background: #fdb81e;
+  }
+
+  &.blue {
+    background: #0071bc;
+    color: white;
+  }
+}

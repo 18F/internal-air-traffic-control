@@ -1,8 +1,8 @@
 ---
 applications:
-- name: acq-atc
+- name: acq-atc-staging
   memory: 512M
   instances: 1
-  host: acq-atc
+  host: acq-atc-staging
   services:
     - atc-trello-cups

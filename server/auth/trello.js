@@ -9,7 +9,7 @@ module.exports = {
     passport.use(new TrelloStrategy({
       consumerKey: process.env.TRELLO_API_KEY,
       consumerSecret: process.env.TRELLO_CLIENT_SECRET,
-      callbackURL: process.env.TRELLO_CALLBACK_URL,
+      callbackURL: `${process.env.HOST}/auth/trello/callback`,
       passReqToCallback: true,
       trelloParams: {
         scope: 'read,write',
