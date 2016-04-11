@@ -1,6 +1,6 @@
 'use strict';
 
-require('dotenv').config();
+require('./env');
 const restify = require('restify');
 const passport = require('passport');
 const io = require('socket.io');

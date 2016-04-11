@@ -15,6 +15,7 @@
   "dependencies": {
     "@erdc-itl/simple-logger": "^1.1.0",
     "bpa-trello-dashboard": "github:18f/bpa-trello#feature/cardrecorder",
+    "cfenv": "^1.0.3",
     "client-sessions": "^0.7.0",
     "dotenv": "^2.0.0",
     "passport": "^0.3.2",
@@ -53,7 +54,7 @@
     "updeep": "^0.13.0"
   },
   "engines": {
-    "node": "4.2.5",
-    "npm": "3.5.3"
+    "node": "5.8.0",
+    "npm": "3.8.0"
   }
 }
