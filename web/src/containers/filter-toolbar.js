@@ -51,7 +51,10 @@ function mapDispatchToProps(dispatch) {
   return {
     getStatusToggleHandler: getToggleHandler(actions.Filter.AddStatus, actions.Filter.RemoveStatus, dispatch),
     getLabelToggleHandler: getToggleHandler(actions.Filter.AddLabel, actions.Filter.RemoveLabel, dispatch),
-    getMemberToggleHandler: getToggleHandler(actions.Filter.AddUser, actions.Filter.RemoveUser, dispatch)
+    getMemberToggleHandler: getToggleHandler(actions.Filter.AddUser, actions.Filter.RemoveUser, dispatch),
+    textChangeHandler: event => {
+      dispatch(actions.Filter.ChangeText(event.target.value));
+    }
   };
 }
 
