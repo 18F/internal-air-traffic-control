@@ -1,16 +1,19 @@
 import React from 'react';
 
-class FlightTag extends React.Component {
-  render() {
-    let color = '';
-    if(this.props.labels[this.props.label]) {
-      color = this.props.labels[this.props.label].color;
-    }
-
-    return (
-      <div className={`chip ${color}`}>{this.props.label}</div>
-    );
+function FlightTag(props) {
+  let color = '';
+  if (props.labels[props.label]) {
+    color = props.labels[props.label].color;
   }
+
+  return (
+    <div className={`chip ${color}`}>{props.label}</div>
+  );
 }
+
+FlightTag.propTypes = {
+  labels: React.PropTypes.object.isRequired,
+  label: React.PropTypes.string.isRequired
+};
 
 export default FlightTag;

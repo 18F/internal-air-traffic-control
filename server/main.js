@@ -84,14 +84,14 @@ server.use((req, res, next) => {
 });
 
 function getBigObjectAsArray(obj, property) {
-  const arr = [ ];
-  for(const propertyName of Object.keys(obj[property])) {
+  const arr = [];
+  for (const propertyName of Object.keys(obj[property])) {
     arr.push(obj[property][propertyName]);
   }
   return arr;
 }
 
-sockets.on('connect', function(s) {
+sockets.on('connect', s => {
   const token = JSON.parse(s.request.session.passport.user).accessToken;
   board.getCards(token)
     .then(out => {
@@ -122,7 +122,7 @@ server.get('/api/labels', (req, res, next) => {
   board.getLabels(req.user.accessToken)
     .then(out => {
       const labels = [];
-      for(const label of Object.keys(out.labels)) {
+      for (const label of Object.keys(out.labels)) {
         labels.push({
           id: label,
           name: out.labels[label].name,
@@ -132,7 +132,7 @@ server.get('/api/labels', (req, res, next) => {
       res.send(labels);
     });
   next();
-})
+});
 
 server.get('/api/flights', (req, res, next) => {
   board.getCards(req.user.accessToken)

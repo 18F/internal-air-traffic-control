@@ -4,7 +4,7 @@ import { Store } from 'flux/utils';
 class StatusStore extends Store {
   constructor(d) {
     super(d);
-    this._statuses = [ ];
+    this._statuses = [];
   }
 
   getStatuses() {

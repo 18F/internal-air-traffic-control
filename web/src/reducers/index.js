@@ -11,15 +11,15 @@ const STORAGE_KEY = 'atc-state-filter';
 
 const stateShape = {
   filter: {
-    statuses: [ ],
-    labels: [ ],
-    users: [ ]
+    statuses: [],
+    labels: [],
+    users: []
   },
-  flights: [ ],
-  statuses: [ ],
-  labels: [ ],
-  members: [ ],
-  visibleFlights: [ ]
+  flights: [],
+  statuses: [],
+  labels: [],
+  members: [],
+  visibleFlights: []
 };
 
 const distinctReducers = combineReducers({
@@ -28,19 +28,20 @@ const distinctReducers = combineReducers({
   statuses,
   labels,
   members,
-  visibleFlights: state => [ ]
+  visibleFlights: () => []
 });
 
 let loaded = false;
-export default function(state = stateShape, action) {
-  if(!loaded) {
+export default function (state = stateShape, action) {
+  let newState = state;
+  if (!loaded) {
     loaded = true;
-    if(localStorage(STORAGE_KEY)) {
-      state.filter = localStorage(STORAGE_KEY);
+    if (localStorage(STORAGE_KEY)) {
+      newState.filter = localStorage(STORAGE_KEY);
     }
   }
-  state = distinctReducers(state, action);
-  state = visibleFlights(state, action);
-  localStorage(STORAGE_KEY, state.filter);
-  return state;
-};
+  newState = distinctReducers(newState, action);
+  newState = visibleFlights(newState, action);
+  localStorage(STORAGE_KEY, newState.filter);
+  return newState;
+}

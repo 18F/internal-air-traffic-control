@@ -1,9 +1,9 @@
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
 import Presentation from '../presentation/flight-tag';
 
 function mapStateToProps(state) {
   const labels = { };
-  for(const label of state.labels) {
+  for (const label of state.labels) {
     labels[label.name] = label;
   }
 
@@ -12,7 +12,7 @@ function mapStateToProps(state) {
   };
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps() {
   return { };
 }
 

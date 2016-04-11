@@ -4,22 +4,20 @@ import CardHeader from 'material-ui/lib/card/card-header';
 import CardText from 'material-ui/lib/card/card-text';
 import Flight from './flight';
 
-class StatusGroup extends React.Component {
-  render() {
-    return(
-      <Card className='status-group' initiallyExpanded={true}>
-        <CardHeader
-          title={this.props.status.name}
-          subtitle={`${this.props.flights.length} projects`}
-          className='status-group-header'
-          actAsExpander={true}
-          showExpandableButton={true}/>
-        <CardText expandable={true}>
-          {this.props.flights.map(f => <Flight key={f.id} flight={f} />)}
-        </CardText>
-      </Card>
-    );
-  }
+function StatusGroup(props) {
+  return (
+    <Card className="status-group" initiallyExpanded>
+      <CardHeader title={props.status.name} subtitle={`${props.flights.length} projects`} className="status-group-header" actAsExpander showExpandableButton />
+      <CardText expandable>
+        {props.flights.map(f => <Flight key={f.id} flight={f} />)}
+      </CardText>
+    </Card>
+  );
 }
+
+StatusGroup.propTypes = {
+  status: React.PropTypes.object.isRequired,
+  flights: React.PropTypes.array.isRequired
+};
 
 export default StatusGroup;

@@ -1,4 +1,4 @@
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
 import Presentation from '../presentation/status-group';
 
 function getVisibleFlights(flights, status) {
@@ -11,7 +11,7 @@ function mapStateToProps(state, props) {
   };
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps() {
   return { };
 }
 

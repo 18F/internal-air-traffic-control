@@ -1,4 +1,4 @@
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
 import Presentation from '../presentation/filter-toolbar';
 import * as actions from '../actions';
 
@@ -10,7 +10,7 @@ function getUIObj(objs, flightCount, filter) {
     checked: (filter.filter(f => f === (o.name || o.fullName)).length > 0),
     real: o
   }));
-};
+}
 
 function getUIStatuses(statuses, flights, filter) {
   const flightCount = status => flights.filter(f => f.status === status.name).length;
@@ -30,12 +30,12 @@ function getUIMembers(members, flights, filter) {
 function getToggleHandler(add, remove, dispatch) {
   return obj => event => {
     const enabled = event.target.checked;
-    if(enabled) {
+    if (enabled) {
       dispatch(add(obj));
     } else {
       dispatch(remove(obj));
     }
-  }
+  };
 }
 
 function mapStateToProps(state) {
@@ -49,11 +49,11 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    getStatusToggleHandler: getToggleHandler(actions.Filter.AddStatus, actions.Filter.RemoveStatus, dispatch),
-    getLabelToggleHandler: getToggleHandler(actions.Filter.AddLabel, actions.Filter.RemoveLabel, dispatch),
-    getMemberToggleHandler: getToggleHandler(actions.Filter.AddUser, actions.Filter.RemoveUser, dispatch),
+    getStatusToggleHandler: getToggleHandler(actions.Filter.addStatus, actions.Filter.removeStatus, dispatch),
+    getLabelToggleHandler: getToggleHandler(actions.Filter.addLabel, actions.Filter.removeLabel, dispatch),
+    getMemberToggleHandler: getToggleHandler(actions.Filter.addUser, actions.Filter.removeUser, dispatch),
     textChangeHandler: event => {
-      dispatch(actions.Filter.ChangeText(event.target.value));
+      dispatch(actions.Filter.changeText(event.target.value));
     }
   };
 }

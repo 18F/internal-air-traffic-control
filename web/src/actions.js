@@ -2,10 +2,10 @@ export const Flights = {
   LIST_IN: 'Incoming list of flights',
   ONE_IN: 'Single incoming flight',
 
-  ReplaceList(list) {
+  replaceList(list) {
     return { type: this.LIST_IN, list };
   },
-  ReplaceOne(flight) {
+  replaceOne(flight) {
     return { type: this.ONE_IN, flight };
   }
 };
@@ -13,7 +13,7 @@ export const Flights = {
 export const Statuses = {
   LIST_IN: 'Incoming list of statuses',
 
-  ReplaceList(list) {
+  replaceList(list) {
     return { type: this.LIST_IN, list };
   }
 };
@@ -29,28 +29,28 @@ export const Filter = {
   REMOVE_LABEL: 'Remove label from the filter',
   CHANGE_TEXT: 'Change filter text',
 
-  AddStatus(status) {
+  addStatus(status) {
     return { type: Filter.ADD_STATUS, status };
   },
-  RemoveStatus(status) {
+  removeStatus(status) {
     return { type: Filter.REMOVE_STATUS, status };
   },
 
-  AddLabel(label) {
+  addLabel(label) {
     return { type: Filter.ADD_LABEL, label };
   },
-  RemoveLabel(label) {
+  removeLabel(label) {
     return { type: Filter.REMOVE_LABEL, label };
   },
 
-  AddUser(user) {
+  addUser(user) {
     return { type: Filter.ADD_USER, user };
   },
-  RemoveUser(user) {
+  removeUser(user) {
     return { type: Filter.REMOVE_USER, user };
   },
 
-  ChangeText(text) {
+  changeText(text) {
     return { type: Filter.CHANGE_TEXT, text };
   }
 };
@@ -58,7 +58,7 @@ export const Filter = {
 export const Members = {
   LIST_IN: 'Incoming list of members',
 
-  ReplaceList(list) {
+  replaceList(list) {
     return { type: this.LIST_IN, list };
   }
 };
@@ -66,7 +66,7 @@ export const Members = {
 export const Labels = {
   LIST_IN: 'Incoming list of labels',
 
-  ReplaceList(list) {
+  replaceList(list) {
     return { type: this.LIST_IN, list };
   }
 };

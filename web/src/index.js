@@ -21,10 +21,10 @@ const store = createStore(reducers, { flights: [ ], statuses: [ ] });
 import * as actions from './actions';
 
 io().on('initial', data => {
-  store.dispatch(actions.Flights.ReplaceList(data.flights));
-  store.dispatch(actions.Statuses.ReplaceList(data.statuses));
-  store.dispatch(actions.Labels.ReplaceList(data.labels));
-  store.dispatch(actions.Members.ReplaceList(data.members));
+  store.dispatch(actions.Flights.replaceList(data.flights));
+  store.dispatch(actions.Statuses.replaceList(data.statuses));
+  store.dispatch(actions.Labels.replaceList(data.labels));
+  store.dispatch(actions.Members.replaceList(data.members));
 });
 
 io().on('flight changed', flight => {

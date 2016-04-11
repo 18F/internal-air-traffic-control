@@ -59,7 +59,7 @@ function getLists(req) {
         body.sort((a, b) => a.pos - b.pos);
         req.lists = body.reduce((p, v) => {
           // Don't even show grounded flights
-          if(v.name !== 'Grounded') {
+          if (v.name !== 'Grounded') {
             p[v.id] = v;
           }
           return p;
@@ -101,7 +101,7 @@ function getLabels(req) {
       if (Array.isArray(body)) {
         req.labels = body.reduce((p, v) => {
           // Only stash labels with names
-          if(v.name) {
+          if (v.name) {
             p[v.id] = v;
           }
           return p;
@@ -116,7 +116,7 @@ function getLabels(req) {
 }
 
 function getLabelName(req, id) {
-  if(req.labels && req.labels[id]) {
+  if (req.labels && req.labels[id]) {
     return req.labels[id].name;
   }
   return '';
@@ -142,9 +142,9 @@ function getCards(req) {
           staff: card.idMembers
         }));
 
-        for(let j = 0; j < req.cards.length; j++) {
+        for (let j = 0; j < req.cards.length; j++) {
           const card = req.cards[j];
-          if(!card.status) {
+          if (!card.status) {
             req.cards.splice(j, 1);
             j--;
           } else {
@@ -191,7 +191,7 @@ module.exports = {
       .then(getLists)
       .then(getLabels)
       .then(getCards)
-      //.then(req => req.cards)
+      // .then(req => req.cards)
       .catch(err => {
         log.error('Error getting cards:');
         log.error(err);

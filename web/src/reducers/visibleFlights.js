@@ -1,20 +1,17 @@
-import updeep from 'updeep';
-import * as actions from '../actions';
-
 function getVisibleFlights(state) {
   let filtered = state.flights.filter(flight => {
-    if(state.filter.statuses.length === 0 || state.filter.statuses.indexOf(flight.status) >= 0) {
+    if (state.filter.statuses.length === 0 || state.filter.statuses.indexOf(flight.status) >= 0) {
       return true;
     }
     return false;
   });
 
   filtered = filtered.filter(flight => {
-    if(state.filter.labels.length === 0) {
+    if (state.filter.labels.length === 0) {
       return true;
     }
-    for(const label of state.filter.labels) {
-      if(flight.labels.indexOf(label) >= 0) {
+    for (const label of state.filter.labels) {
+      if (flight.labels.indexOf(label) >= 0) {
         return true;
       }
     }
@@ -22,11 +19,11 @@ function getVisibleFlights(state) {
   });
 
   filtered = filtered.filter(flight => {
-    if(state.filter.users.length === 0 ) {
+    if (state.filter.users.length === 0) {
       return true;
     }
-    for(const user of state.filter.users) {
-      if(flight.staff.indexOf(user) >= 0) {
+    for (const user of state.filter.users) {
+      if (flight.staff.indexOf(user) >= 0) {
         return true;
       }
     }
@@ -34,26 +31,25 @@ function getVisibleFlights(state) {
   });
 
   const filterTerms = state.filter.text.trim().toLowerCase().split(' ');
-  console.log(filterTerms);
   filtered = filtered.filter(flight => {
-    if(filterTerms.length === 0) {
+    if (filterTerms.length === 0) {
       return true;
     }
 
-    for(const term of filterTerms) {
-      if(flight.description.toLowerCase().indexOf(term) >= 0) {
+    for (const term of filterTerms) {
+      if (flight.description.toLowerCase().indexOf(term) >= 0) {
         return true;
       }
-      if(flight.status.toLowerCase().indexOf(term) >= 0) {
+      if (flight.status.toLowerCase().indexOf(term) >= 0) {
         return true;
       }
-      for(const staff of flight.staff) {
-        if(staff.toLowerCase().indexOf(term) >= 0) {
+      for (const staff of flight.staff) {
+        if (staff.toLowerCase().indexOf(term) >= 0) {
           return true;
         }
       }
-      for(const label of flight.labels) {
-        if(label.toLowerCase().indexOf(term) >= 0) {
+      for (const label of flight.labels) {
+        if (label.toLowerCase().indexOf(term) >= 0) {
           return true;
         }
       }
@@ -65,7 +61,8 @@ function getVisibleFlights(state) {
   return filtered;
 }
 
-export default function visibleFlights(state, action) {
-  state.visibleFlights = getVisibleFlights(state);
-  return state;
+export default function visibleFlights(state) {
+  const newState = state;
+  newState.visibleFlights = getVisibleFlights(newState);
+  return newState;
 }
