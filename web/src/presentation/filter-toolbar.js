@@ -37,7 +37,7 @@ class StatusList extends React.Component {
         <button onClick={this.setPopoverState('status')}><DropdownIcon color="white" /> Statuses</button>
         <button onClick={this.setPopoverState('types')}><DropdownIcon color="white" /> Types</button>
         <button onClick={this.setPopoverState('members')}><DropdownIcon color="white" /> Members</button>
-        <input type="text" value={this.props.text} onChange={this.props.textChangeHandler} />
+        <input type="text" title="Filter text" value={this.props.text} onChange={this.props.textChangeHandler} />
 
         <Popover
           open={this.state.statusPopoverOpen}
