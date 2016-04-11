@@ -2701,6 +2701,27 @@ button svg {
     .status-group .status-group-header * {
       color: white !important; }
 
+.chip {
+  color: black; }
+  .chip.green {
+    background: #2e8540;
+    color: white; }
+  .chip.purple {
+    background: #8c6bd2;
+    color: white; }
+  .chip.sky {
+    background: #9bdaf1; }
+  .chip.red {
+    background: #e31c3d;
+    color: white; }
+  .chip.pink {
+    background: #f9dede; }
+  .chip.orange {
+    background: #fdb81e; }
+  .chip.blue {
+    background: #0071bc;
+    color: white; }
+
 .status-card {
   margin: 1rem 0; }
 
