@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import Presentation from '../presentation/filter-toolbar-status';
+import Presentation from '../presentation/filter-toolbar';
 import * as actions from '../actions';
 
 function getUIObj(objs, flightCount, filter) {
@@ -42,7 +42,8 @@ function mapStateToProps(state) {
   return {
     statuses: getUIStatuses(state.statuses, state.flights, state.filter.statuses),
     labels: getUILabels(state.labels, state.flights, state.filter.labels),
-    members: getUIMembers(state.members, state.flights, state.filter.users)
+    members: getUIMembers(state.members, state.flights, state.filter.users),
+    text: state.filter.text
   };
 }
 

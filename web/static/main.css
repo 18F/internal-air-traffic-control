@@ -2683,23 +2683,26 @@ button svg {
   width: 24px !important;
   fill: white !important; }
 
-.status-toolbar > div {
-  margin-top: 10px; }
-  .status-toolbar > div > button {
-    margin-top: 0; }
-
-.status-toolbar .button button {
-  background-color: #0071bc !important; }
-
-.status-list-popover label {
-  margin-top: 0; }
-
 .status-group {
   margin: 1rem; }
   .status-group .status-group-header {
     background-color: #0071bc; }
     .status-group .status-group-header * {
       color: white !important; }
+
+.filter-toolbar > div {
+  margin-top: 10px; }
+  .filter-toolbar > div > button {
+    margin-top: 0; }
+  .filter-toolbar > div > input[type=text] {
+    width: auto;
+    display: inline-block; }
+
+.filter-toolbar .button button {
+  background-color: #0071bc !important; }
+
+.filter-toolbar-popover label {
+  margin-top: 0; }
 
 .chip {
   color: black; }

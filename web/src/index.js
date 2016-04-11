@@ -10,7 +10,7 @@ injectTapEventPlugin();
 const React = require('react');
 const ReactDOM = require('react-dom');
 import { Provider } from 'react-redux'
-import FilterToolbar from './presentation/filter-toolbar';
+import FilterToolbar from './containers/filter-toolbar';
 import FlightList from './containers/flight-list';
 
 import { createStore } from 'redux';

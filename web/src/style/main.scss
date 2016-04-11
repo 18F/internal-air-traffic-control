@@ -51,25 +51,6 @@ button svg {
   fill: white !important;
 }
 
-.status-toolbar {
-  > div {
-    margin-top: 10px;
-    > button {
-      margin-top: 0;
-    }
-  }
-
-  .button button {
-    background-color: $color-primary !important;
-  }
-}
-
-.status-list-popover {
-  label {
-    margin-top: 0;
-  }
-}
-
 .status-group {
   margin: 1rem;
 
@@ -81,6 +62,7 @@ button svg {
   }
 }
 
+@import './filter-toolbar';
 @import './flight-tag';
 
 
