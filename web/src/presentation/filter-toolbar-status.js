@@ -13,41 +13,32 @@ class FilterToolbarStatus extends React.Component {
       popoverTarget: null
     };
 
-    this.handleStatusButtonTap = (event) => {
-      this.setState({
-        membersPopoverOpen: false,
-        statusPopoverOpen: true,
-        popoverTarget: event.currentTarget
-      });
-    };
-
-    this.handleMembersButtonTap = (event) => {
-      this.setState({
-        membersPopoverOpen: true,
-        statusPopoverOpen: false,
-        popoverTarget: event.currentTarget
-      })
-    };
-
-    this.handlePopoverClose = () => {
-      this.setState({
+    this.setPopoverState = popoverName => event => {
+      const newState = {
         membersPopoverOpen: false,
         statusPopoverOpen: false,
         popoverTarget: null
-      });
+      };
+
+      if(popoverName) {
+        newState[`${popoverName}PopoverOpen`] = true;
+        newState.popoverTarget = event.currentTarget;
+      }
+
+      this.setState(newState);
     };
   }
 
   render() {
     return (
       <div>
-        <button onClick={this.handleStatusButtonTap}><DropdownIcon color='white'/> Statuses</button>
-        <button onClick={this.handleMembersButtonTap}><DropdownIcon color='white'/> Members</button>
+        <button onClick={this.setPopoverState('status')}><DropdownIcon color='white'/> Statuses</button>
+        <button onClick={this.setPopoverState('members')}><DropdownIcon color='white'/> Members</button>
 
         <Popover
           open={this.state.statusPopoverOpen}
           anchorEl={this.state.popoverTarget}
-          onRequestClose={this.handlePopoverClose}
+          onRequestClose={this.setPopoverState()}
           className='status-list-popover'
           style={{ padding: '1rem' }}
         >
@@ -60,7 +51,7 @@ class FilterToolbarStatus extends React.Component {
         <Popover
           open={this.state.membersPopoverOpen}
           anchorEl={this.state.popoverTarget}
-          onRequestClose={this.handlePopoverClose}
+          onRequestClose={this.setPopoverState()}
           className='status-list-popover'
           style={{ padding: '1rem' }}
         >
