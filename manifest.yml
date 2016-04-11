@@ -2,6 +2,7 @@
 applications:
 - name: acq-atc
   memory: 512M
+  disk_quota: 256M
   instances: 1
   host: acq-atc
   services:
