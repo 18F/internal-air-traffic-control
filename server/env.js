@@ -17,4 +17,5 @@ if (appEnv.getServices() && Object.keys(appEnv.getServices()).length) {
   for (const env of knownEnvs) {
     process.env[env] = appEnv.getServiceCreds('atc-trello-cups')[env];
   }
+  process.env.HOST = appEnv.url;
 }
