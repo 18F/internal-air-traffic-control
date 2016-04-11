@@ -18,12 +18,12 @@ if (!process.env.TRELLO_CLIENT_SECRET) {
   log.error('Trello client secret not set.  Cannot continue.');
   process.exit(1);
 }
-if (!process.env.TRELLO_CALLBACK_URL) {
-  log.error('Trello callback URL not set.  Cannot continue.');
+if (!process.env.HOST) {
+  log.error('Host not set.  Cannot continue.');
   process.exit(1);
 }
 
-if (!process.env.TRELLO_BOARD_ID) {
+if (!process.env.ATC_TRELLO_BOARD) {
   log.error('Trello board ID not set.  Cannot continue.');
   process.exit(1);
 }

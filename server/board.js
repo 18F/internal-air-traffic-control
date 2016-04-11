@@ -6,7 +6,7 @@ const Cache = require('timed-cache');
 // 30-minute cache
 const cache = new Cache({ defaultTtl: 1800000 });
 
-const baseURL = `https://api.trello.com/1/boards/${process.env.TRELLO_BOARD_ID}`;
+const baseURL = `https://api.trello.com/1/boards/${process.env.ATC_TRELLO_BOARD}`;
 function buildURL(partial, token) {
   return `${baseURL}${partial}?key=${process.env.TRELLO_API_KEY}&token=${token}`;
 }

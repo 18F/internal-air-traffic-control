@@ -4,3 +4,5 @@ applications:
   memory: 512M
   instances: 1
   host: acq-atc
+  services:
+    - atc-trello-cups

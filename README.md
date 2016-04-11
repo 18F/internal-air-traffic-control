@@ -14,9 +14,9 @@ If you make any changes to the _server_ code, you will need to stop and restart.
 
 # Authentication & Environment
 
-The server uses Trello for authentication and as a backing data store.  Users must have Trello accounts and must be able to access the board containing Air Traffic Control data.  You will need an [API key and OAuth secret from Trello](https://trello.com/app-key) (the API key is up top and the secret is near the bottom).  These should be in environment variables named `TRELLO_API_KEY` and `TRELLO_CLIENT_SECRET`, respectively.  You will also need to provide a callback URL as `TRELLO_CALLBACK_URL`.
+The server uses Trello for authentication and as a backing data store.  Users must have Trello accounts and must be able to access the board containing Air Traffic Control data.  You will need an [API key and OAuth secret from Trello](https://trello.com/app-key) (the API key is up top and the secret is near the bottom).  These should be in environment variables named `TRELLO_API_KEY` and `TRELLO_CLIENT_SECRET`, respectively.  You will also need to set the `HOST` environment variable.  This should be a full HTTP hostname as it is used to construct the Trello callback URL ({HOST}/auth/trello/callback).
 
-Finally, you will need to identify the Trello board to be used for Air Traffic Control.  This is set in the `TRELLO_BOARD_ID` environment variable.
+Finally, you will need to identify the Trello board to be used for Air Traffic Control.  This is set in the `ATC_TRELLO_BOARD` environment variable.
 
 Authentication is persisted in user sessions.  To secure the session, a strong session secret is recommended.  This is read from the environment variable `SESSION_SECRET`.  If it is not provided in the environment variable, it uses a default, hard-coded string that is more secure than nothing, but only just barely since the code is open.  Please set the `SESSION_SECRET`.
 
