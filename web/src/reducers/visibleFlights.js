@@ -10,6 +10,18 @@ function getVisibleFlights(state) {
   });
 
   filtered = filtered.filter(flight => {
+    if(state.filter.labels.length === 0) {
+      return true;
+    }
+    for(const label of state.filter.labels) {
+      if(flight.labels.indexOf(label) >= 0) {
+        return true;
+      }
+    }
+    return false;
+  });
+
+  filtered = filtered.filter(flight => {
     if(state.filter.users.length === 0 ) {
       return true;
     }
@@ -18,7 +30,6 @@ function getVisibleFlights(state) {
         return true;
       }
     }
-
     return false;
   });
 
@@ -28,16 +39,4 @@ function getVisibleFlights(state) {
 export default function visibleFlights(state, action) {
   state.visibleFlights = getVisibleFlights(state);
   return state;
-
-  switch(action.type) {
-    case actions.Filter.ADD_STATUS:
-    case actions.Filter.REMOVE_STATUS:
-    case actions.Filter.ADD_USER:
-    case actions.Filter.REMOVE_USER:
-      state.visibleFlights = getVisibleFlights(state);
-      return state;
-
-    default:
-      return state;
-  }
 }

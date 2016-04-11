@@ -21,6 +21,8 @@ export const Statuses = {
 export const Filter = {
   ADD_STATUS: 'Add status to the filter',
   REMOVE_STATUS: 'Remove status from the filter',
+  ADD_LABEL: 'Add label to the filter',
+  REMOVE_LABEL: 'Remove label from the filter',
   ADD_USER: 'Add user to the filter',
   REMOVE_USER: 'Remove user from the filter',
   ADD_LABEL: 'Add label to the filter',
@@ -33,6 +35,13 @@ export const Filter = {
     return { type: Filter.REMOVE_STATUS, status };
   },
 
+  AddLabel(label) {
+    return { type: Filter.ADD_LABEL, label };
+  },
+  RemoveLabel(label) {
+    return { type: Filter.REMOVE_LABEL, label };
+  },
+
   AddUser(user) {
     return { type: Filter.ADD_USER, user };
   },
@@ -43,6 +52,14 @@ export const Filter = {
 
 export const Members = {
   LIST_IN: 'Incoming list of members',
+
+  ReplaceList(list) {
+    return { type: this.LIST_IN, list };
+  }
+};
+
+export const Labels = {
+  LIST_IN: 'Incoming list of labels',
 
   ReplaceList(list) {
     return { type: this.LIST_IN, list };

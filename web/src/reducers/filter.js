@@ -1,8 +1,9 @@
 import updeep from 'updeep';
 import * as actions from '../actions';
 
-export default function filter(state = { statuses: [ ], users: [ ] }, action) {
+export default function filter(state = { statuses: [ ], labels: [ ], users: [ ] }, action) {
   const newStatusList = state.statuses.concat();
+  const newLabelList = state.labels.concat();
   const newUserList = state.users.concat();
 
   switch(action.type) {
@@ -18,6 +19,19 @@ export default function filter(state = { statuses: [ ], users: [ ] }, action) {
         }
       }
       return updeep({ statuses: newStatusList }, state);
+
+    case actions.Filter.ADD_LABEL:
+      newLabelList.push(action.label.name);
+      return updeep({ labels: newLabelList }, state);
+
+    case actions.Filter.REMOVE_LABEL:
+      for(let i = 0; i < newLabelList.length; i++) {
+        if(newLabelList[i] === action.label.name) {
+          newLabelList.splice(i, 1);
+          break;
+        }
+      }
+      return updeep({ labels: newLabelList }, state);
 
     case actions.Filter.ADD_USER:
       newUserList.push(action.user.fullName);

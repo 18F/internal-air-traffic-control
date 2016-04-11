@@ -8,15 +8,17 @@ class FilterToolbarStatus extends React.Component {
     super(props);
 
     this.state = {
-      membersPopoverOpen: false,
       statusPopoverOpen: false,
+      typesPopoverOpen: false,
+      membersPopoverOpen: false,
       popoverTarget: null
     };
 
     this.setPopoverState = popoverName => event => {
       const newState = {
-        membersPopoverOpen: false,
         statusPopoverOpen: false,
+        typesPopoverOpen: false,
+        membersPopoverOpen: false,
         popoverTarget: null
       };
 
@@ -33,6 +35,7 @@ class FilterToolbarStatus extends React.Component {
     return (
       <div>
         <button onClick={this.setPopoverState('status')}><DropdownIcon color='white'/> Statuses</button>
+        <button onClick={this.setPopoverState('types')}><DropdownIcon color='white'/> Types</button>
         <button onClick={this.setPopoverState('members')}><DropdownIcon color='white'/> Members</button>
 
         <Popover
@@ -45,6 +48,19 @@ class FilterToolbarStatus extends React.Component {
           <fieldset className='usa-fieldset-inputs'>
             <legend className='usa-sr-only'>Available flight statuses</legend>
             {this.props.statuses.map(s => <span key={s.id}><input type='checkbox' id={`status-toggle-${s.name}`} title={`Toggle ${s.name}`} value={s.name} checked={s.checked} onChange={this.props.getStatusToggleHandler(s.real)}/><label htmlFor={`status-toggle-${s.name}`}>{s.name} ({s.flightCount} projects)</label></span>)}
+          </fieldset>
+        </Popover>
+
+        <Popover
+          open={this.state.typesPopoverOpen}
+          anchorEl={this.state.popoverTarget}
+          onRequestClose={this.setPopoverState()}
+          className='types-list-popover'
+          style={{ padding: '1rem' }}
+        >
+          <fieldset className='usa-fieldset-inputs'>
+            <legend className='usa-sr-only'>Flight types</legend>
+            {this.props.labels.map(l => <span key={l.id}><input type='checkbox' id={`status-toggle-${l.name}`} title={`Toggle ${l.name}`} value={l.name} checked={l.checked} onChange={this.props.getLabelToggleHandler(l.real)}/><label htmlFor={`status-toggle-${l.name}`}>{l.name} ({l.flightCount} projects)</label></span>)}
           </fieldset>
         </Popover>
 

@@ -12,6 +12,16 @@ function getUIStatuses(statuses, flights, filter) {
   }));
 }
 
+function getUILabels(labels, flights, filter) {
+  return labels.map(l => ({
+    name: l.name,
+    id: l.id,
+    flightCount: flights.filter(f => f.labels.indexOf(l.name) >= 0).length,
+    checked: (filter.filter(labelFilter => labelFilter === l.name).length > 0),
+    real: l
+  }));
+}
+
 function getUIMembers(members, flights, filter) {
   return members.map(m => ({
     name: m.fullName,
@@ -22,40 +32,30 @@ function getUIMembers(members, flights, filter) {
   }));
 }
 
+function getToggleHandler(add, remove, dispatch) {
+  return obj => event => {
+    const enabled = event.target.checked;
+    if(enabled) {
+      dispatch(add(obj));
+    } else {
+      dispatch(remove(obj));
+    }
+  }
+}
+
 function mapStateToProps(state) {
   return {
     statuses: getUIStatuses(state.statuses, state.flights, state.filter.statuses),
+    labels: getUILabels(state.labels, state.flights, state.filter.labels),
     members: getUIMembers(state.members, state.flights, state.filter.users)
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    getStatusToggleHandler(status) {
-      return (event) => {
-        const enabled = event.target.checked;
-        let action;
-        if(enabled) {
-          action = actions.Filter.AddStatus;
-        } else {
-          action = actions.Filter.RemoveStatus;
-        }
-        dispatch(action(status));
-      };
-    },
-
-    getMemberToggleHandler(member) {
-      return (event) => {
-        const enabled = event.target.checked;
-        let action;
-        if(enabled) {
-          action = actions.Filter.AddUser;
-        } else {
-          action = actions.Filter.RemoveUser;
-        }
-        dispatch(action(member));
-      };
-    }
+    getStatusToggleHandler: getToggleHandler(actions.Filter.AddStatus, actions.Filter.RemoveStatus, dispatch),
+    getLabelToggleHandler: getToggleHandler(actions.Filter.AddLabel, actions.Filter.RemoveLabel, dispatch),
+    getMemberToggleHandler: getToggleHandler(actions.Filter.AddUser, actions.Filter.RemoveUser, dispatch)
   };
 }
 
