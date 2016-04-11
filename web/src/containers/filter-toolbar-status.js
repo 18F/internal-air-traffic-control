@@ -2,34 +2,29 @@ import { connect } from 'react-redux'
 import Presentation from '../presentation/filter-toolbar-status';
 import * as actions from '../actions';
 
-function getUIStatuses(statuses, flights, filter) {
-  return statuses.map(s => ({
-    name: s.name,
-    id: s.id,
-    flightCount: flights.filter(f => f.status === s.name).length,
-    checked: (filter.filter(statusFilter => statusFilter === s.name).length > 0),
-    real: s
+function getUIObj(objs, flightCount, filter) {
+  return objs.map(o => ({
+    name: o.name || o.fullName,
+    id: o.id,
+    flightCount: flightCount(o),
+    checked: (filter.filter(f => f === (o.name || o.fullName)).length > 0),
+    real: o
   }));
+};
+
+function getUIStatuses(statuses, flights, filter) {
+  const flightCount = status => flights.filter(f => f.status === status.name).length;
+  return getUIObj(statuses, flightCount, filter);
 }
 
 function getUILabels(labels, flights, filter) {
-  return labels.map(l => ({
-    name: l.name,
-    id: l.id,
-    flightCount: flights.filter(f => f.labels.indexOf(l.name) >= 0).length,
-    checked: (filter.filter(labelFilter => labelFilter === l.name).length > 0),
-    real: l
-  }));
+  const flightCount = label => flights.filter(f => f.labels.indexOf(label.name) >= 0).length;
+  return getUIObj(labels, flightCount, filter);
 }
 
 function getUIMembers(members, flights, filter) {
-  return members.map(m => ({
-    name: m.fullName,
-    id: m.id,
-    flightCount: flights.filter(f => f.staff.indexOf(m.fullName) >= 0).length,
-    checked: (filter.filter(userFilter => userFilter === m.fullName).length > 0),
-    real: m
-  }));
+  const flightCount = staff => flights.filter(f => f.staff.indexOf(staff.fullName) >= 0).length;
+  return getUIObj(members, flightCount, filter);
 }
 
 function getToggleHandler(add, remove, dispatch) {
