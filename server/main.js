@@ -123,14 +123,10 @@ server.get('/api/labels', (req, res, next) => {
     .then(out => {
       const labels = [];
       for(const label of Object.keys(out.labels)) {
-        let color = out.labels[label].color;
-        if(color === 'sky') {
-          color = 'skyblue';
-        }
         labels.push({
           id: label,
           name: out.labels[label].name,
-          color
+          color: out.labels[label].color
         });
       }
       res.send(labels);
