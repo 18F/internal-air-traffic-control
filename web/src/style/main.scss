@@ -42,6 +42,14 @@ button svg {
   vertical-align: middle;
 }
 
+a span.anchor-description {
+  height: 1px;
+  width: 1px;
+  position: absolute;
+  overflow: hidden;
+  top: -10px;
+}
+
 .status-group-header button svg {
   height: 24px !important;
   width: 24px !important;
