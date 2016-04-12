@@ -12,9 +12,6 @@ input[type="checkbox"], input[type="radio"] {
   }
 }
 
-// This gets the react-select SCSS.  Same story with the include path.
-@import "default";
-
 $chip-bg-color: #D6D6D6;
 @import "./node_modules/materialize-css/sass/components/chips";
 
@@ -65,14 +62,3 @@ button svg {
 @import './filter-toolbar';
 @import './flight';
 @import './flight-tag';
-
-
-
-
-
-
-@import './status-card.scss';
-
-@import "./flight-list.scss";
-@import "./flight.scss";
-@import "./status-step-graph.scss";

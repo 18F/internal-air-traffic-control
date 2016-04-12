@@ -28,7 +28,7 @@ io().on('initial', data => {
 });
 
 io().on('flight changed', flight => {
-  service.mutateFlight(flight);
+  store.dispatch(actions.Flights.replaceOne(flight));
 });
 
 ReactDOM.render(
