@@ -23,7 +23,7 @@ function getVisibleFlights(state) {
       return true;
     }
     for (const user of state.filter.users) {
-      if (flight.staff.indexOf(user) >= 0) {
+      if (flight.staff.some(s => s.fullName === user)) {
         return true;
       }
     }
@@ -44,7 +44,7 @@ function getVisibleFlights(state) {
         return true;
       }
       for (const staff of flight.staff) {
-        if (staff.toLowerCase().indexOf(term) >= 0) {
+        if (staff.name.toLowerCase().indexOf(term) >= 0) {
           return true;
         }
       }
