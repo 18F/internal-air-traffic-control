@@ -51,6 +51,13 @@ function getMemberName(req, id) {
   return '';
 }
 
+function getMemberAvatar(req, id) {
+  if(req.members && req.members[id] && req.members[id].avatarHash) {
+    return `https://trello-avatars.s3.amazonaws.com/${req.members[id].avatarHash}/50.png`
+  }
+  return null;
+}
+
 function getLists(req) {
   if (cache.get('lists')) {
     req.lists = cache.get('lists');
@@ -156,7 +163,11 @@ function getCards(req) {
             j--;
           } else {
             for (let i = 0; i < card.staff.length; i++) {
-              card.staff[i] = getMemberName(req, card.staff[i]);
+              card.staff[i] = {
+                id: card.staff[i],
+                name: getMemberName(req, card.staff[i]),
+                avatar: getMemberAvatar(req, card.staff[i])
+              };
             }
           }
         }
