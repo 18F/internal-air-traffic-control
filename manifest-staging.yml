@@ -2,6 +2,7 @@
 applications:
 - name: acq-atc-staging
   memory: 512M
+  disk_quota: 256M
   instances: 1
   host: acq-atc-staging
   services:

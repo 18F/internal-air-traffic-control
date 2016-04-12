@@ -23,7 +23,7 @@ function getUILabels(labels, flights, filter) {
 }
 
 function getUIMembers(members, flights, filter) {
-  const flightCount = staff => flights.filter(f => f.staff.indexOf(staff.fullName) >= 0).length;
+  const flightCount = staff => flights.filter(f => f.staff.some(s => s.id === staff.id)).length;
   return getUIObj(members, flightCount, filter);
 }
 

@@ -1,15 +1,17 @@
 import React from 'react';
-import Divider from 'material-ui/lib/divider';
 import Tag from '../containers/flight-tag';
 
 function Flight(props) {
   return (
-    <div>
+    <div className="flight">
       <h3>{props.flight.description}</h3>
       <div className="flight-tags">
         {props.flight.labels.map(l => <Tag key={l} label={l} />)}
       </div>
-      <Divider />
+      <div className="member-tags">
+        {props.flight.staff.map(s => <Tag key={s.name} label={s.name} avatar={s.avatar} />)}
+      </div>
+      <hr />
     </div>
   );
 }

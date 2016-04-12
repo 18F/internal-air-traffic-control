@@ -7,8 +7,15 @@ const Cache = require('timed-cache');
 const cache = new Cache({ defaultTtl: 1800000 });
 
 const baseURL = `https://api.trello.com/1/boards/${process.env.ATC_TRELLO_BOARD_ID}`;
-function buildURL(partial, token) {
-  return `${baseURL}${partial}?key=${process.env.TRELLO_API_KEY}&token=${token}`;
+function buildURL(partial, token, params) {
+  let extraGet = '';
+  if(params) {
+    extraGet = '&';
+    for(const key of Object.keys(params)) {
+      extraGet += `${key}=${params[key]}`;
+    }
+  }
+  return `${baseURL}${partial}?key=${process.env.TRELLO_API_KEY}&token=${token}${extraGet}`;
 }
 
 function getRequestChainable(accessToken) {
@@ -22,7 +29,7 @@ function getMembers(req) {
   }
 
   return new Promise((resolve, reject) => {
-    request.get(buildURL('/members', req.accessToken), { json: true }, (err, res, body) => {
+    request.get(buildURL('/members', req.accessToken, { fields: 'username,fullName,avatarHash,initials' }), { json: true }, (err, res, body) => {
       if (err) {
         return reject(err);
       }
@@ -42,6 +49,13 @@ function getMemberName(req, id) {
     return req.members[id].fullName;
   }
   return '';
+}
+
+function getMemberAvatar(req, id) {
+  if(req.members && req.members[id] && req.members[id].avatarHash) {
+    return `https://trello-avatars.s3.amazonaws.com/${req.members[id].avatarHash}/50.png`
+  }
+  return null;
 }
 
 function getLists(req) {
@@ -149,7 +163,11 @@ function getCards(req) {
             j--;
           } else {
             for (let i = 0; i < card.staff.length; i++) {
-              card.staff[i] = getMemberName(req, card.staff[i]);
+              card.staff[i] = {
+                id: card.staff[i],
+                name: getMemberName(req, card.staff[i]),
+                avatar: getMemberAvatar(req, card.staff[i])
+              };
             }
           }
         }
