@@ -153,7 +153,8 @@ function getCards(req) {
           labels: card.idLabels.map(l => getLabelName(req, l)),
           lead: '',
           pair: '',
-          staff: card.idMembers
+          staff: card.idMembers,
+          trelloURL: card.url
         }));
 
         for (let j = 0; j < req.cards.length; j++) {
