@@ -1,35 +1,47 @@
-.chip {
-  color: black;
+.flight-tags {
+  float: left;
+}
 
-  &.green {
-    background: #2e8540;
-    color: white;
-  }
+.member-tags {
+  float: right;
+}
 
-  &.purple {
-    background: #8c6bd2;
-    color: white;
-  }
+.flight-tags, .member-tags {
+  height: 32px;
 
-  &.sky {
-    background: #9bdaf1;
-  }
+  .chip {
+    color: black;
 
-  &.red {
-    background: #e31c3d;
-    color: white;
-  }
+    &.green {
+      background: #2e8540;
+      color: white;
+    }
 
-  &.pink {
-    background: #f9dede;
-  }
+    &.purple {
+      background: #8c6bd2;
+      color: white;
+    }
 
-  &.orange {
-    background: #fdb81e;
-  }
+    &.sky {
+      background: #9bdaf1;
+    }
 
-  &.blue {
-    background: #0071bc;
-    color: white;
+    &.red {
+      background: #e31c3d;
+      color: white;
+    }
+
+    &.pink {
+      background: #f9dede;
+    }
+
+    &.orange {
+      background: #fdb81e;
+    }
+
+    &.blue {
+      background: #0071bc;
+      color: white;
+    }
   }
 }

@@ -2390,23 +2390,47 @@ button svg {
 .filter-toolbar-popover label {
   margin-top: 0; }
 
-.chip {
-  color: black; }
-  .chip.green {
-    background: #2e8540;
-    color: white; }
-  .chip.purple {
-    background: #8c6bd2;
-    color: white; }
-  .chip.sky {
-    background: #9bdaf1; }
-  .chip.red {
-    background: #e31c3d;
-    color: white; }
-  .chip.pink {
-    background: #f9dede; }
-  .chip.orange {
-    background: #fdb81e; }
-  .chip.blue {
-    background: #0071bc;
-    color: white; }
+.flight h3 {
+  margin: 0.5rem 0; }
+
+.flight hr {
+  margin: 0;
+  margin-top: 60px;
+  margin-left: 0;
+  height: 1px;
+  border: none;
+  background-color: #e0e0e0; }
+
+.flight:last-child {
+  margin-bottom: 40px; }
+  .flight:last-child hr {
+    display: none; }
+
+.flight-tags {
+  float: left; }
+
+.member-tags {
+  float: right; }
+
+.flight-tags, .member-tags {
+  height: 32px; }
+  .flight-tags .chip, .member-tags .chip {
+    color: black; }
+    .flight-tags .chip.green, .member-tags .chip.green {
+      background: #2e8540;
+      color: white; }
+    .flight-tags .chip.purple, .member-tags .chip.purple {
+      background: #8c6bd2;
+      color: white; }
+    .flight-tags .chip.sky, .member-tags .chip.sky {
+      background: #9bdaf1; }
+    .flight-tags .chip.red, .member-tags .chip.red {
+      background: #e31c3d;
+      color: white; }
+    .flight-tags .chip.pink, .member-tags .chip.pink {
+      background: #f9dede; }
+    .flight-tags .chip.orange, .member-tags .chip.orange {
+      background: #fdb81e; }
+    .flight-tags .chip.blue, .member-tags .chip.blue {
+      background: #0071bc;
+      color: white; }

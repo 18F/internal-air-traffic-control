@@ -7,7 +7,10 @@ function FlightTag(props) {
   }
 
   return (
-    <div className={`chip ${color}`}>{props.label}</div>
+    <div className={`chip ${color}`}>
+      {props.avatar ? <img src={props.avatar} alt={props.label} /> : null}
+      {props.label}
+    </div>
   );
 }
 
