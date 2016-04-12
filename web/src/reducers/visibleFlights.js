@@ -23,7 +23,7 @@ function getVisibleFlights(state) {
       return true;
     }
     for (const user of state.filter.users) {
-      if (flight.staff.some(s => s.fullName === user)) {
+      if (flight.staff.some(s => s.name === user)) {
         return true;
       }
     }
