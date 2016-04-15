@@ -1,12 +1,16 @@
 export const Flights = {
   LIST_IN: 'Incoming list of flights',
   ONE_IN: 'Single incoming flight',
+  ONE_UPDATE: 'Update single flight',
 
   replaceList(list) {
     return { type: this.LIST_IN, list };
   },
   replaceOne(flight) {
     return { type: this.ONE_IN, flight };
+  },
+  updateOne(flight) {
+    return { type: this.ONE_UPDATE, flight };
   }
 };
 

@@ -16,7 +16,8 @@ function FlightTag(props) {
 
 FlightTag.propTypes = {
   labels: React.PropTypes.object.isRequired,
-  label: React.PropTypes.string.isRequired
+  label: React.PropTypes.string.isRequired,
+  avatar: React.PropTypes.string
 };
 
 export default FlightTag;

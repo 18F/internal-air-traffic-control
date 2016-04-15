@@ -18,4 +18,8 @@ if (appEnv.getServices() && Object.keys(appEnv.getServices()).length) {
     process.env[env] = appEnv.getServiceCreds('atc-trello-cups')[env];
   }
   process.env.HOST = appEnv.url;
+
+  if (!process.env.TRELLO_WEBHOOK_HOST) {
+    process.env.TRELLO_WEBHOOK_HOST = process.env.HOST;
+  }
 }

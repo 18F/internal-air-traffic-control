@@ -13,6 +13,7 @@
   "author": "",
   "license": "CC0-1.0",
   "dependencies": {
+    "@18f/trello-webhook-server": "^2.0.1",
     "@erdc-itl/simple-logger": "^1.1.0",
     "cfenv": "^1.0.3",
     "client-sessions": "^0.7.0",
