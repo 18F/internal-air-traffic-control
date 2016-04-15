@@ -27,6 +27,10 @@ io().on('initial', data => {
   store.dispatch(actions.Members.replaceList(data.members));
 });
 
+io().on('update single flight', flight => {
+  store.dispatch(actions.Flights.updateOne(flight));
+});
+
 io().on('flight changed', flight => {
   store.dispatch(actions.Flights.replaceOne(flight));
 });
