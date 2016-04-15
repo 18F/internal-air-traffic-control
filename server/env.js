@@ -6,6 +6,7 @@ const appEnv = cfenv.getAppEnv();
 
 const knownEnvs = [
   'TRELLO_API_KEY',
+  'TRELLO_API_TOK',
   'TRELLO_CLIENT_SECRET',
   'ATC_TRELLO_BOARD_ID',
   'HOST',
