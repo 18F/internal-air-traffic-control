@@ -19,6 +19,10 @@ if (!process.env.TRELLO_CLIENT_SECRET) {
   log.error('Trello client secret not set.  Cannot continue.');
   process.exit(1);
 }
+if(!proces.env.TRELLO_API_TOK) {
+  log.error('Trello API token not set.  Cannot continue.');
+  process.exit(1);
+}
 if (!process.env.HOST) {
   log.error('Host not set.  Cannot continue.');
   process.exit(1);
@@ -39,7 +43,7 @@ const trelloWH = new TrelloWHServer({
   server,
   hostURL: `${process.env.TRELLO_WEBHOOK_HOST}/trello-webhook`,
   apiKey: process.env.TRELLO_API_KEY,
-  apiToken: process.env.TRELLO_API_TOKEN,
+  apiToken: process.env.TRELLO_API_TOK,
   clientSecret: process.env.TRELLO_CLIENT_SECRET
 });
 

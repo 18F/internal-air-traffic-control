@@ -16,7 +16,7 @@ module.exports = function webhookEventHandlerCreator(sockets) {
 
           const promises = [];
           if (event.action.data.card.idList) {
-              promises.push(board.getListName(event.action.data.card.idList, process.env.TRELLO_API_TOKEN).then(listName => {
+              promises.push(board.getListName(event.action.data.card.idList, process.env.TRELLO_API_TOK).then(listName => {
                 card.listID = event.action.data.card.idList;
                 card.status = listName;
               }));
