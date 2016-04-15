@@ -188,13 +188,15 @@ server.get(/.*/, restify.serveStatic({
 
 server.listen(PORT, () => {
   log.info(`${server.name} listening at ${server.url}`);
-  trelloWH.start(process.env.ATC_TRELLO_BOARD_ID)
-    .then(webhookID => {
-      log.info(`Trello Webhook ID: ${webhookID}`);
-      trelloWH.on('data', require('./webhook-handler')(sockets));
-    })
-    .catch(err => {
-      log.error('Error starting Trello webhook listener');
-      log.error(err);
-    });
+  setTimeout(() => {
+    trelloWH.start(process.env.ATC_TRELLO_BOARD_ID)
+      .then(webhookID => {
+        log.info(`Trello Webhook ID: ${webhookID}`);
+        trelloWH.on('data', require('./webhook-handler')(sockets));
+      })
+      .catch(err => {
+        log.error('Error starting Trello webhook listener');
+        log.error(err);
+      });
+  }, 5000);
 });
