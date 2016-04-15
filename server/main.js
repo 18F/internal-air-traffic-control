@@ -4,8 +4,9 @@ require('./env');
 const restify = require('restify');
 const passport = require('passport');
 const io = require('socket.io');
-const trelloAuth = require('./auth/trello');
 const sessions = require('client-sessions');
+const TrelloWHServer = require('@18f/trello-webhook-server');
+const trelloAuth = require('./auth/trello');
 const board = require('./board');
 const PORT = process.env.PORT || 5000;
 const log = require('./getLogger')('main');
@@ -33,6 +34,15 @@ if (!process.env.SESSION_SECRET) {
 }
 
 const server = restify.createServer({ name: 'Traffic Control API' });
+
+const trelloWH = new TrelloWHServer({
+  server,
+  hostURL: `${process.env.HOST}/trello-webhook`,
+  apiKey: process.env.TRELLO_API_KEY,
+  apiToken: process.env.TRELLO_API_TOKEN,
+  clientSecret: process.env.TRELLO_CLIENT_SECRET
+});
+
 server.use(sessions({
   cookieName: 'session',
   secret: process.env.SESSION_SECRET || 'N4JnqJmmMjjEHHq22yIAkN0owlsMVJeYzsgBkSQ0zSPGrHmdxLVLfnFYGhccog7',
@@ -74,8 +84,8 @@ server.get('/auth/error', (req, res, next) => next(new restify.UnauthorizedError
 trelloAuth.setupMiddleware(server, passport, '/auth/trello');
 
 server.use((req, res, next) => {
-  if (!req.user) {
-    res.redirect('/auth/trello');
+  log.verbose(`Got request: ${req.url}`);
+  if (!req.user || !req.url.match(/\/trello-webhook\/[0-9a-f]{24}/)) {
     next();
   } else {
     res.charSet('utf-8');
@@ -170,4 +180,15 @@ server.get(/.*/, restify.serveStatic({
 
 server.listen(PORT, () => {
   log.info(`${server.name} listening at ${server.url}`);
+  trelloWH.start(process.env.ATC_TRELLO_BOARD_ID)
+    .then(webhookID => {
+      log.info(`Trello Webhook ID: ${webhookID}`);
+      trelloWH.on('data', event => {
+        console.log('Got Trello webhook event');
+      });
+    })
+    .catch(err => {
+      log.error('Error starting Trello webhook listener');
+      log.error(err);
+    })
 });
