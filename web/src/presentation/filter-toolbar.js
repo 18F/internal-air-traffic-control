@@ -3,7 +3,7 @@ import Toolbar from 'material-ui/lib/toolbar/toolbar';
 import Popover from 'material-ui/lib/popover/popover';
 import DropdownIcon from 'material-ui/lib/svg-icons/navigation/arrow-drop-down-circle';
 
-class StatusList extends React.Component {
+class FilterToolbar extends React.Component {
   constructor(props) {
     super(props);
 
@@ -82,7 +82,7 @@ class StatusList extends React.Component {
   }
 }
 
-StatusList.propTypes = {
+FilterToolbar.propTypes = {
   statuses: React.PropTypes.array.isRequired,
   labels: React.PropTypes.array.isRequired,
   members: React.PropTypes.array.isRequired,
@@ -93,11 +93,11 @@ StatusList.propTypes = {
   textChangeHandler: React.PropTypes.func.isRequired
 };
 
-StatusList.defaultProps = {
+FilterToolbar.defaultProps = {
   statuses: [],
   labels: [],
   members: [],
   text: ''
 };
 
-export default StatusList;
+export default FilterToolbar;

@@ -13,7 +13,7 @@
   "author": "",
   "license": "CC0-1.0",
   "dependencies": {
-    "@18f/trello-webhook-server": "^2.0.1",
+    "@18f/trello-webhook-server": "^3.0.0",
     "@erdc-itl/simple-logger": "^1.1.0",
     "cfenv": "^1.0.3",
     "client-sessions": "^0.7.0",
@@ -32,12 +32,13 @@
     "babel-preset-react": "^6.3.13",
     "babelify": "^7.2.0",
     "browser-request": "^0.3.3",
-    "browserify": "^12.0.0",
+    "browserify": "^13.0.0",
     "eslint": "^2.4.0",
-    "eslint-config-airbnb": "^6.1.0",
+    "eslint-config-airbnb": "^7.0.0",
+    "eslint-plugin-jsx-a11y": "^0.6.2",
     "eslint-plugin-react": "^4.2.3",
     "local-storage": "^1.4.2",
-    "material-ui": "^0.15.0-alpha.2",
+    "material-ui": "0.15.0-alpha.2",
     "materialize-css": "^0.97.6",
     "node-sass": "^3.4.2",
     "react": "^0.14.7",
@@ -46,7 +47,7 @@
     "react-tap-event-plugin": "^0.2.2",
     "redux": "^3.3.1",
     "tap": "^5.7.0",
-    "updeep": "^0.13.0"
+    "updeep": "^0.14.0"
   },
   "engines": {
     "node": "5.8.0",
