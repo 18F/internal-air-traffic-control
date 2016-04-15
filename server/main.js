@@ -84,7 +84,10 @@ server.get('/auth/error', (req, res, next) => next(new restify.UnauthorizedError
 trelloAuth.setupMiddleware(server, passport, '/auth/trello');
 
 server.use((req, res, next) => {
-  log.verbose(`Got request: ${req.url}`);
+  // Bypass authentication for calls to /trello-webhook/{guid} because
+  // Trello won't be authenticated.  No worries, though!  The calls
+  // from Trello are verified using our client secret and the digital
+  // signature they provide in the headers.
   if (!req.user || !req.url.match(/\/trello-webhook\/[0-9a-f]{24}/)) {
     next();
   } else {
