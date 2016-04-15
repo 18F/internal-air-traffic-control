@@ -9,9 +9,9 @@ const cache = new Cache({ defaultTtl: 1800000 });
 const baseURL = `https://api.trello.com/1/boards/${process.env.ATC_TRELLO_BOARD_ID}`;
 function buildURL(partial, token, params) {
   let extraGet = '';
-  if(params) {
+  if (params) {
     extraGet = '&';
-    for(const key of Object.keys(params)) {
+    for (const key of Object.keys(params)) {
       extraGet += `${key}=${params[key]}`;
     }
   }
@@ -52,8 +52,8 @@ function getMemberName(req, id) {
 }
 
 function getMemberAvatar(req, id) {
-  if(req.members && req.members[id] && req.members[id].avatarHash) {
-    return `https://trello-avatars.s3.amazonaws.com/${req.members[id].avatarHash}/50.png`
+  if (req.members && req.members[id] && req.members[id].avatarHash) {
+    return `https://trello-avatars.s3.amazonaws.com/${req.members[id].avatarHash}/50.png`;
   }
   return null;
 }
@@ -202,9 +202,7 @@ module.exports = {
 
   getListName(listID, accessToken) {
     return getLists({ accessToken })
-      .then(req => {
-        return getListName(req, listID)
-      });
+      .then(req => getListName(req, listID));
   },
 
   getLabels(accessToken) {

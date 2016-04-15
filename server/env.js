@@ -19,7 +19,7 @@ if (appEnv.getServices() && Object.keys(appEnv.getServices()).length) {
   }
   process.env.HOST = appEnv.url;
 
-  if(!process.env.TRELLO_WEBHOOK_HOST) {
+  if (!process.env.TRELLO_WEBHOOK_HOST) {
     process.env.TRELLO_WEBHOOK_HOST = process.env.HOST;
   }
 }

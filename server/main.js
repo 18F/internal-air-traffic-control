@@ -192,5 +192,5 @@ server.listen(PORT, () => {
     .catch(err => {
       log.error('Error starting Trello webhook listener');
       log.error(err);
-    })
+    });
 });
