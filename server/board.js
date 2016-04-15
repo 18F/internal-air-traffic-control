@@ -200,6 +200,13 @@ module.exports = {
     return getLists({ accessToken });
   },
 
+  getListName(listID, accessToken) {
+    return getLists({ accessToken })
+      .then(req => {
+        return getListName(req, listID)
+      });
+  },
+
   getLabels(accessToken) {
     return getLabels({ accessToken });
   },

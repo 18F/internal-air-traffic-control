@@ -37,7 +37,7 @@ const server = restify.createServer({ name: 'Traffic Control API' });
 
 const trelloWH = new TrelloWHServer({
   server,
-  hostURL: `${process.env.HOST}/trello-webhook`,
+  hostURL: `${process.env.TRELLO_WEBHOOK_HOST}/trello-webhook`,
   apiKey: process.env.TRELLO_API_KEY,
   apiToken: process.env.TRELLO_API_TOKEN,
   clientSecret: process.env.TRELLO_CLIENT_SECRET
