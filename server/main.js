@@ -187,9 +187,7 @@ server.listen(PORT, () => {
   trelloWH.start(process.env.ATC_TRELLO_BOARD_ID)
     .then(webhookID => {
       log.info(`Trello Webhook ID: ${webhookID}`);
-      trelloWH.on('data', event => {
-        console.log('Got Trello webhook event');
-      });
+      trelloWH.on('data', require('./webhook-handler')(sockets));
     })
     .catch(err => {
       log.error('Error starting Trello webhook listener');
