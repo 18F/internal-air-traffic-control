@@ -5,8 +5,8 @@ const socketMessages = require('../socket-messages');
 const log = require('../getLogger')('update-card');
 
 module.exports = {
-  event: events.UPDATE_CARD,
-  handler: (event, sockets) => {
+  events: [ events.UPDATE_CARD ],
+  handler(event, sockets) {
     log.verbose('Card changed');
     const card = {
       id: event.action.data.card.id,

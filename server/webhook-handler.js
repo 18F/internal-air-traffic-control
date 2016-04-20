@@ -7,7 +7,7 @@ module.exports = function webhookEventHandlerCreator(sockets) {
     log.info(`Got a webhook event [${event.action.type}] from Trello`);
 
     for (const handler of handlers) {
-      if (handler.event === event.action.type) {
+      if (handler.events.indexOf(event.action.type) >= 0) {
         handler.handler(event, sockets);
       }
     }
