@@ -32,8 +32,12 @@ io().on(socketMessages.updateOneFlight, flight => {
   store.dispatch(actions.Flights.updateOne(flight));
 });
 
-io().on('flight changed', flight => {
-  store.dispatch(actions.Flights.replaceOne(flight));
+io().on(socketMessages.addMemberToFlight, data => {
+  store.dispatch(actions.Flights.addMemberToFlight(data));
+});
+
+io().on(socketMessages.removeMemberFromFlight, data => {
+  store.dispatch(actions.Flights.removeMemberFromFlight(data));
 });
 
 ReactDOM.render(
