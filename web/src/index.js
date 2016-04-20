@@ -28,7 +28,7 @@ io().on(socketMessages.initialize, data => {
   store.dispatch(actions.Members.replaceList(data.members));
 });
 
-io().on('update single flight', flight => {
+io().on(socketMessages.updateOneFlight, flight => {
   store.dispatch(actions.Flights.updateOne(flight));
 });
 
