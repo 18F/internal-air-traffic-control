@@ -19,7 +19,7 @@ if (!process.env.TRELLO_CLIENT_SECRET) {
   log.error('Trello client secret not set.  Cannot continue.');
   process.exit(1);
 }
-if(!process.env.TRELLO_API_TOK) {
+if (!process.env.TRELLO_API_TOK) {
   log.error('Trello API token not set.  Cannot continue.');
   process.exit(1);
 }
