@@ -166,6 +166,7 @@ server.get('/api/flights', (req, res, next) => {
   next();
 });
 
+/* * /
 server.put('/api/flights', restify.bodyParser(), (req, res, next) => {
   board.moveCard(req.body.id, req.body.listID, req.user.accessToken)
     .then(out => {
@@ -175,6 +176,7 @@ server.put('/api/flights', restify.bodyParser(), (req, res, next) => {
     .catch(e => res.send(new restify.InternalServerError(e)));
   next();
 });
+//*/
 
 server.get('/api/user', (req, res, next) => {
   res.send({ loggedIn: true, user: { name: req.user.name } });

@@ -5,7 +5,7 @@ const socketMessages = require('../socket-messages');
 const log = require('../getLogger')('update-card');
 
 module.exports = {
-  events: [ events.UPDATE_CARD ],
+  events: [events.UPDATE_CARD],
   handler(event, sockets) {
     log.verbose('Card changed');
     const card = {
@@ -13,7 +13,6 @@ module.exports = {
       description: event.action.data.card.name
     };
 
-    const promises = [];
     if (event.action.data.card.idList) {
       board.getListName(event.action.data.card.idList, process.env.TRELLO_API_TOK).then(listName => {
         card.listID = event.action.data.card.idList;

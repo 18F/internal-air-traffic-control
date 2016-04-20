@@ -4,7 +4,7 @@
   "description": "Internal project status tracking",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint --fix web/src/**/*.js && eslint --fix server/**.js",
+    "lint": "eslint --fix web/src/**/*.js && eslint --fix server/**/*.js",
     "build-style": "node-sass web/src/style/main.scss -o web/static --include-path `node sassPaths.js`",
     "build-html": "browserify -d -t [ babelify --presets [ react es2015 ] ] web/src/index.js -o web/static/bundle.js",
     "build": "npm run build-style && npm run build-html",
