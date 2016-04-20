@@ -1,4 +1,5 @@
 module.exports = [
-  require('./update-card'),
-  require('./change-card-members')
+  require('./change-card-labels'),
+  require('./change-card-members'),
+  require('./update-card')
 ];
