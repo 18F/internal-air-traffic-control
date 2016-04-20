@@ -6,6 +6,7 @@ const passport = require('passport');
 const io = require('socket.io');
 const sessions = require('client-sessions');
 const TrelloWHServer = require('@18f/trello-webhook-server');
+const socketMessages = require('./socket-messages');
 const trelloAuth = require('./auth/trello');
 const board = require('./board');
 const PORT = process.env.PORT || 5000;
@@ -19,7 +20,7 @@ if (!process.env.TRELLO_CLIENT_SECRET) {
   log.error('Trello client secret not set.  Cannot continue.');
   process.exit(1);
 }
-if(!process.env.TRELLO_API_TOK) {
+if (!process.env.TRELLO_API_TOK) {
   log.error('Trello API token not set.  Cannot continue.');
   process.exit(1);
 }
@@ -117,7 +118,7 @@ sockets.on('connect', s => {
       const statuses = getBigObjectAsArray(out, 'lists');
       const labels = getBigObjectAsArray(out, 'labels');
 
-      s.emit('initial', { members, statuses, labels, flights: out.cards });
+      s.emit(socketMessages.initialize, { members, statuses, labels, flights: out.cards });
     });
 });
 
@@ -165,6 +166,7 @@ server.get('/api/flights', (req, res, next) => {
   next();
 });
 
+/* * /
 server.put('/api/flights', restify.bodyParser(), (req, res, next) => {
   board.moveCard(req.body.id, req.body.listID, req.user.accessToken)
     .then(out => {
@@ -174,6 +176,7 @@ server.put('/api/flights', restify.bodyParser(), (req, res, next) => {
     .catch(e => res.send(new restify.InternalServerError(e)));
   next();
 });
+//*/
 
 server.get('/api/user', (req, res, next) => {
   res.send({ loggedIn: true, user: { name: req.user.name } });

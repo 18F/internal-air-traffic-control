@@ -26,6 +26,48 @@ export default function flights(state = [], action) {
         return state;
       }
 
+    case actions.Flights.ADD_MEMBER:
+      {
+        const index = state.findIndex(f => f.id === action.data.flight);
+        if (index >= 0) {
+          const update = { [index]: { staff: state[index].staff.concat(action.data.member) } };
+          return updeep(update, state);
+        }
+        return state;
+      }
+
+    case actions.Flights.REMOVE_MEMBER:
+      {
+        const index = state.findIndex(f => f.id === action.data.flight);
+        if (index >= 0) {
+          const newStaff = state[index].staff.filter(m => m.id !== action.data.member.id);
+          const update = { [index]: { staff: newStaff } };
+          return updeep(update, state);
+        }
+        return state;
+      }
+
+    case actions.Flights.ADD_LABEL:
+      {
+        const index = state.findIndex(f => f.id === action.data.flight);
+        if (index >= 0) {
+          const update = { [index]: { labels: state[index].labels.concat(action.data.label) } };
+          return updeep(update, state);
+        }
+        return state;
+      }
+
+    case actions.Flights.REMOVE_LABEL:
+      {
+        const index = state.findIndex(f => f.id === action.data.flight);
+        if (index >= 0) {
+          const newLabels = state[index].labels.filter(l => l !== action.data.label);
+          const update = { [index]: { labels: newLabels } };
+          return updeep(update, state);
+        }
+        return state;
+      }
+
     default:
       return state;
   }
