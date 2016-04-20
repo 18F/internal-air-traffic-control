@@ -1,38 +1,17 @@
 'use strict';
 const log = require('./getLogger')('webhook-handler');
 const board = require('./board');
+const handlers = require('./webhook-events');
 
 module.exports = function webhookEventHandlerCreator(sockets) {
   return function webhookEventHandler(event) {
-    log.info('Got a webhook event from Trello');
-    switch (event.action.type) {
-      case 'updateCard':
-        {
-          log.verbose('Card changed');
-          const card = {
-            id: event.action.data.card.id,
-            description: event.action.data.card.name
-          };
+    log.info(`Got a webhook event [${event.action.type}] from Trello`);
 
-          const promises = [];
-          if (event.action.data.card.idList) {
-              promises.push(board.getListName(event.action.data.card.idList, process.env.TRELLO_API_TOK).then(listName => {
-                card.listID = event.action.data.card.idList;
-                card.status = listName;
-              }));
-            }
-
-          Promise.all(promises)
-          .then(() => sockets.emit('update single flight', card));
-          break;
-        }
-
-      case 'updateList':
-        break;
-
-      default:
-        log.verbose(`Unhandled webhook type: ${event.action.type}`);
-        break;
+    const handlerPromises = [ ];
+    for(const handler of handlers) {
+      if(handler.event === event.action.type) {
+        handler.handler(event, sockets);
+      }
     }
   };
 };
