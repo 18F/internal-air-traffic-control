@@ -6,6 +6,7 @@ const passport = require('passport');
 const io = require('socket.io');
 const sessions = require('client-sessions');
 const TrelloWHServer = require('@18f/trello-webhook-server');
+const socketMessages = require('./socket-messages');
 const trelloAuth = require('./auth/trello');
 const board = require('./board');
 const PORT = process.env.PORT || 5000;
@@ -117,7 +118,7 @@ sockets.on('connect', s => {
       const statuses = getBigObjectAsArray(out, 'lists');
       const labels = getBigObjectAsArray(out, 'labels');
 
-      s.emit('initial', { members, statuses, labels, flights: out.cards });
+      s.emit(socketMessages.initialize, { members, statuses, labels, flights: out.cards });
     });
 });
 

@@ -9,6 +9,7 @@ injectTapEventPlugin();
 
 const React = require('react');
 const ReactDOM = require('react-dom');
+const socketMessages = require('../../server/socket-messages.js');
 import { Provider } from 'react-redux'
 import FilterToolbar from './containers/filter-toolbar';
 import FlightList from './containers/flight-list';
@@ -20,7 +21,7 @@ const store = createStore(reducers, { flights: [ ], statuses: [ ] });
 
 import * as actions from './actions';
 
-io().on('initial', data => {
+io().on(socketMessages.initialize, data => {
   store.dispatch(actions.Flights.replaceList(data.flights));
   store.dispatch(actions.Statuses.replaceList(data.statuses));
   store.dispatch(actions.Labels.replaceList(data.labels));
