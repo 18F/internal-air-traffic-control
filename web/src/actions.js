@@ -4,6 +4,8 @@ export const Flights = {
   ONE_UPDATE: 'Update single flight',
   ADD_MEMBER: 'Add member to flight',
   REMOVE_MEMBER: 'Remove member from flight',
+  ADD_LABEL: 'Add label to flight',
+  REMOVE_LABEL: 'Remove label from flight',
 
   replaceList(list) {
     return { type: this.LIST_IN, list };
@@ -19,6 +21,12 @@ export const Flights = {
   },
   removeMemberFromFlight(data) {
     return { type: this.REMOVE_MEMBER, data };
+  },
+  addLabelToFlight(data) {
+    return { type: this.ADD_LABEL, data };
+  },
+  removeLabelFromFlight(data) {
+    return { type: this.REMOVE_LABEL, data };
   }
 };
 

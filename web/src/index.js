@@ -40,6 +40,14 @@ io().on(socketMessages.removeMemberFromFlight, data => {
   store.dispatch(actions.Flights.removeMemberFromFlight(data));
 });
 
+io().on(socketMessages.addLabelToFlight, data => {
+  store.dispatch(actions.Flights.addLabelToFlight(data));
+});
+
+io().on(socketMessages.removeLabelFromFlight, data => {
+  store.dispatch(actions.Flights.removeLabelFromFlight(data));
+});
+
 ReactDOM.render(
   <Provider store={store}>
     <div>
