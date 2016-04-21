@@ -12,15 +12,19 @@
   .chip {
     color: black;
 
+    // Use these colors to match Trello rather than
+    // the US Web Design color palette.  These colors
+    // have been tweaked to have sufficient contrast.
+
     &.green {
       background: #2e8540;
       color: white;
     }
 
-  &.purple {
-    background: #8463ca;
-    color: white;
-  }
+    &.purple {
+      background: #8463ca;
+      color: white;
+    }
 
     &.sky {
       background: #9bdaf1;
