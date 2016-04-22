@@ -4,7 +4,7 @@ import Tag from '../containers/flight-tag';
 
 function Flight(props) {
   return (
-    <div className="flight">
+    <div className={`flight ${props.className}`}>
       <h3>{props.flight.description} <a href={props.flight.trelloURL}><span className="anchor-description">Trello card for {props.flight.description}</span><Dashboard /></a></h3>
       <div className="flight-tags">
         {props.flight.labels.map(l => <Tag key={l} label={l} />)}

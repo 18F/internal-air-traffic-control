@@ -3,7 +3,7 @@ import StatusGroup from '../containers/status-group';
 
 function FlightList(props) {
   return (
-    <div>
+    <div className="usa-grid">
       {props.statuses.map(s => <StatusGroup key={s.id} status={s} />)}
     </div>
   );

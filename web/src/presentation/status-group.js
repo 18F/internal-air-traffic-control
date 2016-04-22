@@ -6,7 +6,7 @@ import Flight from './flight';
 
 function StatusGroup(props) {
   return (
-    <Card className="status-group" initiallyExpanded>
+    <Card className="status-group usa-width-one-whole" initiallyExpanded>
       <CardHeader title={props.status.name} subtitle={`${props.flights.length} projects`} className="status-group-header" actAsExpander showExpandableButton />
       <CardText expandable>
         {props.flights.map(f => <Flight key={f.id} flight={f} />)}
