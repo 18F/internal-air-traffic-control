@@ -9,8 +9,8 @@ const knownEnvs = [
   'TRELLO_API_TOK',
   'TRELLO_CLIENT_SECRET',
   'ATC_TRELLO_BOARD_ID',
-  'HOST',
-  'LOG_LEVEL'
+  'LOG_LEVEL',
+  'ATC_SESSION_SECRET'
 ];
 
 if (appEnv.getServices() && Object.keys(appEnv.getServices()).length) {

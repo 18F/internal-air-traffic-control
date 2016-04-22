@@ -34,8 +34,8 @@ if (!process.env.ATC_TRELLO_BOARD_ID) {
   process.exit(1);
 }
 
-if (!process.env.SESSION_SECRET) {
-  log.warn('No SESSION_SECRET set.  Using less secure default.');
+if (!process.env.ATC_SESSION_SECRET) {
+  log.warn('No ATC_SESSION_SECRET set.  Using less secure default.');
 }
 
 const server = restify.createServer({ name: 'Traffic Control API' });
@@ -48,15 +48,17 @@ const trelloWH = new TrelloWHServer({
   clientSecret: process.env.TRELLO_CLIENT_SECRET
 });
 
-server.use(sessions({
+const sessionFunction = sessions({
   cookieName: 'session',
-  secret: process.env.SESSION_SECRET || 'N4JnqJmmMjjEHHq22yIAkN0owlsMVJeYzsgBkSQ0zSPGrHmdxLVLfnFYGhccog7',
-  duration: 24 * 60 * 60 * 1000, // how long the session will stay valid in ms
+  secret: process.env.ATC_SESSION_SECRET || 'z1b3/a1WknQW|Ix{T}ySh126G=Bu<zrR;d|?ySNV$9)AIY>Wf[[Zwnv)/or;@/A',
+  duration: 14 * 24 * 60 * 60 * 1000, // how long the session will stay valid in ms
   activeDuration: 1000 * 60 * 5, // if expiresIn < activeDuration, the session will be extended by activeDuration milliseconds
   cookie: {
     httpOnly: true
   }
-}));
+});
+
+server.use(sessionFunction);
 const sockets = io.listen(server.server);
 
 server.use(require('restify-redirect')());
@@ -66,15 +68,7 @@ server.use(passport.session());
 
 sockets.use((socket, next) => {
   passport.session()(socket.request, { }, next);
-  sessions({
-    cookieName: 'session',
-    secret: process.env.SESSION_SECRET || 'N4JnqJmmMjjEHHq22yIAkN0owlsMVJeYzsgBkSQ0zSPGrHmdxLVLfnFYGhccog7',
-    duration: 24 * 60 * 60 * 1000, // how long the session will stay valid in ms
-    activeDuration: 1000 * 60 * 5, // if expiresIn < activeDuration, the session will be extended by activeDuration milliseconds
-    cookie: {
-      httpOnly: true
-    }
-  })(socket.request, { }, next);
+  sessionFunction(socket.request, { }, next);
 });
 
 server.get('/auth/reset', (req, res, next) => {
@@ -111,6 +105,11 @@ function getBigObjectAsArray(obj, property) {
 }
 
 sockets.on('connect', s => {
+  if(!s.request.session || !s.request.session.passport || !s.request.session.passport.user) {
+    s.disconnect();
+    return;
+  }
+
   const token = JSON.parse(s.request.session.passport.user).accessToken;
   board.getCards(token)
     .then(out => {
