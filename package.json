@@ -1,6 +1,6 @@
 {
   "name": "air-traffic-control",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Internal project status tracking",
   "main": "index.js",
   "scripts": {
