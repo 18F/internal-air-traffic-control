@@ -1,0 +1,23 @@
+.filter-toolbar {
+  > div {
+    margin-top: 10px;
+    > button {
+      margin-top: 0;
+    }
+
+    > input[type=text] {
+      width: auto;
+      display: inline-block;
+    }
+  }
+
+  .button button {
+    background-color: $color-primary !important;
+  }
+}
+
+.filter-toolbar-popover {
+  label {
+    margin-top: 0;
+  }
+}

@@ -1,29 +1,30 @@
 {
   "name": "air-traffic-control",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Internal project status tracking",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint --fix web/src/**/*.js && eslint --fix server/**.js",
+    "lint": "eslint --fix web/src/**/*.js && eslint --fix server/**/*.js",
     "build-style": "node-sass web/src/style/main.scss -o web/static --include-path `node sassPaths.js`",
-    "build-html": "browserify -t [ babelify --presets [ react es2015 ] ] web/src/index.js -o web/static/bundle.js",
+    "build-html": "browserify -d -t [ babelify --presets [ react es2015 ] ] web/src/index.js -o web/static/bundle.js",
     "build": "npm run build-style && npm run build-html",
     "start": "node server/main.js"
   },
   "author": "",
   "license": "CC0-1.0",
   "dependencies": {
+    "@18f/trello-webhook-server": "^3.0.0",
     "@erdc-itl/simple-logger": "^1.1.0",
-    "bpa-trello-dashboard": "github:18f/bpa-trello#feature/cardrecorder",
+    "cfenv": "^1.0.3",
     "client-sessions": "^0.7.0",
     "dotenv": "^2.0.0",
     "passport": "^0.3.2",
-    "passport-google-oauth20": "^1.0.0",
     "passport-trello": "^0.1.5",
     "request": "^2.69.0",
     "restify": "^4.0.3",
     "restify-redirect": "^1.0.0",
-    "socket.io": "^1.4.5"
+    "socket.io": "^1.4.5",
+    "timed-cache": "^1.0.5"
   },
   "devDependencies": {
     "18f-contrib-web-design-standards": "^1.0.1",
@@ -31,23 +32,25 @@
     "babel-preset-react": "^6.3.13",
     "babelify": "^7.2.0",
     "browser-request": "^0.3.3",
-    "browserify": "^12.0.0",
-    "es6-promise": "^3.0.2",
+    "browserify": "^13.0.0",
     "eslint": "^2.4.0",
-    "eslint-config-airbnb": "^6.1.0",
+    "eslint-config-airbnb": "^7.0.0",
+    "eslint-plugin-jsx-a11y": "^0.6.2",
     "eslint-plugin-react": "^4.2.3",
-    "flux": "^2.1.1",
     "local-storage": "^1.4.2",
+    "material-ui": "0.15.0-alpha.2",
+    "materialize-css": "^0.97.6",
     "node-sass": "^3.4.2",
     "react": "^0.14.7",
     "react-dom": "^0.14.7",
-    "react-select": "^1.0.0-beta8",
+    "react-redux": "^4.4.1",
+    "react-tap-event-plugin": "^0.2.2",
+    "redux": "^3.3.1",
     "tap": "^5.7.0",
-    "ucfirst": "^1.0.0",
-    "updeep": "^0.13.0"
+    "updeep": "^0.14.0"
   },
   "engines": {
-    "node": "4.2.5",
-    "npm": "3.5.3"
+    "node": "5.8.0",
+    "npm": "3.8.0"
   }
 }

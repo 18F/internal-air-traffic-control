@@ -1,0 +1,51 @@
+.flight-tags {
+  float: left;
+}
+
+.member-tags {
+  float: right;
+}
+
+.flight-tags, .member-tags {
+  height: 32px;
+
+  .chip {
+    color: black;
+
+    // Use these colors to match Trello rather than
+    // the US Web Design color palette.  These colors
+    // have been tweaked to have sufficient contrast.
+
+    &.green {
+      background: #2e8540;
+      color: white;
+    }
+
+    &.purple {
+      background: #8463ca;
+      color: white;
+    }
+
+    &.sky {
+      background: #9bdaf1;
+    }
+
+    &.red {
+      background: #e31c3d;
+      color: white;
+    }
+
+    &.pink {
+      background: #f9dede;
+    }
+
+    &.orange {
+      background: #fdb81e;
+    }
+
+    &.blue {
+      background: #0071bc;
+      color: white;
+    }
+  }
+}

@@ -1,11 +1,13 @@
 'use strict';
 
-require('dotenv').config();
+require('./env');
 const restify = require('restify');
 const passport = require('passport');
 const io = require('socket.io');
-const trelloAuth = require('./auth/trello');
 const sessions = require('client-sessions');
+const TrelloWHServer = require('@18f/trello-webhook-server');
+const socketMessages = require('./socket-messages');
+const trelloAuth = require('./auth/trello');
 const board = require('./board');
 const PORT = process.env.PORT || 5000;
 const log = require('./getLogger')('main');
@@ -18,36 +20,56 @@ if (!process.env.TRELLO_CLIENT_SECRET) {
   log.error('Trello client secret not set.  Cannot continue.');
   process.exit(1);
 }
-if (!process.env.TRELLO_CALLBACK_URL) {
-  log.error('Trello callback URL not set.  Cannot continue.');
+if (!process.env.TRELLO_API_TOK) {
+  log.error('Trello API token not set.  Cannot continue.');
+  process.exit(1);
+}
+if (!process.env.HOST) {
+  log.error('Host not set.  Cannot continue.');
   process.exit(1);
 }
 
-if (!process.env.TRELLO_BOARD_ID) {
+if (!process.env.ATC_TRELLO_BOARD_ID) {
   log.error('Trello board ID not set.  Cannot continue.');
   process.exit(1);
 }
 
-if (!process.env.SESSION_SECRET) {
-  log.warn('No SESSION_SECRET set.  Using less secure default.');
+if (!process.env.ATC_SESSION_SECRET) {
+  log.warn('No ATC_SESSION_SECRET set.  Using less secure default.');
 }
 
 const server = restify.createServer({ name: 'Traffic Control API' });
-server.use(sessions({
+
+const trelloWH = new TrelloWHServer({
+  server,
+  hostURL: `${process.env.TRELLO_WEBHOOK_HOST}/trello-webhook`,
+  apiKey: process.env.TRELLO_API_KEY,
+  apiToken: process.env.TRELLO_API_TOK,
+  clientSecret: process.env.TRELLO_CLIENT_SECRET
+});
+
+const sessionFunction = sessions({
   cookieName: 'session',
-  secret: process.env.SESSION_SECRET || 'N4JnqJmmMjjEHHq22yIAkN0owlsMVJeYzsgBkSQ0zSPGrHmdxLVLfnFYGhccog7',
-  duration: 24 * 60 * 60 * 1000, // how long the session will stay valid in ms
+  secret: process.env.ATC_SESSION_SECRET || 'z1b3/a1WknQW|Ix{T}ySh126G=Bu<zrR;d|?ySNV$9)AIY>Wf[[Zwnv)/or;@/A',
+  duration: 14 * 24 * 60 * 60 * 1000, // how long the session will stay valid in ms
   activeDuration: 1000 * 60 * 5, // if expiresIn < activeDuration, the session will be extended by activeDuration milliseconds
   cookie: {
     httpOnly: true
   }
-}));
+});
+
+server.use(sessionFunction);
 const sockets = io.listen(server.server);
 
 server.use(require('restify-redirect')());
 server.use(restify.queryParser());
 server.use(passport.initialize());
 server.use(passport.session());
+
+sockets.use((socket, next) => {
+  passport.session()(socket.request, { }, next);
+  sessionFunction(socket.request, { }, next);
+});
 
 server.get('/auth/reset', (req, res, next) => {
   req.logout();
@@ -61,13 +83,42 @@ server.get('/auth/error', (req, res, next) => next(new restify.UnauthorizedError
 trelloAuth.setupMiddleware(server, passport, '/auth/trello');
 
 server.use((req, res, next) => {
-  if (!req.user) {
+  // Bypass authentication for calls to /trello-webhook/{guid} because
+  // Trello won't be authenticated.  No worries, though!  The calls
+  // from Trello are verified using our client secret and the digital
+  // signature they provide in the headers.
+  if (!req.user && !req.url.match(/\/trello-webhook\/[0-9a-f]{24}/)) {
     res.redirect('/auth/trello');
     next();
   } else {
     res.charSet('utf-8');
     next();
   }
+});
+
+function getBigObjectAsArray(obj, property) {
+  const arr = [];
+  for (const propertyName of Object.keys(obj[property])) {
+    arr.push(obj[property][propertyName]);
+  }
+  return arr;
+}
+
+sockets.on('connect', s => {
+  if(!s.request.session || !s.request.session.passport || !s.request.session.passport.user) {
+    s.disconnect();
+    return;
+  }
+
+  const token = JSON.parse(s.request.session.passport.user).accessToken;
+  board.getCards(token)
+    .then(out => {
+      const members = getBigObjectAsArray(out, 'members');
+      const statuses = getBigObjectAsArray(out, 'lists');
+      const labels = getBigObjectAsArray(out, 'labels');
+
+      s.emit(socketMessages.initialize, { members, statuses, labels, flights: out.cards });
+    });
 });
 
 server.get('/api/statuses', (req, res, next) => {
@@ -85,10 +136,26 @@ server.get('/api/statuses', (req, res, next) => {
   next();
 });
 
+server.get('/api/labels', (req, res, next) => {
+  board.getLabels(req.user.accessToken)
+    .then(out => {
+      const labels = [];
+      for (const label of Object.keys(out.labels)) {
+        labels.push({
+          id: label,
+          name: out.labels[label].name,
+          color: out.labels[label].color
+        });
+      }
+      res.send(labels);
+    });
+  next();
+});
+
 server.get('/api/flights', (req, res, next) => {
   board.getCards(req.user.accessToken)
-    .then(cards => {
-      res.send(cards);
+    .then(out => {
+      res.send(out.cards);
     })
     .catch(e => {
       log.error('Error getting rows from sheet:');
@@ -98,8 +165,9 @@ server.get('/api/flights', (req, res, next) => {
   next();
 });
 
+/* * /
 server.put('/api/flights', restify.bodyParser(), (req, res, next) => {
-  board.moveCard(req.body._id, req.body.listID, req.user.accessToken)
+  board.moveCard(req.body.id, req.body.listID, req.user.accessToken)
     .then(out => {
       res.send({ });
       sockets.emit('flight changed', out.card);
@@ -107,6 +175,7 @@ server.put('/api/flights', restify.bodyParser(), (req, res, next) => {
     .catch(e => res.send(new restify.InternalServerError(e)));
   next();
 });
+//*/
 
 server.get('/api/user', (req, res, next) => {
   res.send({ loggedIn: true, user: { name: req.user.name } });
@@ -121,4 +190,15 @@ server.get(/.*/, restify.serveStatic({
 
 server.listen(PORT, () => {
   log.info(`${server.name} listening at ${server.url}`);
+  setTimeout(() => {
+    trelloWH.start(process.env.ATC_TRELLO_BOARD_ID)
+      .then(webhookID => {
+        log.info(`Trello Webhook ID: ${webhookID}`);
+        trelloWH.on('data', require('./webhook-handler')(sockets));
+      })
+      .catch(err => {
+        log.error('Error starting Trello webhook listener');
+        log.error(err);
+      });
+  }, 5000);
 });

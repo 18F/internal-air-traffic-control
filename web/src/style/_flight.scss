@@ -1,0 +1,22 @@
+.flight {
+  h3 {
+    margin: 0.5rem 0;
+  }
+
+  hr {
+    margin: 0;
+    margin-top: 60px;
+    margin-left: 0;
+    height: 1px;
+    border: none;
+    background-color: #e0e0e0;
+  }
+
+  &:last-child {
+    margin-bottom: 40px;
+
+    hr {
+      display: none;
+    }
+  }
+}
