@@ -181,6 +181,8 @@ function getCards(req) {
 }
 
 function moveCard(req) {
+  return Promise.reject(new Error('Method not implemented'));
+  /*
   return new Promise((resolve, reject) => {
     request.put(`https://api.trello.com/1/cards/${req.cardID}?key=${process.env.TRELLO_API_KEY}&token=${req.accessToken}`, { json: true, body: { idList: req.listID } }, (err, res, body) => {
       if (err) {
@@ -193,6 +195,7 @@ function moveCard(req) {
       return resolve(req);
     });
   });
+  */
 }
 
 module.exports = {
