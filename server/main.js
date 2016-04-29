@@ -5,6 +5,7 @@ const restify = require('restify');
 const passport = require('passport');
 const io = require('socket.io');
 const sessions = require('client-sessions');
+const crypto = require('crypto');
 const TrelloWHServer = require('@18f/trello-webhook-server');
 const socketMessages = require('./socket-messages');
 const trelloAuth = require('./auth/trello');
@@ -34,10 +35,6 @@ if (!process.env.ATC_TRELLO_BOARD_ID) {
   process.exit(1);
 }
 
-if (!process.env.ATC_SESSION_SECRET) {
-  log.warn('No ATC_SESSION_SECRET set.  Using less secure default.');
-}
-
 const server = restify.createServer({ name: 'Traffic Control API' });
 
 const trelloWH = new TrelloWHServer({
@@ -50,7 +47,7 @@ const trelloWH = new TrelloWHServer({
 
 const sessionFunction = sessions({
   cookieName: 'session',
-  secret: process.env.ATC_SESSION_SECRET || 'z1b3/a1WknQW|Ix{T}ySh126G=Bu<zrR;d|?ySNV$9)AIY>Wf[[Zwnv)/or;@/A',
+  secret: crypto.randomBytes(256),
   duration: 14 * 24 * 60 * 60 * 1000, // how long the session will stay valid in ms
   activeDuration: 1000 * 60 * 5, // if expiresIn < activeDuration, the session will be extended by activeDuration milliseconds
   cookie: {
