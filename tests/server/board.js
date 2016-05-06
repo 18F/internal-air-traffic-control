@@ -42,15 +42,14 @@ function getExpectedURL(partial, params) {
   }
   return `${baseURL}${partial}?key=${process.env.TRELLO_API_KEY}&token=${TOKEN}${extraGet}`;
 }
+const lists = [
+  { pos: 2, name: 'List 2', id: 2 },
+  { pos: 1, name: 'List 1', id: 1 },
+  { pos: 3, name: 'List 3', id: 3 }
+];
 
 tap.test('Trello board methods', t1 => {
   t1.test('getLists', t2 => {
-    const lists = [
-      { pos: 2, name: 'List 2', id: 2 },
-      { pos: 1, name: 'List 1', id: 1 },
-      { pos: 3, name: 'List 3', id: 3 }
-    ];
-
     const expected = {
       '1': lists[1],
       '2': lists[0],
@@ -127,7 +126,30 @@ tap.test('Trello board methods', t1 => {
   });
 
   t1.test('getListName', t2 => {
-    t2.pass();
+    t2.test('with unknown list ID', t3 => {
+      board.getListName('unknown', TOKEN)
+        .then(name => {
+          t3.pass('resolves');
+          t3.equal(name, '', 'resolves an empty string');
+        })
+        .catch(name => {
+          t3.fail('resolves');
+        })
+        .then(t3.done);
+    });
+
+    t2.test('with a known list ID', t3 => {
+      board.getListName(lists[0].id, TOKEN)
+        .then(name => {
+          t3.pass('resolves');
+          t3.equal(name, lists[0].name, 'resolves the list name');
+        })
+        .catch(name => {
+          t3.fail('resolves');
+        })
+        .then(t3.done);
+    });
+
     t2.done();
   })
 
