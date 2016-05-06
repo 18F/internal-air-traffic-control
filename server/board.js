@@ -199,6 +199,10 @@ function moveCard(req) {
 }
 
 module.exports = {
+  getMembers(accessToken) {
+    return getMembers({ accessToken });
+  },
+  
   getLists(accessToken) {
     return getLists({ accessToken });
   },
