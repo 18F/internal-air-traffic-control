@@ -4,6 +4,7 @@ const tap = require('tap');
 const sinon = require('sinon');
 const request = require('request');
 const sandbox = sinon.sandbox.create();
+const clock = sinon.useFakeTimers();
 
 const ENV = {
   ATC_TRELLO_BOARD_ID: process.env.ATC_TRELLO_BOARD_ID,
@@ -14,6 +15,7 @@ tap.tearDown(() => {
   process.env.ATC_TRELLO_BOARD_ID = ENV.ATC_TRELLO_BOARD_ID;
   process.env.TRELLO_API_KEY = ENV.TRELLO_API_KEY;
   sandbox.restore();
+  clock.restore();
 });
 
 tap.beforeEach(done => {
@@ -55,36 +57,92 @@ tap.test('Trello board methods', t1 => {
       '3': lists[2]
     };
 
-    t2.test('Without an error', t3 => {
-      getMock.yields(null, { }, lists);
+    t2.test('With an error', t3 => {
+      const err = new Error('Test Error');
+      getMock.yields(err, { }, null);
       board.getLists(TOKEN)
-        .then(out => {
-          t3.pass('resolves');
+        .then(() => {
+          t3.fail('rejects');
+        })
+        .catch(e => {
+          t3.pass('rejects');
           t3.equal(getMock.callCount, 1, 'Calls Trello API once');
           t3.equal(getMock.args[0][0], getExpectedURL('/lists'), 'Gets lists from Trello API');
-          t3.same(out.lists, expected, 'Resolves expected list');
-        }).catch(() => {
-          t3.fail('resolves');
+          t3.equal(e, err, 'Rejects expected error');
         })
         .then(t3.done);
+    });
+
+    t2.test('Without an error', t3 => {
+      t3.test('With uncached lists', t4 => {
+        t4.test('With non-array body returned', t5 => {
+          getMock.yields(null, { }, 'This is not an array');
+          board.getLists(TOKEN)
+            .then(out => {
+              t5.pass('resolves');
+              t5.equal(getMock.callCount, 1, 'Calls Trello API once');
+              t5.equal(getMock.args[0][0], getExpectedURL('/lists'), 'Gets lists from Trello API');
+              t5.same(out.lists, { }, 'Resolves empty list list');
+            }).catch(() => {
+              t5.fail('resolves');
+            })
+            .then(t5.done);
+        })
+
+        t4.test('With array body returned', t5 => {
+          getMock.yields(null, { }, lists);
+          board.getLists(TOKEN)
+            .then(out => {
+              t5.pass('resolves');
+              t5.equal(getMock.callCount, 1, 'Calls Trello API once');
+              t5.equal(getMock.args[0][0], getExpectedURL('/lists'), 'Gets lists from Trello API');
+              t5.same(out.lists, expected, 'Resolves expected list');
+              clock.restore();
+            }).catch(() => {
+              t5.fail('resolves');
+            })
+            .then(t5.done);
+        });
+
+        t4.done();
+      });
+
+      t3.test('With cached lists', t4 => {
+        getMock.yields(null, { }, lists);
+        board.getLists(TOKEN)
+          .then(out => {
+            t4.pass('resolves');
+            t4.equal(getMock.callCount, 0, 'Does not calls Trello API');
+            t4.same(out.lists, expected, 'Resolves expected list');
+          }).catch(() => {
+            t4.fail('resolves');
+          })
+          .then(t4.done);
+      });
+
+      t3.done();
     });
 
     t2.done();
   });
 
   t1.test('getListName', t2 => {
+    t2.pass();
     t2.done();
   })
 
   t1.test('getLabels', t2 => {
+    t2.pass();
     t2.done();
   });
 
   t1.test('getCards', t2 => {
+    t2.pass();
     t2.done();
   });
 
   t1.test('moveCard', t2 => {
+    t2.pass();
     t2.done();
   });
 
